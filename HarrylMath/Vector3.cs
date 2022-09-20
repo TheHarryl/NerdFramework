@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace HarrylMath
+﻿namespace HarrylMath
 {
     class Vector3
     {
@@ -43,6 +41,38 @@ namespace HarrylMath
         public Vector3 Normalized()
         {
             return this / Magnitude();
+        }
+
+        public Vector3 RotateX(double radians)
+        {
+            return new Vector3(
+                this.x,
+                this.y * Math.Cos(radians) - this.z * Math.Sin(radians),
+                this.y * Math.Sin(radians) + this.z * Math.Cos(radians)
+            );
+        }
+
+        public Vector3 RotateY(double radians)
+        {
+            return new Vector3(
+                this.x * Math.Cos(radians) + this.z * Math.Sin(radians),
+                this.y,
+                -this.x * Math.Sin(radians) + this.z * Math.Cos(radians)
+            );
+        }
+
+        public Vector3 RotateZ(double radians)
+        {
+            return new Vector3(
+                this.x * Math.Cos(radians) - this.y * Math.Sin(radians),
+                this.x * Math.Sin(radians) + this.y * Math.Cos(radians),
+                this.z
+            );
+        }
+
+        public Vector3 Rotate(double r1, double r2, double r3)
+        {
+            return RotateX(r1).RotateY(r2).RotateZ(r3);
         }
 
         public static double Dot(Vector3 a, Vector3 b)

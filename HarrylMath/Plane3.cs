@@ -31,6 +31,7 @@
              * c ⊥ a AND c ⊥ b <=> c = a×b
              * n = a×b
              */
+
             n = Vector3.Cross(new Vector3(a, b), new Vector3(a, c));
         }
 
@@ -72,11 +73,7 @@
 
         public double Min(Vector3 point)
         {
-            /* P = Shortest path from a point to a Plane
-             * P ⊥ Plane
-             * THUS: n = P
-             * 
-             * 
+            /* 
              */
 
             return Vector3.Dot(n, point - p) / n.Magnitude();
@@ -101,10 +98,20 @@
         }
         public double Min(Plane3 plane)
         {
-            if (n == plane.n)
+            if (n.Normalized() == plane.n.Normalized() || n.Normalized() == Vector3.Zero - plane.n.Normalized())
             {
-                /* v⋅v = v1*v1 + v2*v2 + v3*v3 = |v||v|
+                /* Plane:
+                 * n.x(x - p.x) + n.y(y - p.y) + n.z(z - p.z) = 0
+                 * n⋅<x,y,z> - n⋅p = 0
                  * 
+                 * @ Plane centered at <0,0,0>:
+                 * p = <0,0,0>
+                 * n⋅<x,y,z> = 0
+                 * 
+                 * Difference of plane equations | p1 = <x1,y1,z1> from p0 = <0,0,0> @ n = n1 = n0:
+                 * n⋅<x,y,z> - n⋅<x1,y1,z1> = 0
+                 * n⋅<x,y,z> = 0
+                 * Difference: n⋅<x1,y1,z1>
                  */
             }
 
