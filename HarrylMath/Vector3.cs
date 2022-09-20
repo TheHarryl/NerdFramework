@@ -47,12 +47,47 @@ namespace HarrylMath
 
         public static double Dot(Vector3 a, Vector3 b)
         {
+            /* a⋅b = (a1*b1) + (a2*b2) + (a3*b3)
+             * 
+             * a⋅b = 0 <=> a ⊥ b
+             */
+
             return (a.x * b.x) + (a.y * b.y) + (a.z * b.z);
         }
 
         public static Vector3 Cross(Vector3 a, Vector3 b)
         {
+            /*       | e1 e2 e3 |   | a2 a3 |     | a1 a3 |     | a1 a2 |
+             * a×b = | a1 a2 a3 | = | b2 b3 |e1 - | b1 b3 |e2 + | b1 b2 |e3
+             *       | b1 b2 b3 |
+             * 
+             *  = <(a2*b3) - (a3*b2), -[(a1*b3) - (a3*b1)], (a1*b2) - (a2*b1)>
+             * 
+             * c = a×b <=> c ⊥ a AND c ⊥ b
+             * 
+             * |a×b| = |A||B|sin(theta) = Area of Parallelogram
+             * 
+             * a×b = -b×a
+             */
+
             return new Vector3((a.y * b.z) - (a.z * b.y), -(a.x * b.z) + (a.z * b.x), (a.x * b.y) - (a.y * b.x));
+        }
+
+        public static double Triple(Vector3 a, Vector3 b, Vector3 c)
+        {
+            /*           | a1 a2 a3 |   | b2 b3 |     | b1 b3 |     | b1 b2 |
+             * a⋅(b×c) = | b1 b2 b3 | = | c2 c3 |a1 - | c1 c3 |a2 + | c1 c2 |a3
+             *           | c1 c2 c3 |
+             * 
+             *  = [(b2*c3) - (b3*c2)]a1 -[(b1*c3) - (b3*c1)]a2 + [(b1*c2) - (b2*c1)]a3
+             * 
+             * |a⋅(b×c)| = Volume of Parallelepiped
+             * 
+             * a⋅(b×c) = c⋅(a×b) = b⋅(c×a)
+             * a⋅(b×c) = -b⋅(a×c) = -c⋅(b×a)
+             */
+
+            return ((b.y * c.z) - (b.z * c.y))*a.x - ((b.x * c.z) - (b.z * c.x))*a.y + ((b.x * c.y) - (b.y * c.x))*a.z;
         }
 
         public static Vector3 Lerp(Vector3 a, Vector3 b, double alpha)
