@@ -2,9 +2,9 @@
 {
     class Vector3
     {
-        public double x;
-        public double y;
-        public double z;
+        public readonly double x;
+        public readonly double y;
+        public readonly double z;
 
         public static Vector3 Zero = new Vector3();
         public static Vector3 One = new Vector3(1.0, 1.0, 1.0);
@@ -75,6 +75,49 @@
             return RotateX(r1).RotateY(r2).RotateZ(r3);
         }
 
+        public static Vector3 Angle3(Vector3 a, Vector3 b)
+        {
+            // Create projections of vectors a and b onto the x-axis
+            Vector3 Ax = new Vector3(0.0, a.y, a.z);
+            Vector3 Bx = new Vector3(0.0, b.y, b.z);
+
+            // Calculate 2D x-angle between projections
+            double xRadians = Angle(Ax, Bx);
+
+            // Create angle-adjusted a vector
+            Vector3 a2 = a.RotateX(xRadians);
+
+            // Create projections of vectors a2 and b onto the y-axis
+            Vector3 Ay = new Vector3(a2.x, 0.0, a2.z);
+            Vector3 By = new Vector3(b.x, 0.0, b.z);
+
+            // Calculate 2D y-angle between projections
+            double yRadians = Angle(Ay, By);
+
+            // Create angle-adjusted a vector
+            Vector3 a3 = a2.RotateY(yRadians);
+
+            // Create projections of vectors a3 and b onto the z-axis
+            Vector3 Az = new Vector3(a3.x, a3.y, 0.0);
+            Vector3 Bz = new Vector3(b.x, b.y, 0.0);
+
+            // Calculate 2D z-angle between projections
+            double zRadians = Angle(Az, Bz);
+
+            return new Vector3(xRadians, yRadians, zRadians);
+        }
+
+        public static double Angle(Vector3 a, Vector3 b)
+        {
+            /* a⋅b = |a||b|cos(theta)
+             * 
+             * cos(theta) = (a⋅b)/(|a||b|)
+             * theta = acos((a⋅b)/(|a||b|))
+             */
+
+            return Math.Acos(Dot(a, b) / (a.Magnitude() * b.Magnitude()));
+        }
+
         public static double Dot(Vector3 a, Vector3 b)
         {
             /* a⋅b = (a1*b1) + (a2*b2) + (a3*b3)
@@ -125,11 +168,6 @@
             return a * (1 - alpha) + b * alpha;
         }
 
-        public static double Angle(Vector3 a, Vector3 b)
-        {
-            return Math.Acos(Dot(a, b) / (a.Magnitude() * b.Magnitude()));
-        }
-
         public override bool Equals(object obj)
         {
             return obj is Vector3 vector &&
@@ -140,7 +178,7 @@
 
         public override int GetHashCode()
         {
-            return HashCode.Combine(x, y, z);
+            return System.HashCode.Combine(x, y, z);
         }
 
         public static Vector3 operator +(Vector3 a, Vector3 b)
@@ -161,6 +199,11 @@
         public static Vector3 operator -(Vector3 a, double b)
         {
             return new Vector3(a.x - b, a.y - b, a.z - b);
+        }
+
+        public static Vector3 operator -(Vector3 a)
+        {
+            return new Vector3(-a.x, -a.y, -a.z);
         }
 
         public static Vector3 operator *(Vector3 a, Vector3 b)

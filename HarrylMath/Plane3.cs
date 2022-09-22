@@ -98,20 +98,16 @@
         }
         public double Min(Plane3 plane)
         {
-            if (n.Normalized() == plane.n.Normalized() || n.Normalized() == Vector3.Zero - plane.n.Normalized())
+            if (n.Normalized() == plane.n.Normalized() || n.Normalized() == -plane.n.Normalized())
             {
                 /* Plane:
                  * n.x(x - p.x) + n.y(y - p.y) + n.z(z - p.z) = 0
                  * n⋅<x,y,z> - n⋅p = 0
                  * 
-                 * @ Plane centered at <0,0,0>:
-                 * p = <0,0,0>
-                 * n⋅<x,y,z> = 0
+                 * n⋅p = n⋅<x,y,z>
+                 * p = Any point within the plane
                  * 
-                 * Difference of plane equations | p1 = <x1,y1,z1> from p0 = <0,0,0> @ n = n1 = n0:
-                 * n⋅<x,y,z> - n⋅<x1,y1,z1> = 0
-                 * n⋅<x,y,z> = 0
-                 * Difference: n⋅<x1,y1,z1>
+                 * 
                  */
             }
 

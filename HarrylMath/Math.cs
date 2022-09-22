@@ -1,4 +1,6 @@
-﻿namespace HarrylMath
+﻿using System.Numerics;
+
+namespace HarrylMath
 {
     public class Math
     {   
@@ -35,7 +37,8 @@
 
         public static double Pow(double x, double n)
         {
-            return Pow(x, (int)(n*10)) / Pow(x, 10);
+            return Math.Pow(x, n);
+            //return Pow(x, (int)(n*10)) / Pow(x, 10);
         }
 
         public static int Factorial(int x)
@@ -67,31 +70,33 @@
 
         public static double PI = 3.1415926535897931;
 
-        public static double DegreesToRadians(double degrees)
+        public static double DegreesToRadians(double radians)
         {
-            return (degrees / 360.0) * (2 * PI);
+            return (radians / 360.0) * (2 * PI);
         }
         public static double RadiansToDegrees(double radians)
         {
             return (radians / (2 * PI)) * 360.0;
         }
 
-        public static double Sin(double degrees, int steps = 10)
+        public static double Sin(double radians, int steps = 10)
         {
-            degrees = DegreesToRadians(degrees);
+            return Math.Sin(radians);
+            /*
             double x1 = 0.0;
             
             for (int i = 1; i <= steps; i++)
             {
-                x1 += Pow(degrees, i * 2) / Factorial(i * 2) * (i % 2 == 0 ? -1 : 1);
+                x1 += Pow(radians, i * 2) / Factorial(i * 2) * (i % 2 == 0 ? -1 : 1);
             }
 
-            return x1;
+            return x1;*/
         }
 
         public static double Asin(double d, int steps = 10)
         {
-            if (d < -1 || d > 1) return 0.0;
+            return Math.Asin(d);
+            /*if (d < -1 || d > 1) return 0.0;
             double x1 = 0.0;
 
             for (int i = 0; i < steps; i++)
@@ -99,26 +104,27 @@
                 x1 += (Factorial(i * 2) / (Pow(2, i * 2) * Pow(Factorial(i), 2))) * (Pow(d, (2*i) + 1)/((2*i) + 1));
             }
 
-            return RadiansToDegrees(x1);
+            return x1*/
         }
 
-        public static double Cos(double degrees, int steps = 10)
+        public static double Cos(double radians, int steps = 10)
         {
-            degrees = DegreesToRadians(degrees);
-            double x1 = 0.0;
+            return Math.Cos(radians);
+            /*double x1 = 0.0;
 
             for (int i = 0; i < steps; i++)
             {
-                x1 += Pow(degrees, i * 2) / Factorial(i * 2) * (i % 2 == 1 ? -1 : 1);
+                x1 += Pow(radians, i * 2) / Factorial(i * 2) * (i % 2 == 1 ? -1 : 1);
             }
 
-            return x1;
+            return x1;*/
         }
 
         public static double Acos(double d, int steps = 10)
         {
-            if (d < -1 || d > 1) return 0.0;
-            return RadiansToDegrees(PI / 2.0) - Asin(d, steps);
+            return Math.Acos(d);
+            /*if (d < -1 || d > 1) return 0.0;
+            return PI / 2.0 - Asin(d, steps);*/
         }
 
         public static double Log(double x, double y)
