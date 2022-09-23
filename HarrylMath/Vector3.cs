@@ -123,6 +123,10 @@
             /* a⋅b = (a1*b1) + (a2*b2) + (a3*b3)
              * 
              * a⋅b = 0 <=> a ⊥ b
+             * 
+             * a⋅b = |a||b|cos(theta)
+             * 
+             * a⋅b = b⋅a
              */
 
             return (a.x * b.x) + (a.y * b.y) + (a.z * b.z);

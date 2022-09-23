@@ -20,30 +20,67 @@
             v = vector;
         }
 
-        public bool Contains(Vector3 point)
+        public bool Meets(Vector3 point)
         {
             /* Line:
              * x = p.x + v.xt
              * y = p.y + v.yt
              * z = p.z + v.zt
              * 
-             * (x - p.x)/v.x = (y - p.y)/v.y = (z - p.z)/v.z
+             * <x, y, z> = p + vt
+             * <x, y, z> - p = vt
              * 
+             * vt / |v| = ±v
+             * (<x, y, z> - p) / |v| = ±v
              * 
+             * IF the vector between the specified point and ANY point on the Line
+             *   is ∥ to the Line's vector, the specified point exists on the Line
+             */
+
+            Vector3 v0 = v.Normalized();
+            Vector3 v1 = (point - p).Normalized();
+
+            return v0 == v1 || v0 == -v1;
+        }
+
+        public bool Meets(Line3 line)
+        {
+            /* 
              */
 
             return true;
         }
 
-        public double Min(Vector3 point)
+        public Vector3 Intersection(Line3 line)
         {
-            /* P = Shortest path from a point to a Line
-             * P ⊥ Line
-             * 
+            /* 
              */
 
-            return 0.0;
+            return Vector3.Zero;
         }
+
+        public double Min(Vector3 point)
+        {
+            /* d = p0 - p = Path between any point of Plane and specified point
+             * v ∥ Line
+             * 
+             * Minimum path between point and Line is ⊥ to the Line
+             * n = Minimum path
+             * d, v, and n form a right triangle
+             * 
+             * IF theta = angle between d and v:
+             * |d|sin(theta) = Projection of d onto n
+             * 
+             * Turns it ⊥ to the Plane, shortest path between point and Plane
+             * 
+             * |a×b| = |A||B|sin(theta)
+             * |d×v| = |d||v|sin(theta)
+             * (|d×v|)/|v| = |d|sin(theta)
+            */
+
+            return Vector3.Cross(point - p, v).Magnitude() / v.Magnitude();
+        }
+
         public double Min(Line3 line)
         {
             if (v == line.v)
