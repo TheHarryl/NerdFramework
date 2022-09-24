@@ -11,3 +11,4 @@ C:\Users\harry\Desktop\Mathi\Mathi\obj\Debug\netcoreapp3.1\Mathi.csproj.CoreComp
 C:\Users\harry\Desktop\Mathi\Mathi\obj\Debug\netcoreapp3.1\Mathi.dll
 C:\Users\harry\Desktop\Mathi\Mathi\obj\Debug\netcoreapp3.1\Mathi.pdb
 C:\Users\harry\Desktop\Mathi\Mathi\obj\Debug\netcoreapp3.1\Mathi.genruntimeconfig.cache
+C:\Users\harry\Desktop\Mathi\Mathi\obj\Debug\netcoreapp3.1\Mathi.csproj.AssemblyReference.cache

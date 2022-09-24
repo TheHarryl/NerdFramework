@@ -4,12 +4,12 @@ using System.Text;
 
 namespace HarrylMath
 {
-    class Ray
+    class Ray3
     {
         public Vector3 p;
         public Vector3 v;
 
-        public Ray(Vector3 position, Vector3 vector)
+        public Ray3(Vector3 position, Vector3 vector)
         {
             /* Ray:
              * x = p.x + v.xt
@@ -45,14 +45,14 @@ namespace HarrylMath
             v = v.Rotate(r1, r2, r3);
         }
 
-        public static Ray Lerp(Ray a, Ray b, double alpha)
+        public static Ray3 Lerp(Ray3 a, Ray3 b, double alpha)
         {
             return a * (1 - alpha) + b * alpha;
         }
 
         public override bool Equals(object obj)
         {
-            return obj is Ray ray &&
+            return obj is Ray3 ray &&
                    p == ray.p &&
                    v == ray.v;
         }
@@ -62,42 +62,42 @@ namespace HarrylMath
             return System.HashCode.Combine(p, v);
         }
 
-        public static Ray operator +(Ray a, Ray b)
+        public static Ray3 operator +(Ray3 a, Ray3 b)
         {
-            return new Ray(a.p + b.p, a.v + b.v);
+            return new Ray3(a.p + b.p, a.v + b.v);
         }
 
-        public static Ray operator -(Ray a, Ray b)
+        public static Ray3 operator -(Ray3 a, Ray3 b)
         {
-            return new Ray(a.p - b.p, a.v - b.v);
+            return new Ray3(a.p - b.p, a.v - b.v);
         }
 
-        public static Ray operator *(Ray a, Ray b)
+        public static Ray3 operator *(Ray3 a, Ray3 b)
         {
-            return new Ray(a.p * b.p, a.v * b.v);
+            return new Ray3(a.p * b.p, a.v * b.v);
         }
 
-        public static Ray operator *(Ray a, double b)
+        public static Ray3 operator *(Ray3 a, double b)
         {
-            return new Ray(a.p * b, a.v * b);
+            return new Ray3(a.p * b, a.v * b);
         }
 
-        public static Ray operator /(Ray a, Ray b)
+        public static Ray3 operator /(Ray3 a, Ray3 b)
         {
-            return new Ray(a.p / b.p, a.v / b.v);
+            return new Ray3(a.p / b.p, a.v / b.v);
         }
 
-        public static Ray operator /(Ray a, double b)
+        public static Ray3 operator /(Ray3 a, double b)
         {
-            return new Ray(a.p / b, a.v / b);
+            return new Ray3(a.p / b, a.v / b);
         }
 
-        public static bool operator ==(Ray a, Ray b)
+        public static bool operator ==(Ray3 a, Ray3 b)
         {
             return a.p == b.p && a.v == b.v;
         }
 
-        public static bool operator !=(Ray a, Ray b)
+        public static bool operator !=(Ray3 a, Ray3 b)
         {
             return a.p != b.p || a.v != b.v;
         }

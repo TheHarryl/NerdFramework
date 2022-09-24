@@ -1,12 +1,12 @@
 ﻿namespace HarrylMath
 {
-    class Triangle
+    class Triangle3
     {
         Vector3 a;
         Vector3 b;
         Vector3 c;
 
-        public Triangle(Vector3 a, Vector3 b, Vector3 c)
+        public Triangle3(Vector3 a, Vector3 b, Vector3 c)
         {
             this.a = a;
             this.b = b;

@@ -84,9 +84,8 @@
         public Line3 Intersection(Plane3 Plane)
         {
             // In order to maximize performance, this code assumes you will only
-            //   use this function if you already know the two planes intersect.
-            // If you do not know, use the Meets(Plane) function.
-            // If you do not neither know nor attempt to, you are an idiot.
+            //   use this function if you already know the two planes intersect at a Line.
+            // This condition can be checked for by checking if
 
             /* Planes:
              * n0.x(x - p.x) + n0.y(y - p.y) + n0.z(z - p.z) = 0
@@ -115,15 +114,10 @@
              * x = (n0.x*p.x - n1.x*q.x) / (n0 - n1).x
              * y = (n0.y*p.y - n1.y*q.y) / (n0 - n1).y
              * z = (n0.z*p.z - n1.z*q.z) / (n0 - n1).z
+             * <x, y, z> = (n0*p - n1*q) / (n0 - n1)
              */
 
-            Vector3 nDifference = n - Plane.n;
-
-            return new Line3(new Vector3(
-                (n.x * p.x - Plane.n.x * Plane.p.x) / nDifference.x,
-                (n.y * p.y - Plane.n.y * Plane.p.y) / nDifference.y,
-                (n.z * p.z - Plane.n.z * Plane.p.z) / nDifference.z
-            ), Vector3.Cross(n, Plane.n));
+            return new Line3((n * p - Plane.n * Plane.p) / (n - Plane.n), Vector3.Cross(n, Plane.n));
         }
 
         public double Min(Vector3 point)

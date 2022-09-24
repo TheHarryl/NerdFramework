@@ -1,16 +1,16 @@
 ﻿namespace HarrylMath
 {
-    class RaySector
+    class Ray3Sector
     {
-        public Ray d;
+        public Ray3 d;
         protected Vector3 w0;
         protected Vector3 w1;
         protected Vector3 h0;
         protected Vector3 h1;
 
-        public RaySector(Ray direction, double wRadians, double hRadians)
+        public Ray3Sector(Ray3 direction, double wRadians, double hRadians)
         {
-            this.d = new Ray(direction.p, Vector3.zAxis);
+            this.d = new Ray3(direction.p, Vector3.zAxis);
             this.w0 = d.v.RotateY(-wRadians /2);
             this.w1 = d.v.RotateY(wRadians / 2);
             this.h0 = d.v.RotateX(-hRadians / 2);
@@ -19,9 +19,9 @@
             RotateTo(direction.v);
         }
 
-        public Ray Ray(double wAlpha, double hAlpha)
+        public Ray3 Ray(double wAlpha, double hAlpha)
         {
-            return new Ray(d.p, Vector3.Lerp(Vector3.Lerp(w0, w1, wAlpha), Vector3.Lerp(h0, h1, wAlpha), hAlpha));
+            return new Ray3(d.p, Vector3.Lerp(Vector3.Lerp(w0, w1, wAlpha), Vector3.Lerp(h0, h1, wAlpha), hAlpha));
         }
 
         public void RotateX(double radians)

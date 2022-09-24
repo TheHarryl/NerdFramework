@@ -1,23 +1,23 @@
 ﻿namespace HarrylMath
 {
-    class RayRegion
+    class Ray3Region
     {
-        public Ray d;
+        public Ray3 d;
         protected Vector3 w;
         protected Vector3 h;
 
-        public RayRegion(Ray direction, double width, double height)
+        public Ray3Region(Ray3 direction, double width, double height)
         {
-            this.d = new Ray(direction.p, Vector3.zAxis);
+            this.d = new Ray3(direction.p, Vector3.zAxis);
             this.w = Vector3.xAxis * width;
             this.h = Vector3.yAxis * height;
 
             RotateTo(direction.v);
         }
 
-        public Ray Ray(double wAlpha, double hAlpha)
+        public Ray3 Ray(double wAlpha, double hAlpha)
         {
-            return new Ray(d.p + w * (wAlpha - 0.5) + h * (hAlpha - 0.5), d.v);
+            return new Ray3(d.p + w * (wAlpha - 0.5) + h * (hAlpha - 0.5), d.v);
         }
 
         public void RotateX(double radians)
