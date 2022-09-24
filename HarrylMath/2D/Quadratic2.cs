@@ -1,6 +1,6 @@
 ﻿namespace HarrylMath
 {
-    class Quadratic2
+    public class Quadratic2
     {
         readonly double? a;
         readonly double? b;

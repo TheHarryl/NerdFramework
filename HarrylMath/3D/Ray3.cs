@@ -4,7 +4,7 @@ using System.Text;
 
 namespace HarrylMath
 {
-    class Ray3
+    public class Ray3
     {
         public Vector3 p;
         public Vector3 v;

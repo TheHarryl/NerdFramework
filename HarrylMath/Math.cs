@@ -81,7 +81,7 @@ namespace HarrylMath
 
         public static double Sin(double radians, int steps = 10)
         {
-            return Math.Sin(radians);
+            return System.Math.Sin(radians);
             /*
             double x1 = 0.0;
             
@@ -95,7 +95,7 @@ namespace HarrylMath
 
         public static double Asin(double d, int steps = 10)
         {
-            return Math.Asin(d);
+            return System.Math.Asin(d);
             /*if (d < -1 || d > 1) return 0.0;
             double x1 = 0.0;
 
@@ -109,7 +109,7 @@ namespace HarrylMath
 
         public static double Cos(double radians, int steps = 10)
         {
-            return Math.Cos(radians);
+            return System.Math.Cos(radians);
             /*double x1 = 0.0;
 
             for (int i = 0; i < steps; i++)
@@ -122,7 +122,7 @@ namespace HarrylMath
 
         public static double Acos(double d, int steps = 10)
         {
-            return Math.Acos(d);
+            return System.Math.Acos(d);
             /*if (d < -1 || d > 1) return 0.0;
             return PI / 2.0 - Asin(d, steps);*/
         }

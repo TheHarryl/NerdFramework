@@ -1,0 +1,10 @@
+C:\Users\harry\Desktop\Mathi\HarrylMath\obj\Debug\netcoreapp3.1\HarrylMath.csproj.AssemblyReference.cache
+C:\Users\harry\Desktop\Mathi\HarrylMath\obj\Debug\netcoreapp3.1\HarrylMath.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\harry\Desktop\Mathi\HarrylMath\obj\Debug\netcoreapp3.1\HarrylMath.AssemblyInfoInputs.cache
+C:\Users\harry\Desktop\Mathi\HarrylMath\obj\Debug\netcoreapp3.1\HarrylMath.AssemblyInfo.cs
+C:\Users\harry\Desktop\Mathi\HarrylMath\obj\Debug\netcoreapp3.1\HarrylMath.csproj.CoreCompileInputs.cache
+C:\Users\harry\Desktop\Mathi\HarrylMath\bin\Debug\netcoreapp3.1\HarrylMath.deps.json
+C:\Users\harry\Desktop\Mathi\HarrylMath\bin\Debug\netcoreapp3.1\HarrylMath.dll
+C:\Users\harry\Desktop\Mathi\HarrylMath\bin\Debug\netcoreapp3.1\HarrylMath.pdb
+C:\Users\harry\Desktop\Mathi\HarrylMath\obj\Debug\netcoreapp3.1\HarrylMath.dll
+C:\Users\harry\Desktop\Mathi\HarrylMath\obj\Debug\netcoreapp3.1\HarrylMath.pdb

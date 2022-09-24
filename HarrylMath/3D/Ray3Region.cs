@@ -1,6 +1,6 @@
 ﻿namespace HarrylMath
 {
-    class Ray3Region
+    public class Ray3Region
     {
         public Ray3 d;
         protected Vector3 w;

@@ -1,6 +1,6 @@
 ﻿namespace HarrylMath
 {
-    class Plane3
+    public class Plane3
     {
         public Vector3 p;
         public Vector3 n;
@@ -62,6 +62,11 @@
 
         public Vector3 Intersection(Line3 line)
         {
+            // In order to maximize performance, this code assumes you will only
+            //   use this function if you already know the plane and line intersect at a point.
+            // This condition can be checked for by checking if the plane and line are not parallel.
+            // A line is parallel to a line if its directional vector is perpendicular to the plane's normal.
+
             /* Plane:
              * n.x(x - q.x) + n.y(y - q.y) + n.z(z - q.z) = 0
              * 
@@ -85,7 +90,7 @@
         {
             // In order to maximize performance, this code assumes you will only
             //   use this function if you already know the two planes intersect at a Line.
-            // This condition can be checked for by checking if
+            // This condition can be checked for by checking if the planes are not parallel.
 
             /* Planes:
              * n0.x(x - p.x) + n0.y(y - p.y) + n0.z(z - p.z) = 0

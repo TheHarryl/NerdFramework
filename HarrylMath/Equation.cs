@@ -2,7 +2,7 @@
 
 namespace HarrylMath
 {
-    class Term
+    public class Term
     {
         public static Term One = new Term(1);
         public static Term Zero = new Term(0);
@@ -65,7 +65,7 @@ namespace HarrylMath
         }
     }
 
-    class Equation
+    public class Equation
     {
         public List<Term> terms;
 

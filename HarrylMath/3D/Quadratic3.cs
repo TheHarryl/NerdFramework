@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 namespace HarrylMath
 {
-    class Quadratic3
+    public class Quadratic3
     {
         readonly double? a;
         readonly double? b;

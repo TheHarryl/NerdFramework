@@ -1,6 +1,6 @@
 ﻿namespace HarrylMath
 {
-    class Matrix
+    public class Matrix
     {
         private double[][] _elements;
 

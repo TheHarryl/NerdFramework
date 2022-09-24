@@ -1,6 +1,6 @@
 ﻿namespace HarrylMath
 {
-    class Line3
+    public class Line3
     {
         public Vector3 p;
         public Vector3 v;

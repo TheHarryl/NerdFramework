@@ -1,6 +1,6 @@
 ﻿namespace HarrylMath
 {
-    class Vector3
+    public class Vector3
     {
         public readonly double x;
         public readonly double y;
@@ -232,12 +232,12 @@
 
         public static bool operator ==(Vector3 a, Vector3 b)
         {
-            return a.x == b.x && a.y == b.y && a.z == b.z;
+            return Math.Abs(a.x - b.x) < 0.00001 && Math.Abs(a.y - b.y) < 0.00001 && Math.Abs(a.z - b.z) < 0.00001;
         }
 
         public static bool operator !=(Vector3 a, Vector3 b)
         {
-            return a.x != b.x || a.y != b.y || a.z != b.z;
+            return Math.Abs(a.x - b.x) >= 0.00001 && Math.Abs(a.y - b.y) >=- 0.00001 && Math.Abs(a.z - b.z) >= 0.00001;
         }
     }
 }

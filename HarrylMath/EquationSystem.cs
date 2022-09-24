@@ -2,7 +2,7 @@
 
 namespace HarrylMath
 {
-    class EquationSystem
+    public class EquationSystem
     {
         public List<Equation> equations;
 

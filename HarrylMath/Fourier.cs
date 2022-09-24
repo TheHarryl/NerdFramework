@@ -4,7 +4,7 @@ using System.Text;
 
 namespace HarrylMath
 {
-    class Fourier
+    public class Fourier
     {
     }
 }
