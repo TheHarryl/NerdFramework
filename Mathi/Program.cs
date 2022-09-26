@@ -1,8 +1,13 @@
 ﻿using Math = System.Math;
-using Ray3Sector = HarrylMath.Ray3Sector;
-using Ray3 = HarrylMath.Ray3;
-using Vector3 = HarrylMath.Vector3;
-using Triangle3 = HarrylMath.Triangle3;
+using Ray3Region = NerdEngine.Ray3Region;
+using Ray3Sector = NerdEngine.Ray3Sector;
+using Ray3 = NerdEngine.Ray3;
+using Vector3 = NerdEngine.Vector3;
+using Triangle3 = NerdEngine.Triangle3;
+using Triangle3Group = NerdEngine.Triangle3Group;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Mathi
 {
@@ -10,30 +15,69 @@ namespace Mathi
     {
         static void Main(string[] args)
         {
-            Ray3Sector camera = new Ray3Sector(new Ray3(Vector3.Zero, Vector3.zAxis), 2.0, (1080 / 1920) * 2.0);
-            Triangle3 triangle = new Triangle3(new Vector3(10, 0, 10), new Vector3(0, 10, 10), new Vector3(-10, 0, 10));
+            Random random = new Random();
+            List<string> light = new List<string> { ",", "\"", "^", "`", "'", ".", "-", "~", "_" };
+            List<string> dark = new List<string> { "▓" };
 
-            int width = 120;
-            int height = 30;
-            for (int i = 0; i < 500; i++)
-            {
-                System.Console.WriteLine("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
-            }
+            Ray3Region camera = new Ray3Region(new Ray3(Vector3.Zero, Vector3.zAxis), 20, 35);
+            //Ray3Sector camera = new Ray3Sector(new Ray3(new Vector3(0,0,-10), Vector3.zAxis), 2, (1080/1920)*2.0);
+
+            Triangle3Group tris = (
+                new Triangle3(new Vector3(-10, 10, 10), new Vector3(-10, -10, 10), new Vector3(10, -10, 10)) +
+                new Triangle3(new Vector3(10, -10, 10), new Vector3(10, 10, 10), new Vector3(-10, 10, 10)) +
+                new Triangle3(new Vector3(10, -10, 30), new Vector3(-10, -10, 30), new Vector3(-10, 10, 30)) +
+                new Triangle3(new Vector3(-10, 10, 30), new Vector3(10, 10, 30), new Vector3(10, -10, 30))
+            );
+
+            Triangle3Group tris2 = new Triangle3(new Vector3(-10, 10, 10), new Vector3(-10, -10, 10), new Vector3(10, -10, 10)) +
+                new Triangle3(new Vector3(10, -10, 10), new Vector3(10, 10, 10), new Vector3(-10, 10, 10)) +
+                new Triangle3(new Vector3(10, -10, 30), new Vector3(-10, -10, 30), new Vector3(-10, 10, 30)) +
+                new Triangle3(new Vector3(-10, 10, 30), new Vector3(10, 10, 30), new Vector3(10, -10, 30));
+
+            Triangle3Group tris3 = new Triangle3(new Vector3(-10, 10, 10), new Vector3(-10, -10, 10), new Vector3(10, -10, 10)) +
+                new Triangle3(new Vector3(10, -10, 10), new Vector3(10, 10, 10), new Vector3(-10, 10, 10)) +
+                new Triangle3(new Vector3(10, -10, 30), new Vector3(-10, -10, 30), new Vector3(-10, 10, 30)) +
+                new Triangle3(new Vector3(-10, 10, 30), new Vector3(10, 10, 30), new Vector3(10, -10, 30));
+
+            tris2.RotateX(Math.PI/2, new Vector3(0, 0, 20));
+            tris3.RotateY(Math.PI/2, new Vector3(0, 0, 20));
+
+            tris = tris + tris2 + tris3;
+
+            tris.origin += new Vector3(30, 0, 0);
+
+            double width = 230;
+            double height = 60;
+            Console.SetBufferSize(800, 800);
+
             while (true)
             {
+                string line = "";
                 for (int y = 0; y < height; y++)
                 {
-                    string line = "";
+                    if (y > 0)
+                        line += "\n";
                     for (int x = 0; x < width; x++)
                     {
-                        if (triangle.Meets(camera.Ray(x / height, y / height)))
-                            line += "█";
-                        else
-                            line += "░";
+                        Ray3 ray = camera.Ray(x / height, y / height);
+                        tris.triangles = tris.triangles.OrderBy(t => Vector3.Angle(t.Normal(), ray.v)).ToList();
+                        if (tris.Meets(ray)) {
+                            if (tris.Angle(ray) <= 0.8)
+                                line += dark[random.Next(dark.Count)];
+                            else if (tris.Angle(ray) <= 1.25)
+                                line += "▒";
+                            else if (tris.Angle(ray) <= 1.5)
+                                line += "░";
+                            else
+                                line += " ";
+                        } else
+                            line += light[random.Next(light.Count)];
                     }
-                    System.Console.WriteLine(line);
                 }
-                System.Threading.Thread.Sleep(1000 / 30);
+                System.Console.Write(line);
+                Console.SetCursorPosition(0, 0);
+                System.Threading.Thread.Sleep(0);
+                tris.Rotate(0.1, 0.0, 0.05, new Vector3(30, 0, 20));
             }
         }
     }

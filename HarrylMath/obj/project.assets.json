@@ -15,9 +15,9 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\harry\\Desktop\\Mathi\\HarrylMath\\HarrylMath.csproj",
-      "projectName": "HarrylMath",
-      "projectPath": "C:\\Users\\harry\\Desktop\\Mathi\\HarrylMath\\HarrylMath.csproj",
+      "projectUniqueName": "C:\\Users\\harry\\Desktop\\Mathi\\HarrylMath\\NerdEngine.csproj",
+      "projectName": "NerdEngine",
+      "projectPath": "C:\\Users\\harry\\Desktop\\Mathi\\HarrylMath\\NerdEngine.csproj",
       "packagesPath": "C:\\Users\\harry\\.nuget\\packages\\",
       "outputPath": "C:\\Users\\harry\\Desktop\\Mathi\\HarrylMath\\obj\\",
       "projectStyle": "PackageReference",
@@ -68,7 +68,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.400\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.402\\RuntimeIdentifierGraph.json"
       }
     }
   }

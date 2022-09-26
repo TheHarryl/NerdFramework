@@ -12,6 +12,5 @@ C:\Users\harry\Desktop\Mathi\Mathi\obj\Debug\netcoreapp3.1\Mathi.dll
 C:\Users\harry\Desktop\Mathi\Mathi\obj\Debug\netcoreapp3.1\Mathi.pdb
 C:\Users\harry\Desktop\Mathi\Mathi\obj\Debug\netcoreapp3.1\Mathi.genruntimeconfig.cache
 C:\Users\harry\Desktop\Mathi\Mathi\obj\Debug\netcoreapp3.1\Mathi.csproj.AssemblyReference.cache
-C:\Users\harry\Desktop\Mathi\Mathi\bin\Debug\netcoreapp3.1\HarrylMath.dll
-C:\Users\harry\Desktop\Mathi\Mathi\bin\Debug\netcoreapp3.1\HarrylMath.pdb
-C:\Users\harry\Desktop\Mathi\Mathi\obj\Debug\netcoreapp3.1\Mathi.csproj.CopyComplete
+C:\Users\harry\Desktop\Mathi\Mathi\bin\Debug\netcoreapp3.1\NerdEngine.dll
+C:\Users\harry\Desktop\Mathi\Mathi\bin\Debug\netcoreapp3.1\NerdEngine.pdb

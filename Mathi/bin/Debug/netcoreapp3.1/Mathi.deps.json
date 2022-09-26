@@ -8,15 +8,15 @@
     ".NETCoreApp,Version=v3.1": {
       "Mathi/1.0.0": {
         "dependencies": {
-          "HarrylMath": "1.0.0"
+          "NerdEngine": "1.0.0"
         },
         "runtime": {
           "Mathi.dll": {}
         }
       },
-      "HarrylMath/1.0.0": {
+      "NerdEngine/1.0.0": {
         "runtime": {
-          "HarrylMath.dll": {}
+          "NerdEngine.dll": {}
         }
       }
     }
@@ -27,7 +27,7 @@
       "serviceable": false,
       "sha512": ""
     },
-    "HarrylMath/1.0.0": {
+    "NerdEngine/1.0.0": {
       "type": "project",
       "serviceable": false,
       "sha512": ""

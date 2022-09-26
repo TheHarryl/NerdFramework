@@ -4,12 +4,12 @@
     "C:\\Users\\harry\\Desktop\\Mathi\\Mathi\\Mathi.csproj": {}
   },
   "projects": {
-    "C:\\Users\\harry\\Desktop\\Mathi\\HarrylMath\\HarrylMath.csproj": {
+    "C:\\Users\\harry\\Desktop\\Mathi\\HarrylMath\\NerdEngine.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\harry\\Desktop\\Mathi\\HarrylMath\\HarrylMath.csproj",
-        "projectName": "HarrylMath",
-        "projectPath": "C:\\Users\\harry\\Desktop\\Mathi\\HarrylMath\\HarrylMath.csproj",
+        "projectUniqueName": "C:\\Users\\harry\\Desktop\\Mathi\\HarrylMath\\NerdEngine.csproj",
+        "projectName": "NerdEngine",
+        "projectPath": "C:\\Users\\harry\\Desktop\\Mathi\\HarrylMath\\NerdEngine.csproj",
         "packagesPath": "C:\\Users\\harry\\.nuget\\packages\\",
         "outputPath": "C:\\Users\\harry\\Desktop\\Mathi\\HarrylMath\\obj\\",
         "projectStyle": "PackageReference",
@@ -60,7 +60,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.400\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.402\\RuntimeIdentifierGraph.json"
         }
       }
     },
@@ -94,8 +94,8 @@
           "netcoreapp3.1": {
             "targetAlias": "netcoreapp3.1",
             "projectReferences": {
-              "C:\\Users\\harry\\Desktop\\Mathi\\HarrylMath\\HarrylMath.csproj": {
-                "projectPath": "C:\\Users\\harry\\Desktop\\Mathi\\HarrylMath\\HarrylMath.csproj"
+              "C:\\Users\\harry\\Desktop\\Mathi\\HarrylMath\\NerdEngine.csproj": {
+                "projectPath": "C:\\Users\\harry\\Desktop\\Mathi\\HarrylMath\\NerdEngine.csproj"
               }
             }
           }
@@ -122,9 +122,12 @@
           "frameworkReferences": {
             "Microsoft.NETCore.App": {
               "privateAssets": "all"
+            },
+            "Microsoft.WindowsDesktop.App": {
+              "privateAssets": "none"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.400\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.402\\RuntimeIdentifierGraph.json"
         }
       }
     }

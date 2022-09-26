@@ -3,10 +3,12 @@
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>netcoreapp3.1</TargetFramework>
+    <UseWPF>true</UseWPF>
+    <UseWindowsForms>true</UseWindowsForms>
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\HarrylMath\HarrylMath.csproj" />
+    <ProjectReference Include="..\HarrylMath\NerdEngine.csproj" />
   </ItemGroup>
 
 </Project>

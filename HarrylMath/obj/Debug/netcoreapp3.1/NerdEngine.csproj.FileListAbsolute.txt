@@ -1,0 +1,10 @@
+C:\Users\harry\Desktop\Mathi\HarrylMath\bin\Debug\netcoreapp3.1\NerdEngine.deps.json
+C:\Users\harry\Desktop\Mathi\HarrylMath\bin\Debug\netcoreapp3.1\NerdEngine.dll
+C:\Users\harry\Desktop\Mathi\HarrylMath\bin\Debug\netcoreapp3.1\NerdEngine.pdb
+C:\Users\harry\Desktop\Mathi\HarrylMath\obj\Debug\netcoreapp3.1\NerdEngine.csproj.AssemblyReference.cache
+C:\Users\harry\Desktop\Mathi\HarrylMath\obj\Debug\netcoreapp3.1\NerdEngine.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\harry\Desktop\Mathi\HarrylMath\obj\Debug\netcoreapp3.1\NerdEngine.AssemblyInfoInputs.cache
+C:\Users\harry\Desktop\Mathi\HarrylMath\obj\Debug\netcoreapp3.1\NerdEngine.AssemblyInfo.cs
+C:\Users\harry\Desktop\Mathi\HarrylMath\obj\Debug\netcoreapp3.1\NerdEngine.csproj.CoreCompileInputs.cache
+C:\Users\harry\Desktop\Mathi\HarrylMath\obj\Debug\netcoreapp3.1\NerdEngine.dll
+C:\Users\harry\Desktop\Mathi\HarrylMath\obj\Debug\netcoreapp3.1\NerdEngine.pdb
