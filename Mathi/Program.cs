@@ -19,8 +19,8 @@ namespace Mathi
             List<string> light = new List<string> { ",", "\"", "^", "`", "'", ".", "-", "~", "_" };
             List<string> dark = new List<string> { "▓" };
 
-            Ray3Region camera = new Ray3Region(new Ray3(Vector3.Zero, Vector3.zAxis), 20, 35);
-            //Ray3Sector camera = new Ray3Sector(new Ray3(new Vector3(0,0,-10), Vector3.zAxis), 2, (1080/1920)*2.0);
+            Ray3Region camera = new Ray3Region(new Ray3(Vector3.Zero, Vector3.zAxis), 70, 35);
+            //Ray3Sector camera = new Ray3Sector(new Ray3(new Vector3(0,0,-10), Vector3.zAxis), 1.5, 1.0);
 
             Triangle3Group tris = (
                 new Triangle3(new Vector3(-10, 10, 10), new Vector3(-10, -10, 10), new Vector3(10, -10, 10)) +
@@ -44,8 +44,6 @@ namespace Mathi
 
             tris = tris + tris2 + tris3;
 
-            tris.origin += new Vector3(30, 0, 0);
-
             double width = 230;
             double height = 60;
             Console.SetBufferSize(800, 800);
@@ -59,7 +57,7 @@ namespace Mathi
                         line += "\n";
                     for (int x = 0; x < width; x++)
                     {
-                        Ray3 ray = camera.Ray(x / height, y / height);
+                        Ray3 ray = camera.Ray(x / width, y / height);
                         tris.triangles = tris.triangles.OrderBy(t => Vector3.Angle(t.Normal(), ray.v)).ToList();
                         if (tris.Meets(ray)) {
                             if (tris.Angle(ray) <= 0.8)
@@ -77,7 +75,7 @@ namespace Mathi
                 System.Console.Write(line);
                 Console.SetCursorPosition(0, 0);
                 System.Threading.Thread.Sleep(0);
-                tris.Rotate(0.1, 0.0, 0.05, new Vector3(30, 0, 20));
+                tris.Rotate(0.1, 0.0, 0.05, new Vector3(0, 0, 20));
             }
         }
     }

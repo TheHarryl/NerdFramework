@@ -59,7 +59,7 @@ namespace NerdEngine
         {
             foreach (Triangle3 triangle in triangles)
             {
-                triangle.RotateX(radians, origin);
+                triangle.RotateX(radians, origin + _origin);
             }
         }
 
@@ -67,7 +67,7 @@ namespace NerdEngine
         {
             foreach (Triangle3 triangle in triangles)
             {
-                triangle.RotateY(radians, origin);
+                triangle.RotateY(radians, origin + _origin);
             }
         }
 
@@ -75,7 +75,7 @@ namespace NerdEngine
         {
             foreach (Triangle3 triangle in triangles)
             {
-                triangle.RotateZ(radians, origin);
+                triangle.RotateZ(radians, origin + _origin);
             }
         }
 
@@ -83,7 +83,7 @@ namespace NerdEngine
         {
             foreach (Triangle3 triangle in triangles)
             {
-                triangle.Rotate(r1, r2, r3, origin);
+                triangle.Rotate(r1, r2, r3, origin + _origin);
             }
         }
 
