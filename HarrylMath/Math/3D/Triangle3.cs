@@ -1,4 +1,4 @@
-﻿namespace NerdEngine
+﻿namespace NerdFramework
 {
     public class Triangle3
     {
@@ -17,13 +17,6 @@
             this.a = a;
             this.b = b;
             this.c = c;
-        }
-
-        public void Move(Vector3 offset)
-        {
-            a += offset;
-            b += offset;
-            c += offset;
         }
 
         public Vector3 Normal()
@@ -48,6 +41,20 @@
              */
 
             return Vector3.Cross(b - a, c - a).Magnitude() / 2.0;
+        }
+
+        public void Move(Vector3 offset)
+        {
+            a += offset;
+            b += offset;
+            c += offset;
+        }
+
+        public void Scale(Vector3 scale, Vector3 origin)
+        {
+            a = (a - origin) * scale + origin;
+            b = (b - origin) * scale + origin;
+            c = (c - origin) * scale + origin;
         }
 
         public void RotateX(double radians, Vector3 origin)
@@ -96,7 +103,73 @@
 
         public bool Meets(Vector3 point)
         {
-            /* A, B, and C are COPLANAR, all are solutions of Plane
+            /* A, B, and C are COPLANAR, and vertices of the triangle
+             * P is any point that lies within the triangle
+             * 
+             * Parameterization of triangle:
+             * A triangle is created by two vectors AB and AC
+             * A solution of the triangle consists of initial point A with added components AB*t and AC*s
+             * In other words, picture a triangle as a defined coordinate plane of two (non?)orthogonal axes, AB and AC
+             * 
+             * OP = OA + (OB-OA)t + (OC-OA)s
+             * (OP-OA) = (OB-OA)t + (OC-OA)s <=> AP = ABt + ACs
+             * The point is within the triangle if t and s fall within defined boundaries
+             * 
+             * Solving for t and s:
+             * P = (OP-OA)
+             * B = (OB-OA)
+             * C = (OC-OA)
+             * 
+             * P = Bt + Cs
+             * Since P being coplanar is a given, we can eliminate one dimension through rotation (rigid transformation)
+             * Thus, we can derive t and s from a system of two equations:
+             * P.x = B.x*t + C.x*s
+             * P.y = B.y*t + C.y*s
+             * 
+             * s = (P.y - B.y*t)/C.y
+             * t = (P.y - C.y*s)/B.y
+             * 
+             * P.x = B.x*t + C.x*[(P.y - B.y*t)/C.y]
+             * B.x*t - B.y*t*(C.x/C.y) = P.x - P.y*(C.x/C.y)
+             * t = [P.x - P.y*(C.x/C.y)] / [B.x - B.y*(C.x/C.y)]
+             * 
+             * P.x = B.x*(P.y - C.y*s)/B.y + C.x*s
+             * C.x*s - C.y*s*(B.x/B.y) = P.x - P.y*(B.x/B.y)
+             * s = [P.x - P.y*(B.x/B.y)] / [C.x - C.y*(B.x/B.y)]
+             * 
+             * t and s are interpolant values between 0 and 1 that describe P length relative to axis lengths
+             * IF t defines how far the point is along AB and s the same for AC:
+             * The hypotenuse BC can be seen as a linear inverse relationship between s and t
+             * 
+             * THUS the additional condition applies:
+             * t <= 1 - s
+             * t + s <= 1
+             * 
+             * [Conclusion]
+             * After calculating t and s using the following formulas:
+             * t = [P.x - P.y*(C.x/C.y)] / [B.x - B.y*(C.x/C.y)]
+             * s = [P.x - P.y*(B.x/B.y)] / [C.x - C.y*(B.x/B.y)]
+             * 
+             * The point is a solution of the triangle if:
+             * t >= 0
+             * s >= 0
+             * t + s <= 1
+             */
+
+            Vector3 AB = b - a;
+            Vector3 AC = c - a;
+            Vector3 AP = point - a;
+            double ABdiff = AB.x / AB.y;
+            double ACdiff = AC.x / AC.y;
+            double t = (AP.x - AP.y * ACdiff) / (AB.x - AB.y * ACdiff);
+            double s = (AP.x - AP.y * ABdiff) / (AC.x - AC.y * ABdiff);
+
+            return t >= 0 && s >= 0 && t + s <= 1;
+
+
+            /* METHOD 2 */
+
+             /* A, B, and C are COPLANAR, all are solutions of Plane
              * 
              * p1 lies between AB and AC IF:
              * 
@@ -107,7 +180,7 @@
              * acos((AB⋅AP)/(|AB||AP|)) + acos((AC⋅AP)/(|AC||AP|)) <= acos((AB⋅AC)/(|AB||AC|))
              * acos((AB⋅AP)/(|AB||AP|)) + acos((AC⋅AP)/(|AC||AP|)) <= acos((AB⋅AC)/(|AB||AC|))
              * 
-             * Magnitude of the projection of AP onto AB is <= the magnitude of AB <= the magnitude of AC:
+             * Magnitude of the projection of AP onto AB and AC is <= the magnitude of AB and AC:
              * a⋅b = |a||b|cos(theta)
              * AB⋅AP = |AB||AP|cos(theta)
              * |AP|cos(theta) = AB⋅AP/|AB|
@@ -117,7 +190,7 @@
              * AC⋅AP <= AC⋅AC
              */
 
-            Vector3 AB = (b - a);
+            /*Vector3 AB = (b - a);
             Vector3 AC = (c - a);
             Vector3 AP = (point - a);
             double ABm = AB.Magnitude();
@@ -128,30 +201,51 @@
 
             return
                 Math.Abs(Math.Acos(Vector3.Dot(AB, AC) / (ABm * ACm)) - (Math.Acos(ABAP / (ABm * APm)) + Math.Acos(ACAP / (ACm * APm)))) <= 0.0001 &&
-                ABAP <= ABm * ABm && ACAP <= ACm * ACm;
+                ABAP <= ABm * ABm && ACAP <= ACm * ACm;*/
         }
 
         public bool Meets(Ray3 ray)
         {
             /* 1st Check:
+             * Would the ray collide on the triangle's front face?
+             */
+            if (Vector3.Dot(ray.v, Normal()) < 0) return false;
+
+            /* 2nd Check:
              * Simplifies the question in terms of the line the ray resides in and the plane the triangle resides in
              * Do they meet?
              */
+
+            Vector3 n = Normal();
             Line3 line = new Line3(ray.p, ray.v);
-            Plane3 plane = new Plane3(a, Normal());
+            Plane3 plane = new Plane3(a, n);
             if (!plane.Meets(line)) return false;
 
-            /* 2nd Check:
+            /* Final Check:
              * Is this point of intersection within the triangle?
              */
-            Vector3 pointOfIntersection = plane.Intersection(line);
-            if (!Meets(pointOfIntersection)) return false;
 
-            /* Final Check:
-             * (Definition of the Ray)
-             * Is this point of intersection in the positive vector direction of the line's starting point?
+            /* Plane:
+             * n.x(x - q.x) + n.y(y - q.y) + n.z(z - q.z) = 0
+             * 
+             * Line:
+             * x = p.x + v.xt
+             * y = p.y + v.yt
+             * z = p.z + v.zt
+             * 
+             * Intersection:
+             * n.x([p.x + v.xt] - q.x) + n.y([p.y + v.yt] - q.y) + n.z([p.z + v.zt] - q.z) = 0
+             * n⋅p + n⋅vt - n⋅q = 0
+             * (n⋅v)t = n⋅(q - p)
+             * t = [n⋅(q - p)]/(n⋅v)
              */
-            return (pointOfIntersection - line.p).Normalized() == line.v.Normalized();
+
+            Vector3 pointOfIntersection = plane.Intersection(line);
+
+            //if (Vector3.Dot((pointOfIntersection - line.p), line.v) < 0) return false;
+            //if ((pointOfIntersection - line.p).Normalized() != line.v.Normalized()) return false;
+
+            return Meets(pointOfIntersection);
         }
 
         /*public bool Meets(Triangle3 triangle)

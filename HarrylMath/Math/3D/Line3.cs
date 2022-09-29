@@ -1,4 +1,4 @@
-﻿namespace NerdEngine
+﻿namespace NerdFramework
 {
     public class Line3
     {
@@ -64,7 +64,7 @@
              * L0 = p + v0t
              * L1 = q + v1s
              * 
-             * Matrix:
+             * Augmented Matrix:
              *   t    s
              * | v0.x -v1.x | q.x-p.x |   | a b | c |
              * | v0.y -v1.y | q.y-p.y | = | d e | f |

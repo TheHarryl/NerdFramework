@@ -1,0 +1,17 @@
+C:\Users\harry\Desktop\Mathi\Mathi\bin\Release\netcoreapp3.1\Mathi.exe
+C:\Users\harry\Desktop\Mathi\Mathi\bin\Release\netcoreapp3.1\Mathi.deps.json
+C:\Users\harry\Desktop\Mathi\Mathi\bin\Release\netcoreapp3.1\Mathi.runtimeconfig.json
+C:\Users\harry\Desktop\Mathi\Mathi\bin\Release\netcoreapp3.1\Mathi.runtimeconfig.dev.json
+C:\Users\harry\Desktop\Mathi\Mathi\bin\Release\netcoreapp3.1\Mathi.dll
+C:\Users\harry\Desktop\Mathi\Mathi\bin\Release\netcoreapp3.1\Mathi.pdb
+C:\Users\harry\Desktop\Mathi\Mathi\bin\Release\netcoreapp3.1\NerdFramework.dll
+C:\Users\harry\Desktop\Mathi\Mathi\bin\Release\netcoreapp3.1\NerdFramework.pdb
+C:\Users\harry\Desktop\Mathi\Mathi\obj\Release\netcoreapp3.1\Mathi.csproj.AssemblyReference.cache
+C:\Users\harry\Desktop\Mathi\Mathi\obj\Release\netcoreapp3.1\Mathi.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\harry\Desktop\Mathi\Mathi\obj\Release\netcoreapp3.1\Mathi.AssemblyInfoInputs.cache
+C:\Users\harry\Desktop\Mathi\Mathi\obj\Release\netcoreapp3.1\Mathi.AssemblyInfo.cs
+C:\Users\harry\Desktop\Mathi\Mathi\obj\Release\netcoreapp3.1\Mathi.csproj.CoreCompileInputs.cache
+C:\Users\harry\Desktop\Mathi\Mathi\obj\Release\netcoreapp3.1\Mathi.dll
+C:\Users\harry\Desktop\Mathi\Mathi\obj\Release\netcoreapp3.1\Mathi.pdb
+C:\Users\harry\Desktop\Mathi\Mathi\obj\Release\netcoreapp3.1\Mathi.genruntimeconfig.cache
+C:\Users\harry\Desktop\Mathi\Mathi\obj\Release\netcoreapp3.1\Mathi.csproj.CopyComplete

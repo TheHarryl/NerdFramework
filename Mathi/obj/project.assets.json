@@ -2,28 +2,28 @@
   "version": 3,
   "targets": {
     ".NETCoreApp,Version=v3.1": {
-      "NerdEngine/1.0.0": {
+      "NerdFramework/1.0.0": {
         "type": "project",
         "framework": ".NETCoreApp,Version=v3.1",
         "compile": {
-          "bin/placeholder/NerdEngine.dll": {}
+          "bin/placeholder/NerdFramework.dll": {}
         },
         "runtime": {
-          "bin/placeholder/NerdEngine.dll": {}
+          "bin/placeholder/NerdFramework.dll": {}
         }
       }
     }
   },
   "libraries": {
-    "NerdEngine/1.0.0": {
+    "NerdFramework/1.0.0": {
       "type": "project",
-      "path": "../HarrylMath/NerdEngine.csproj",
-      "msbuildProject": "../HarrylMath/NerdEngine.csproj"
+      "path": "../HarrylMath/NerdFramework.csproj",
+      "msbuildProject": "../HarrylMath/NerdFramework.csproj"
     }
   },
   "projectFileDependencyGroups": {
     ".NETCoreApp,Version=v3.1": [
-      "NerdEngine >= 1.0.0"
+      "NerdFramework >= 1.0.0"
     ]
   },
   "packageFolders": {
@@ -61,8 +61,8 @@
         "netcoreapp3.1": {
           "targetAlias": "netcoreapp3.1",
           "projectReferences": {
-            "C:\\Users\\harry\\Desktop\\Mathi\\HarrylMath\\NerdEngine.csproj": {
-              "projectPath": "C:\\Users\\harry\\Desktop\\Mathi\\HarrylMath\\NerdEngine.csproj"
+            "C:\\Users\\harry\\Desktop\\Mathi\\HarrylMath\\NerdFramework.csproj": {
+              "projectPath": "C:\\Users\\harry\\Desktop\\Mathi\\HarrylMath\\NerdFramework.csproj"
             }
           }
         }

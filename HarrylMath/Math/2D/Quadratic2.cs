@@ -1,4 +1,4 @@
-﻿namespace NerdEngine
+﻿namespace NerdFramework
 {
     public class Quadratic2
     {

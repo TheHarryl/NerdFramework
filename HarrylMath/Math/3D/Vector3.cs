@@ -1,4 +1,4 @@
-﻿namespace NerdEngine
+﻿namespace NerdFramework
 {
     public class Vector3
     {
@@ -96,7 +96,16 @@
 
         public Vector3 Rotate(double r1, double r2, double r3)
         {
-            return RotateX(r1).RotateY(r2).RotateZ(r3);
+            Vector3 newVector = this;
+
+            if (r1 != 0.0)
+                newVector = newVector.RotateX(r1);
+            if (r2 != 0.0)
+                newVector = newVector.RotateY(r2);
+            if (r3 != 0.0)
+                newVector = newVector.RotateZ(r3);
+
+            return newVector;
         }
 
         public static Vector3 Angle3(Vector3 a, Vector3 b)

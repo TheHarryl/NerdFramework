@@ -1,5 +1,5 @@
 ﻿using System;
-namespace NerdEngine
+namespace NerdFramework
 {
     public class Vector2
     {

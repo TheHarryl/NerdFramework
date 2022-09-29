@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 
-namespace NerdEngine
+namespace NerdFramework
 {
     public class Triangle3GroupSoft : Triangle3Group
     {

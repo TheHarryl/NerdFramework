@@ -1,7 +1,19 @@
-﻿namespace NerdEngine
+﻿namespace NerdFramework
 {
     public class Math
     {
+        public static double Min(double a, double b)
+        {
+            if (a <= b) return a;
+            return b;
+        }
+
+        public static double Max(double a, double b)
+        {
+            if (a >= b) return a;
+            return b;
+        }
+
         public static double Abs(double x)
         {
             if (x < 0.0) return x * -1.0;

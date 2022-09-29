@@ -4,12 +4,12 @@
     "C:\\Users\\harry\\Desktop\\Mathi\\Mathi\\Mathi.csproj": {}
   },
   "projects": {
-    "C:\\Users\\harry\\Desktop\\Mathi\\HarrylMath\\NerdEngine.csproj": {
+    "C:\\Users\\harry\\Desktop\\Mathi\\HarrylMath\\NerdFramework.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\harry\\Desktop\\Mathi\\HarrylMath\\NerdEngine.csproj",
-        "projectName": "NerdEngine",
-        "projectPath": "C:\\Users\\harry\\Desktop\\Mathi\\HarrylMath\\NerdEngine.csproj",
+        "projectUniqueName": "C:\\Users\\harry\\Desktop\\Mathi\\HarrylMath\\NerdFramework.csproj",
+        "projectName": "NerdFramework",
+        "projectPath": "C:\\Users\\harry\\Desktop\\Mathi\\HarrylMath\\NerdFramework.csproj",
         "packagesPath": "C:\\Users\\harry\\.nuget\\packages\\",
         "outputPath": "C:\\Users\\harry\\Desktop\\Mathi\\HarrylMath\\obj\\",
         "projectStyle": "PackageReference",
@@ -94,8 +94,8 @@
           "netcoreapp3.1": {
             "targetAlias": "netcoreapp3.1",
             "projectReferences": {
-              "C:\\Users\\harry\\Desktop\\Mathi\\HarrylMath\\NerdEngine.csproj": {
-                "projectPath": "C:\\Users\\harry\\Desktop\\Mathi\\HarrylMath\\NerdEngine.csproj"
+              "C:\\Users\\harry\\Desktop\\Mathi\\HarrylMath\\NerdFramework.csproj": {
+                "projectPath": "C:\\Users\\harry\\Desktop\\Mathi\\HarrylMath\\NerdFramework.csproj"
               }
             }
           }

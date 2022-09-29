@@ -8,7 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\HarrylMath\NerdEngine.csproj" />
+    <ProjectReference Include="..\HarrylMath\NerdFramework.csproj" />
   </ItemGroup>
 
 </Project>

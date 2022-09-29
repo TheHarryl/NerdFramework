@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace NerdEngine
+namespace NerdFramework
 {
     public class EquationSystem
     {
