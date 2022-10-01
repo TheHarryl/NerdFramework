@@ -4,7 +4,7 @@ using System.Text;
 
 namespace NerdFramework
 {
-    public class Renderer
+    public class Renderer3
     {
         public Ray3Caster camera;
 
@@ -19,7 +19,7 @@ namespace NerdFramework
         public Triangle3[,] triangleBuffer;
         public Color3[,] lightBuffer;
 
-        public Renderer(Ray3Caster camera, int width, int height)
+        public Renderer3(Ray3Caster camera, int width, int height)
         {
             this.camera = camera;
 
