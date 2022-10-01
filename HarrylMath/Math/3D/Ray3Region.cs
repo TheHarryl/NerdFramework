@@ -1,6 +1,6 @@
 ﻿namespace NerdFramework
 {
-    public class Ray3Region
+    public class Ray3Region : Ray3Caster
     {
         public Ray3 d;
         protected Vector3 w;
@@ -15,12 +15,12 @@
             RotateTo(direction.v);
         }
 
-        public Ray3 Ray(double wAlpha, double hAlpha)
+        public override Ray3 Ray(double wAlpha, double hAlpha)
         {
             return new Ray3(d.p + w * (wAlpha - 0.5) + h * (hAlpha - 0.5), d.v);
         }
 
-        public Vector2 Projection(Vector3 point)
+        public override Vector2 Projection(Vector3 point)
         {
             /* Get projection of point onto camera as intersection of shortest path from point to camera's plane
              * 
@@ -71,44 +71,51 @@
 
             Vector3 intersection = plane.Intersection(line);
 
+            double hSlope = h.x / h.y;
+            double wSlope = w.x / w.y;
+
             return new Vector2(
-                (intersection.x + d.p.y * (h.x / h.y) - d.p.x - intersection.y * (h.x / h.y)) / (w.x - w.y * (h.x / h.y)) + 0.5,
-                (intersection.x + d.p.y * (w.x / w.y) - d.p.x - intersection.y * (w.x / w.y)) / (h.x - h.y * (w.x / w.y)) + 0.5
+                (intersection.x + d.p.y * hSlope - d.p.x - intersection.y * hSlope) / (w.x - w.y * hSlope) + 0.5,
+                (intersection.x + d.p.y * wSlope - d.p.x - intersection.y * wSlope) / (h.x - h.y * wSlope) + 0.5
             );
         }
 
-        public void RotateX(double radians)
+        public override bool Meets(Vector3 point)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public override void RotateX(double radians)
         {
             d.RotateX(radians);
             w = w.RotateX(radians);
             h = h.RotateX(radians);
         }
 
-        public void RotateY(double radians)
+        public override void RotateY(double radians)
         {
             d.RotateY(radians);
             w = w.RotateY(radians);
             h = h.RotateY(radians);
         }
 
-        public void RotateZ(double radians)
+        public override void RotateZ(double radians)
         {
             d.RotateZ(radians);
             w = w.RotateZ(radians);
             h = h.RotateZ(radians);
         }
 
-        public void Rotate(double r1, double r2, double r3)
+        public override void Rotate(double r1, double r2, double r3)
         {
             d.Rotate(r1, r2, r3);
             w = w.Rotate(r1, r2, r3);
             h = h.Rotate(r1, r2, r3);
         }
 
-        public void RotateTo(Vector3 vector)
+        public override void RotateTo(Vector3 vector)
         {
             Vector3 rotation = Vector3.Angle3(d.v, vector);
-            System.Console.WriteLine(rotation);
             Rotate(rotation.x, rotation.y, rotation.z);
         }
     }

@@ -1,6 +1,6 @@
 ﻿namespace NerdFramework
 {
-    public class Ray3
+    public struct Ray3
     {
         public Vector3 p;
         public Vector3 v;

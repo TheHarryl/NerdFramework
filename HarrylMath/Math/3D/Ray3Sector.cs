@@ -1,6 +1,6 @@
 ﻿namespace NerdFramework
 {
-    public class Ray3Sector
+    public class Ray3Sector : Ray3Caster
     {
         public Ray3 d;
         protected Vector3 w0;
@@ -19,12 +19,22 @@
             RotateTo(direction.v);
         }
 
-        public Ray3 Ray(double wAlpha, double hAlpha)
+        public override Ray3 Ray(double wAlpha, double hAlpha)
         {
             return new Ray3(d.p, Vector3.Lerp(Vector3.Lerp(w0, w1, wAlpha), Vector3.Lerp(h0, h1, wAlpha), hAlpha));
         }
 
-        public void RotateX(double radians)
+        public override Vector2 Projection(Vector3 point)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public override bool Meets(Vector3 point)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public override void RotateX(double radians)
         {
             d.RotateX(radians);
             w0 = w0.RotateX(radians);
@@ -33,7 +43,7 @@
             h1 = h1.RotateX(radians);
         }
 
-        public void RotateY(double radians)
+        public override void RotateY(double radians)
         {
             d.RotateY(radians);
             w0 = w0.RotateY(radians);
@@ -42,7 +52,7 @@
             h1 = h1.RotateY(radians);
         }
 
-        public void RotateZ(double radians)
+        public override void RotateZ(double radians)
         {
             d.RotateZ(radians);
             w0 = w0.RotateZ(radians);
@@ -51,7 +61,7 @@
             h1 = h1.RotateZ(radians);
         }
 
-        public void Rotate(double r1, double r2, double r3)
+        public override void Rotate(double r1, double r2, double r3)
         {
             d.Rotate(r1, r2, r3);
             w0 = w0.Rotate(r1, r2, r3);
@@ -60,7 +70,7 @@
             h1 = h1.Rotate(r1, r2, r3);
         }
 
-        public void RotateTo(Vector3 vector)
+        public override void RotateTo(Vector3 vector)
         {
             Vector3 rotation = Vector3.Angle3(d.v, vector);
             Rotate(rotation.x, rotation.y, rotation.z);

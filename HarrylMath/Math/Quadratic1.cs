@@ -1,6 +1,6 @@
 ﻿namespace NerdFramework
 {
-    public class Quadratic1
+    public struct Quadratic1
     {
         double a;
         double b;

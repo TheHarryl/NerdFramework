@@ -1,7 +1,7 @@
 ﻿using System;
 namespace NerdFramework
 {
-    public class Vector2
+    public struct Vector2
     {
         public readonly double x;
         public readonly double y;

@@ -1,6 +1,6 @@
 ﻿namespace NerdFramework
 {
-    public class Plane3
+    public struct Plane3
     {
         public Vector3 p;
         public Vector3 n;

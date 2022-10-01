@@ -1,6 +1,6 @@
 ﻿namespace NerdFramework
 {
-    public class Line3
+    public struct Line3
     {
         public Vector3 p;
         public Vector3 v;
