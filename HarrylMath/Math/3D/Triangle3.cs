@@ -164,7 +164,7 @@
             double t = (AP.x - AP.y * ACdiff) / (AB.x - AB.y * ACdiff);
             double s = (AP.x - AP.y * ABdiff) / (AC.x - AC.y * ABdiff);
 
-            return t >= 0 && s >= 0 && t + s <= 1;
+            return t >= 0.0 && s >= 0.0 && t + s <= 1.0;
 
 
             /* METHOD 2 */

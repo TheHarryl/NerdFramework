@@ -14,3 +14,4 @@ C:\Users\harry\Desktop\Mathi\Mathi\obj\Debug\netcoreapp3.1\Mathi.genruntimeconfi
 C:\Users\harry\Desktop\Mathi\Mathi\obj\Debug\netcoreapp3.1\Mathi.csproj.AssemblyReference.cache
 C:\Users\harry\Desktop\Mathi\Mathi\bin\Debug\netcoreapp3.1\NerdFramework.dll
 C:\Users\harry\Desktop\Mathi\Mathi\bin\Debug\netcoreapp3.1\NerdFramework.pdb
+C:\Users\harry\Desktop\Mathi\Mathi\obj\Debug\netcoreapp3.1\Mathi.csproj.CopyComplete

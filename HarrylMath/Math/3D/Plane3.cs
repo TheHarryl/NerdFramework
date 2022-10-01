@@ -20,8 +20,6 @@
 
         public Plane3(Vector3 a, Vector3 b, Vector3 c)
         {
-            p = (a + b + c) / 3;
-
             /* A, B, and C are COPLANAR, all are solutions of Plane
              * n ⊥ Plane
              * 
@@ -32,6 +30,7 @@
              * n = a×b
              */
 
+            p = a;
             n = Vector3.Cross(new Vector3(a, b), new Vector3(a, c));
         }
 

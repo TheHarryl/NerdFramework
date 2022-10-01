@@ -1,0 +1,17 @@
+C:\Users\harry\Desktop\Mathi\Mathi\bin\Release\netcoreapp3.1\GraphicsConsole.exe
+C:\Users\harry\Desktop\Mathi\Mathi\bin\Release\netcoreapp3.1\GraphicsConsole.deps.json
+C:\Users\harry\Desktop\Mathi\Mathi\bin\Release\netcoreapp3.1\GraphicsConsole.runtimeconfig.json
+C:\Users\harry\Desktop\Mathi\Mathi\bin\Release\netcoreapp3.1\GraphicsConsole.runtimeconfig.dev.json
+C:\Users\harry\Desktop\Mathi\Mathi\bin\Release\netcoreapp3.1\GraphicsConsole.dll
+C:\Users\harry\Desktop\Mathi\Mathi\bin\Release\netcoreapp3.1\GraphicsConsole.pdb
+C:\Users\harry\Desktop\Mathi\Mathi\bin\Release\netcoreapp3.1\NerdFramework.dll
+C:\Users\harry\Desktop\Mathi\Mathi\bin\Release\netcoreapp3.1\NerdFramework.pdb
+C:\Users\harry\Desktop\Mathi\Mathi\obj\Release\netcoreapp3.1\GraphicsConsole.csproj.AssemblyReference.cache
+C:\Users\harry\Desktop\Mathi\Mathi\obj\Release\netcoreapp3.1\GraphicsConsole.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\harry\Desktop\Mathi\Mathi\obj\Release\netcoreapp3.1\GraphicsConsole.AssemblyInfoInputs.cache
+C:\Users\harry\Desktop\Mathi\Mathi\obj\Release\netcoreapp3.1\GraphicsConsole.AssemblyInfo.cs
+C:\Users\harry\Desktop\Mathi\Mathi\obj\Release\netcoreapp3.1\GraphicsConsole.csproj.CoreCompileInputs.cache
+C:\Users\harry\Desktop\Mathi\Mathi\obj\Release\netcoreapp3.1\GraphicsConsole.csproj.CopyComplete
+C:\Users\harry\Desktop\Mathi\Mathi\obj\Release\netcoreapp3.1\GraphicsConsole.dll
+C:\Users\harry\Desktop\Mathi\Mathi\obj\Release\netcoreapp3.1\GraphicsConsole.pdb
+C:\Users\harry\Desktop\Mathi\Mathi\obj\Release\netcoreapp3.1\GraphicsConsole.genruntimeconfig.cache

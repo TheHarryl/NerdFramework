@@ -34,9 +34,9 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\harry\\Desktop\\Mathi\\Mathi\\Mathi.csproj",
-      "projectName": "Mathi",
-      "projectPath": "C:\\Users\\harry\\Desktop\\Mathi\\Mathi\\Mathi.csproj",
+      "projectUniqueName": "C:\\Users\\harry\\Desktop\\Mathi\\Mathi\\GraphicsConsole.csproj",
+      "projectName": "GraphicsConsole",
+      "projectPath": "C:\\Users\\harry\\Desktop\\Mathi\\Mathi\\GraphicsConsole.csproj",
       "packagesPath": "C:\\Users\\harry\\.nuget\\packages\\",
       "outputPath": "C:\\Users\\harry\\Desktop\\Mathi\\Mathi\\obj\\",
       "projectStyle": "PackageReference",
@@ -94,7 +94,7 @@
             "privateAssets": "none"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.402\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.412\\RuntimeIdentifierGraph.json"
       }
     }
   }

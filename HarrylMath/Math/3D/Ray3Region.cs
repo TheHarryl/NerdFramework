@@ -62,8 +62,8 @@
              * s = [P1.x + P0.y*(w.x/w.y) - P0.x - P1.y*(w.x/w.y)] / [h.x - h.y*(w.x/w.y)]
              * 
              * Since the origin is in the center of the screen:
-             * t -= 0.5
-             * s -= 5
+             * t += 0.5
+             * s += 0.5
              */
 
             Plane3 plane = new Plane3(d.p, d.v);
@@ -72,8 +72,8 @@
             Vector3 intersection = plane.Intersection(line);
 
             return new Vector2(
-                (intersection.x + d.p.y * (h.x / h.y) - d.p.x - intersection.y * (h.x / h.y)) / (w.x - w.y * (h.x / h.y)) - 0.5,
-                (intersection.x + d.p.y * (w.x / w.y) - d.p.x - intersection.y * (w.x / w.y)) / (h.x - h.y * (w.x / w.y)) - 0.5
+                (intersection.x + d.p.y * (h.x / h.y) - d.p.x - intersection.y * (h.x / h.y)) / (w.x - w.y * (h.x / h.y)) + 0.5,
+                (intersection.x + d.p.y * (w.x / w.y) - d.p.x - intersection.y * (w.x / w.y)) / (h.x - h.y * (w.x / w.y)) + 0.5
             );
         }
 

@@ -92,6 +92,11 @@ namespace NerdFramework
             return a.x != b.x || a.y != b.y;
         }
 
+        public override string ToString()
+        {
+            return "(" + x + ", " + y + ")";
+        }
+
         public override bool Equals(object obj)
         {
             return obj is Vector2 vector &&

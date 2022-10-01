@@ -1,0 +1,10 @@
+C:\Users\harry\Desktop\Mathi\HarrylMath\bin\Release\netcoreapp3.0\NerdFramework.deps.json
+C:\Users\harry\Desktop\Mathi\HarrylMath\bin\Release\netcoreapp3.0\NerdFramework.dll
+C:\Users\harry\Desktop\Mathi\HarrylMath\bin\Release\netcoreapp3.0\NerdFramework.pdb
+C:\Users\harry\Desktop\Mathi\HarrylMath\obj\Release\netcoreapp3.0\NerdFramework.csproj.AssemblyReference.cache
+C:\Users\harry\Desktop\Mathi\HarrylMath\obj\Release\netcoreapp3.0\NerdFramework.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\harry\Desktop\Mathi\HarrylMath\obj\Release\netcoreapp3.0\NerdFramework.AssemblyInfoInputs.cache
+C:\Users\harry\Desktop\Mathi\HarrylMath\obj\Release\netcoreapp3.0\NerdFramework.AssemblyInfo.cs
+C:\Users\harry\Desktop\Mathi\HarrylMath\obj\Release\netcoreapp3.0\NerdFramework.csproj.CoreCompileInputs.cache
+C:\Users\harry\Desktop\Mathi\HarrylMath\obj\Release\netcoreapp3.0\NerdFramework.dll
+C:\Users\harry\Desktop\Mathi\HarrylMath\obj\Release\netcoreapp3.0\NerdFramework.pdb

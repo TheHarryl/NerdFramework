@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.31729.503
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mathi", "Mathi\Mathi.csproj", "{912D158A-76B4-4EBD-B334-FA185FC518BA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GraphicsConsole", "Mathi\GraphicsConsole.csproj", "{912D158A-76B4-4EBD-B334-FA185FC518BA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NerdFramework", "HarrylMath\NerdFramework.csproj", "{3A9300B9-3827-4ADF-8B8A-FB0831E11ACF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NerdFramework", "HarrylMath\NerdFramework.csproj", "{3A9300B9-3827-4ADF-8B8A-FB0831E11ACF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

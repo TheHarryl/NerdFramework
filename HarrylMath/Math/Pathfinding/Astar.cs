@@ -4,7 +4,7 @@ using System.Text;
 
 namespace NerdFramework
 {
-    public class Astar
+    public static class Astar
     {
         public static Vector2 Calculate(double[][] map)
         {

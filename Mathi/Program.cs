@@ -21,29 +21,11 @@ namespace Mathi
             Ray3Region camera = new Ray3Region(new Ray3(Vector3.Zero, Vector3.zAxis), 70, 35);
             //Ray3Sector camera = new Ray3Sector(new Ray3(new Vector3(0,0,-10), Vector3.zAxis), 1.5, 1.0);
 
-            Triangle3Group tris =
-                new Triangle3(new Vector3(-10, -10, -10), new Vector3(-10, 10, -10), new Vector3(10, -10, -10)) +
-                new Triangle3(new Vector3(10, 10, -10), new Vector3(10, -10, -10), new Vector3(-10, 10, -10)) +
-                new Triangle3(new Vector3(-10, -10, 10), new Vector3(10, -10, 10), new Vector3(-10, 10, 10)) +
-                new Triangle3(new Vector3(10, 10, 10), new Vector3(-10, 10, 10), new Vector3(10, -10, 10));
-
-            Triangle3Group tris2 =
-                new Triangle3(new Vector3(-10, -10, -10), new Vector3(-10, 10, -10), new Vector3(10, -10, -10)) +
-                new Triangle3(new Vector3(10, 10, -10), new Vector3(10, -10, -10), new Vector3(-10, 10, -10)) +
-                new Triangle3(new Vector3(-10, -10, 10), new Vector3(10, -10, 10), new Vector3(-10, 10, 10)) +
-                new Triangle3(new Vector3(10, 10, 10), new Vector3(-10, 10, 10), new Vector3(10, -10, 10));
-
-            Triangle3Group tris3 =
-                new Triangle3(new Vector3(-10, -10, -10), new Vector3(-10, 10, -10), new Vector3(10, -10, -10)) +
-                new Triangle3(new Vector3(10, 10, -10), new Vector3(10, -10, -10), new Vector3(-10, 10, -10)) +
-                new Triangle3(new Vector3(-10, -10, 10), new Vector3(10, -10, 10), new Vector3(-10, 10, 10)) +
-                new Triangle3(new Vector3(10, 10, 10), new Vector3(-10, 10, 10), new Vector3(10, -10, 10));
-
-            tris2.RotateX(Math.PI / 2, new Vector3(0, 0, 0));
-            tris3.RotateY(Math.PI / 2, new Vector3(0, 0, 0));
-
-            tris = tris + tris2 + tris3;
+            //Triangle3Group tris = Triangle3Group.FromCube(Vector3.Zero, 20);
+            Triangle3Group tris = Triangle3Group.FromIcophere(Vector3.Zero, 15, 0);
             tris.origin = new Vector3(0, 0, 100);
+
+            Triangle3Group scene = tris;
 
             int width = 230;
             int height = 60;
@@ -57,9 +39,9 @@ namespace Mathi
             int _framesRendered = 0; // an increasing count
             int _fps; // the FPS calculated from the last measurement
 
-            double xRotate = 0.1;
-            double yRotate = 0.0;
-            double zRotate = 0.05;
+            double xRotate = 0.001;
+            double yRotate = 0.05;
+            double zRotate = 0.0;
 
             while (true)
             {
@@ -92,7 +74,7 @@ namespace Mathi
                         depthBuffer[y, x] = double.MaxValue;
                         triangleBuffer[y, x] = null;
                         Ray3 ray = camera.Ray((double)x / width, (double)y / height);
-                        foreach (Triangle3 triangle in tris.triangles)
+                        foreach (Triangle3 triangle in scene.triangles)
                         {
                             if (triangle.Meets(ray))
                             {
@@ -146,8 +128,6 @@ namespace Mathi
 
                 if ((DateTime.Now - _lastTime).TotalSeconds >= 1)
                 {
-                    // one second has elapsed 
-
                     _fps = _framesRendered;
                     _framesRendered = 0;
                     _lastTime = DateTime.Now;
