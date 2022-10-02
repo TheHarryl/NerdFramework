@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace NerdFramework
@@ -8,12 +9,12 @@ namespace NerdFramework
     {
         public Ray3Caster camera;
 
-        public Triangle3Group scene;
-        public List<Light3Caster> lightSources;
+        public Triangle3Group scene = new Triangle3Group(new List<Triangle3>());
+        public List<Light3Caster> lightSources = new List<Light3Caster>();
 
-        public Color3 fog;
-        private int _width;
-        private int _height;
+        public Color3 fog = new Color3(0, 0, 0, 0.05);
+        public readonly int width;
+        public readonly int height;
 
         public double[,] depthBuffer;
         public Triangle3[,] triangleBuffer;
@@ -23,23 +24,90 @@ namespace NerdFramework
         {
             this.camera = camera;
 
-            _width = width;
-            _height = height;
+            this.width = width;
+            this.height = height;
 
             depthBuffer = new double[height, width];
             triangleBuffer = new Triangle3[height, width];
             lightBuffer = new Color3[height, width];
         }
 
-        public void Render()
+        public void FillLine(Color3 color, int x1, int y1, int x2, int y2)
         {
-            for (int y = 0; y < _height; y++)
+            bool steep = Math.Abs(y2 - y1) > Math.Abs(x2 - x1);
+            if (steep)
             {
-                for (int x = 0; x < _width; x++)
+                int t = x1;
+                y1 = x1;
+                x1 = t;
+
+                t = x2;
+                y2 = x2;
+                x2 = t;
+            }
+            if (x1 > x2)
+            {
+                int t = x1;
+                x1 = x2;
+                x2 = t;
+
+                t = y1;
+                y1 = y2;
+                y2 = t;
+            }
+            double dx = x2 - x1;
+            double dy = Math.Abs(y2 - y1);
+            double error = (dx / 2f);
+            int ystep = (y1 < y2) ? 1 : -1;
+            double y = y1;
+            for (int x = (int)x1; x <= x2; x++)
+            {
+                if (x - 1 >= 0 && x < width && y - 1 >= 0 && y < height)
+                    lightBuffer[(int)((steep ? x : y) - 1), (int)(steep ? y : x) - 1] = color;
+                error -= dy;
+                if (error < 0)
+                {
+                    y += ystep;
+                    error += dx;
+                }
+            }
+        }
+
+        public void FillTriangle(Color3 color, int x1, int y1, int x2, int y2)
+        {
+            for (int y = y1; y <= y2; y++)
+            {
+
+            }
+        }
+
+        public void RenderRasterized()
+        {
+            scene.triangles = scene.triangles.OrderBy(t => ((t.a + t.b + t.c) / 3.0 - camera.d.p).Magnitude()).ToList();
+            foreach (Triangle3 triangle in scene.triangles)
+            {
+                Vector2 a = camera.Projection(triangle.a) * new Vector2(width, height);
+                Vector2 b = camera.Projection(triangle.b) * new Vector2(width, height);
+                Vector2 c = camera.Projection(triangle.c) * new Vector2(width, height);
+                System.Diagnostics.Debug.WriteLine(a);
+                System.Diagnostics.Debug.WriteLine(b);
+                System.Diagnostics.Debug.WriteLine(c);
+                FillLine(Color3.White, (int)triangle.a.x, (int)triangle.a.y, (int)triangle.b.x, (int)triangle.b.y);
+                FillLine(Color3.White, (int)triangle.b.x, (int)triangle.b.y, (int)triangle.c.x, (int)triangle.c.y);
+                FillLine(Color3.White, (int)triangle.c.x, (int)triangle.c.y, (int)triangle.a.x, (int)triangle.a.y);
+            }
+        }
+
+        public void RenderRaytraced()
+        {
+            for (int y = 0; y < height; y++)
+            {
+                for (int x = 0; x < width; x++)
                 {
                     depthBuffer[y, x] = double.MaxValue;
                     triangleBuffer[y, x] = null;
-                    Ray3 ray = camera.Ray((double)x / _width, (double)y / _height);
+                    lightBuffer[y, x] = Color3.Black;
+                    Ray3 ray = camera.RayAt((double)x / width, (double)y / height);
                     foreach (Triangle3 triangle in scene.triangles)
                     {
                         if (triangle.Meets(ray))
@@ -48,10 +116,24 @@ namespace NerdFramework
                             if (distance >= depthBuffer[y, x]) continue;
                             depthBuffer[y, x] = distance;
                             triangleBuffer[y, x] = triangle;
+
+                            double interpolant = Vector3.Angle(triangleBuffer[y, x].Normal(), camera.d.v) / (Math.PI/2.0);
+                            if (interpolant > 1.0)
+                                interpolant = 1.0;
+                            lightBuffer[y, x] = Color3.Lerp(Color3.White, Color3.Black, interpolant);
+                            lightBuffer[y, x] = RenderFog(lightBuffer[y, x], distance);
                         }
                     }
                 }
             }
+        }
+
+        public Color3 RenderFog(Color3 original, double distance)
+        {
+            /* Uses alpha as intensity of fog per unit distance
+             */
+
+            return Color3.Lerp(original, fog.WithoutAlpha(), Math.Pow(1 - fog.alpha, distance));
         }
     }
 }

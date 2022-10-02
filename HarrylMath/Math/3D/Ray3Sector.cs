@@ -2,7 +2,6 @@
 {
     public class Ray3Sector : Ray3Caster
     {
-        public Ray3 d;
         protected Vector3 w0;
         protected Vector3 w1;
         protected Vector3 h0;
@@ -19,7 +18,7 @@
             RotateTo(direction.v);
         }
 
-        public override Ray3 Ray(double wAlpha, double hAlpha)
+        public override Ray3 RayAt(double wAlpha, double hAlpha)
         {
             return new Ray3(d.p, Vector3.Lerp(Vector3.Lerp(w0, w1, wAlpha), Vector3.Lerp(h0, h1, wAlpha), hAlpha));
         }

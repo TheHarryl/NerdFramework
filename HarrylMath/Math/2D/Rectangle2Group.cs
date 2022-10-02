@@ -13,7 +13,6 @@
 
                 foreach (Rectangle2 rectangle in rectangles)
                 {
-                    rectangle.p += value - _origin;
                 }
                 _origin = value;
             }
@@ -28,7 +27,6 @@
         {
             foreach (Rectangle2 rectangle in rectangles)
             {
-                rectangle.p += offset;
             }
         }
 

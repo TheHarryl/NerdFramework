@@ -60,7 +60,7 @@
 
         public static double Pow(double x, double n)
         {
-            return Math.Pow(x, n);
+            return System.Math.Pow(x, n);
             //return Pow(x, (int)(n*10)) / Pow(x, 10);
         }
 
@@ -75,17 +75,12 @@
             return x1;
         }
 
-        public static double Lerp(double x1, double x2, double a)
-        {
-            return x1 * (1.0 - a) + x2 * a;
-        }
-
         public static double Integrate(System.Func<double, double> function, double a, double b, int steps = 1000)
         {
             double x1 = 0.0;
             for (int i = 0; i < steps; i++)
             {
-                x1 += function(Lerp(a, b, (double)i / steps)) / steps;
+                x1 += function(Tween.Linear(a, b, (double)i / steps)) / steps;
             }
 
             return x1;

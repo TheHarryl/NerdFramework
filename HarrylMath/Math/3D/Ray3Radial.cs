@@ -2,7 +2,6 @@
 {
     public class Ray3Radial : Ray3Caster
     {
-        public Ray3 d;
         protected Vector3 w;
         protected Vector3 h;
         protected double angle;
@@ -17,7 +16,7 @@
             RotateTo(direction.v);
         }
 
-        public override Ray3 Ray(double wAlpha, double hAlpha)
+        public override Ray3 RayAt(double wAlpha, double hAlpha)
         {
             throw new System.NotImplementedException();
         }

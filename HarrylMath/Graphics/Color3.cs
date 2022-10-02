@@ -41,6 +41,25 @@ namespace NerdFramework
             return (r + g + b) / 3;
         }
 
+        public Color3 WithoutAlpha()
+        {
+            return new Color3(r, g, b);
+        }
+
+        public override bool Equals(object obj)
+        {
+            return obj is Color3 color &&
+                   r == color.r &&
+                   g == color.g &&
+                   b == color.b &&
+                   alpha == color.alpha;
+        }
+
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(r, g, b, alpha);
+        }
+
         public static Color3 operator +(Color3 a, Color3 b)
         {
             return new Color3(a.r + b.r, a.g + b.g, a.b + b.b, a.alpha + b.alpha);

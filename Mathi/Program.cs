@@ -1,13 +1,8 @@
 ﻿using Math = System.Math;
-using Ray3Region = NerdFramework.Ray3Region;
-using Ray3Sector = NerdFramework.Ray3Sector;
-using Ray3 = NerdFramework.Ray3;
-using Vector3 = NerdFramework.Vector3;
-using Triangle3 = NerdFramework.Triangle3;
-using Triangle3Group = NerdFramework.Triangle3Group;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using NerdFramework;
 
 namespace Mathi
 {
@@ -15,25 +10,15 @@ namespace Mathi
     {
         static void Main(string[] args)
         {
-            Random random = new Random();
-            List<char> light = new List<char> { ',', '\"', '^', '`', '\'', '.', '-', '~', '_' };
-
-            Ray3Region camera = new Ray3Region(new Ray3(Vector3.Zero, Vector3.zAxis), 70, 35);
-            //Ray3Sector camera = new Ray3Sector(new Ray3(new Vector3(0,0,-10), Vector3.zAxis), 1.5, 1.0);
-
-            //Triangle3Group tris = Triangle3Group.FromCube(Vector3.Zero, 20);
-            Triangle3Group tris = Triangle3Group.FromIcophere(Vector3.Zero, 15, 0);
-            tris.origin = new Vector3(0, 0, 100);
-
-            Triangle3Group scene = tris;
-
-            int width = 230;
-            int height = 60;
+            //Random random = new Random();
+            //List<char> light = new List<char> { ',', '\"', '^', '`', '\'', '.', '-', '~', '_' };
+            Renderer3 renderer = new Renderer3(new Ray3Region(new Ray3(Vector3.Zero, Vector3.zAxis), 70, 35), 230, 60);
             Console.SetBufferSize(800, 800);
             Console.TreatControlCAsInput = true;
 
-            double[,] depthBuffer = new double[height, width];
-            Triangle3[,] triangleBuffer = new Triangle3[height, width];
+            Triangle3Group tris = Triangle3Group.FromIcophere(Vector3.Zero, 15, 1);
+            tris.origin = new Vector3(0, 0, 15);
+            renderer.scene = tris;
 
             DateTime _lastTime = DateTime.Now; // marks the beginning the measurement began
             int _framesRendered = 0; // an increasing count
@@ -67,61 +52,15 @@ namespace Mathi
                     }
                 }
 
-                for (int y = 0; y < height; y++)
-                {
-                    for (int x = 0; x < width; x++)
-                    {
-                        depthBuffer[y, x] = double.MaxValue;
-                        triangleBuffer[y, x] = null;
-                        Ray3 ray = camera.Ray((double)x / width, (double)y / height);
-                        foreach (Triangle3 triangle in scene.triangles)
-                        {
-                            if (triangle.Meets(ray))
-                            {
-                                double distance = (triangle.Intersection(ray) - ray.p).Magnitude();
-                                if (distance >= depthBuffer[y, x]) continue;
-                                depthBuffer[y, x] = distance;
-                                triangleBuffer[y, x] = triangle;
-                            }
-                        }
-                    }
-                }
-                Dictionary<Triangle3, double> angleCache = new Dictionary<Triangle3, double>();
+                renderer.RenderRaytraced();
                 string line = "";
-                for (int y = 0; y < height; y++)
+                for (int y = 0; y < renderer.height; y++)
                 {
                     if (y > 0)
                         line += "\n";
-                    for (int x = 0; x < width; x++)
+                    for (int x = 0; x < renderer.width; x++)
                     {
-                        if (triangleBuffer[y, x] == null)
-                        {
-                            line += ' '; // light[random.Next(light.Count)];
-                            continue;
-                        }
-                        double angle;
-                        if (angleCache.ContainsKey(triangleBuffer[y, x]))
-                            angle = angleCache[triangleBuffer[y, x]];
-                        else
-                        {
-                            angle = Vector3.Angle(triangleBuffer[y, x].Normal(), camera.d.v);
-                            angleCache.Add(triangleBuffer[y, x], angle);
-                        }
-                        switch (angle)
-                        {
-                            case double theta when theta <= 0.8:
-                                line += '▓';
-                                break;
-                            case double theta when theta <= 1.25:
-                                line += '▒';
-                                break;
-                            case double theta when theta <= 1.5:
-                                line += '░';
-                                break;
-                            default:
-                                line += ' ';
-                                break;
-                        }
+                        line += ASCIIShader.FromAlpha(renderer.lightBuffer[y, x].Average() / 255.0);
                     }
                 }
                 System.Console.Write(line);

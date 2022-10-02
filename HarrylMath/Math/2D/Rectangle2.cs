@@ -2,23 +2,27 @@
 {
     public class Rectangle2
     {
-        public Vector2 p;
-        public Vector2 s;
+        public UDim2 p;
+        public UDim2 s;
 
-        public Rectangle2(Vector2 position, Vector2 size)
+        public Rectangle2(UDim2 position, UDim2 size)
         {
             this.p = position;
             this.s = size;
         }
 
-        public bool Overlaps(Vector2 point)
+        public bool Overlaps(Vector2 point, int windowWidth = 0, int windowHeight = 0)
         {
-            return (point.x >= p.x && point.y >= p.y && point.x <= p.x + s.x && point.y <= p.y + s.y);
+            Vector2 pAbsolute = p.Absolute(windowWidth, windowHeight);
+            Vector2 sAbsolute = s.Absolute(windowWidth, windowHeight);
+            return (point.x >= pAbsolute.x && point.y >= pAbsolute.y && point.x <= pAbsolute.x + sAbsolute.x && point.y <= pAbsolute.y + sAbsolute.y);
         }
 
-        public bool Overlaps(Rectangle2 rectangle)
+        public bool Overlaps(Rectangle2 rectangle, int windowWidth = 0, int windowHeight = 0)
         {
-            return Overlaps(rectangle.p) || Overlaps(rectangle.p + rectangle.s);
+            Vector2 pAbsolute = rectangle.p.Absolute(windowWidth, windowHeight);
+            Vector2 sAbsolute = rectangle.s.Absolute(windowWidth, windowHeight);
+            return Overlaps(pAbsolute) || Overlaps(pAbsolute + sAbsolute);
         }
     }
 }

@@ -2,7 +2,6 @@
 {
     public class Ray3Region : Ray3Caster
     {
-        public Ray3 d;
         protected Vector3 w;
         protected Vector3 h;
 
@@ -15,7 +14,7 @@
             RotateTo(direction.v);
         }
 
-        public override Ray3 Ray(double wAlpha, double hAlpha)
+        public override Ray3 RayAt(double wAlpha, double hAlpha)
         {
             return new Ray3(d.p + w * (wAlpha - 0.5) + h * (hAlpha - 0.5), d.v);
         }
@@ -73,6 +72,8 @@
 
             double hSlope = h.x / h.y;
             double wSlope = w.x / w.y;
+
+            //System.Diagnostics.Debug.WriteLine((intersection.x + d.p.y * wSlope - d.p.x - intersection.y * wSlope) + " " + (h.x - h.y * wSlope) + 0.5);
 
             return new Vector2(
                 (intersection.x + d.p.y * hSlope - d.p.x - intersection.y * hSlope) / (w.x - w.y * hSlope) + 0.5,

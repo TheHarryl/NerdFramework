@@ -8,18 +8,20 @@ namespace NerdFramework
     {
         public Ray3Caster rayCaster;
         public Triangle3Group origin;
-        public Vector3 offset;
+        public Color3Sequence color;
 
-        public Color3 color;
         public double distance;
+        public int quantization;
+        public double dustCoefficient;
 
-        public Light3Caster(Ray3Caster caster, Triangle3Group origin, Vector3 offset, Color3 color, double distance)
+        public Light3Caster(Ray3Caster caster, Triangle3Group origin, Color3Sequence color, double distance, int quantization = 3, double dustCoefficient = 0.1)
         {
             this.rayCaster = caster;
             this.origin = origin;
-            this.offset = offset;
             this.color = color;
             this.distance = distance;
+            this.quantization = quantization;
+            this.dustCoefficient = dustCoefficient;
         }
     }
 }

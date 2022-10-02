@@ -6,7 +6,10 @@ namespace NerdFramework
     public class Triangle3Group
     {
         public List<Triangle3> triangles;
+
         private Vector3 _origin = Vector3.Zero;
+        private Vector3 _scale = Vector3.One;
+
         public Vector3 origin
         {
             get => _origin;
@@ -21,7 +24,6 @@ namespace NerdFramework
                 _origin = value;
             }
         }
-        private Vector3 _scale = Vector3.One;
         public Vector3 scale
         {
             get => _scale;
@@ -63,7 +65,7 @@ namespace NerdFramework
             return clone;
         }
 
-        public static Triangle3Group FromFile(string fileLocation)
+        public static Triangle3Group FromFile(Vector3 origin, string fileLocation)
         {
             string[] lines = System.IO.File.ReadAllLines(fileLocation);
             List<Triangle3> triangles = new List<Triangle3>();
@@ -74,8 +76,7 @@ namespace NerdFramework
             }
 
             Triangle3Group group = new Triangle3Group(triangles);
-
-
+            group.origin = origin;
 
             return group;
         }
@@ -92,7 +93,7 @@ namespace NerdFramework
             Vector3 g = new Vector3(-v, -v, -v);
             Vector3 h = new Vector3(-v, -v, v);
 
-            Triangle3Group cube = new Triangle3Group(new List<Triangle3>()
+            Triangle3Group group = new Triangle3Group(new List<Triangle3>()
             {
                 new Triangle3(b, d, f),
                 new Triangle3(h, f, d),
@@ -107,9 +108,9 @@ namespace NerdFramework
                 new Triangle3(a, e, c),
                 new Triangle3(g, c, e),
             });
+            group.origin = origin;
 
-            cube.origin = origin;
-            return cube;
+            return group;
         }
 
         public static Triangle3Group FromIcophere(Vector3 origin, double radius, int iterations = 2)
@@ -128,6 +129,7 @@ namespace NerdFramework
             Vector3 k = new Vector3(0.0, -goldenRatio, -1.0).Normalized();
             Vector3 l = new Vector3(0.0, -goldenRatio, 1.0).Normalized();
 
+            // This was NOT poggers to make
             List<Triangle3> icosahedron = new List<Triangle3>()
             {
                 new Triangle3(e, l, b),
@@ -140,12 +142,12 @@ namespace NerdFramework
                 new Triangle3(f, l, e),
                 new Triangle3(b, k, h),
                 new Triangle3(b, h, a),
-                new Triangle3(a, h, j),
+                new Triangle3(h, j, a),
                 new Triangle3(d, j, g),
                 new Triangle3(d, g, c),
                 new Triangle3(c, g, k),
                 new Triangle3(g, j, h),
-                new Triangle3(g, h, k),
+                new Triangle3(h, k, g),
                 new Triangle3(i, a, j),
                 new Triangle3(i, j, d),
                 new Triangle3(l, c, k),
