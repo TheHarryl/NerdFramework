@@ -159,6 +159,8 @@
              * 
              * a⋅b = 0 <=> a ⊥ b
              * 
+             * a⋅b = 1 <=> a'⋅b = 0 <=> a' ⊥ b
+             * 
              * a⋅b = |a||b|cos(theta)
              * 
              * a⋅b = b⋅a

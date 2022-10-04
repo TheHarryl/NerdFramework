@@ -5,7 +5,7 @@ namespace NerdFramework
 {
     public class Color3Sequence
     {
-        Dictionary<double, Color3> steps = new Dictionary<double, Color3>();
+        public Dictionary<double, Color3> steps = new Dictionary<double, Color3>();
 
         public Color3Sequence()
         {

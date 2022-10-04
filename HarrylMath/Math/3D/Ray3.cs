@@ -1,4 +1,6 @@
-﻿namespace NerdFramework
+﻿using System.Collections.Generic;
+
+namespace NerdFramework
 {
     public struct Ray3
     {
@@ -19,6 +21,23 @@
 
             p = position;
             v = vector;
+        }
+
+        public Ray3 March(List<Triangle3> triangles)
+        {
+            double distance = (triangles[0].a - p).Magnitude();
+            foreach (Triangle3 triangle in triangles)
+            {
+                double d1 = (triangle.a - p).Magnitude();
+                double d2 = (triangle.b - p).Magnitude();
+                double d3 = (triangle.c - p).Magnitude();
+                double min = Math.Min(d1, d2, d3);
+
+                if (min < distance)
+                    distance = min;
+            }
+
+            return new Ray3(p + v * distance, v);
         }
 
         public void RotateX(double radians)

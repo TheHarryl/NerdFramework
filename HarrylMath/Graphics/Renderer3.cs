@@ -17,8 +17,9 @@ namespace NerdFramework
         public readonly int height;
 
         public double[,] depthBuffer;
-        public Triangle3[,] triangleBuffer;
         public Color3[,] lightBuffer;
+
+        private double criticalAngle = Math.PI / 2.0;
 
         public Renderer3(Ray3Caster camera, int width, int height)
         {
@@ -28,7 +29,6 @@ namespace NerdFramework
             this.height = height;
 
             depthBuffer = new double[height, width];
-            triangleBuffer = new Triangle3[height, width];
             lightBuffer = new Color3[height, width];
         }
 
@@ -89,9 +89,6 @@ namespace NerdFramework
                 Vector2 a = camera.Projection(triangle.a) * new Vector2(width, height);
                 Vector2 b = camera.Projection(triangle.b) * new Vector2(width, height);
                 Vector2 c = camera.Projection(triangle.c) * new Vector2(width, height);
-                System.Diagnostics.Debug.WriteLine(a);
-                System.Diagnostics.Debug.WriteLine(b);
-                System.Diagnostics.Debug.WriteLine(c);
                 FillLine(Color3.White, (int)triangle.a.x, (int)triangle.a.y, (int)triangle.b.x, (int)triangle.b.y);
                 FillLine(Color3.White, (int)triangle.b.x, (int)triangle.b.y, (int)triangle.c.x, (int)triangle.c.y);
                 FillLine(Color3.White, (int)triangle.c.x, (int)triangle.c.y, (int)triangle.a.x, (int)triangle.a.y);
@@ -105,8 +102,7 @@ namespace NerdFramework
                 for (int x = 0; x < width; x++)
                 {
                     depthBuffer[y, x] = double.MaxValue;
-                    triangleBuffer[y, x] = null;
-                    lightBuffer[y, x] = Color3.Black;
+
                     Ray3 ray = camera.RayAt((double)x / width, (double)y / height);
                     foreach (Triangle3 triangle in scene.triangles)
                     {
@@ -115,15 +111,15 @@ namespace NerdFramework
                             double distance = (triangle.Intersection(ray) - ray.p).Magnitude();
                             if (distance >= depthBuffer[y, x]) continue;
                             depthBuffer[y, x] = distance;
-                            triangleBuffer[y, x] = triangle;
 
-                            double interpolant = Vector3.Angle(triangleBuffer[y, x].Normal(), camera.d.v) / (Math.PI/2.0);
+                            double interpolant = Vector3.Angle(triangle.Normal(), -camera.d.v) / criticalAngle;
                             if (interpolant > 1.0)
                                 interpolant = 1.0;
                             lightBuffer[y, x] = Color3.Lerp(Color3.White, Color3.Black, interpolant);
-                            lightBuffer[y, x] = RenderFog(lightBuffer[y, x], distance);
                         }
                     }
+
+                    lightBuffer[y, x] = RenderFog(lightBuffer[y, x], depthBuffer[y, x]);
                 }
             }
         }
@@ -133,7 +129,7 @@ namespace NerdFramework
             /* Uses alpha as intensity of fog per unit distance
              */
 
-            return Color3.Lerp(original, fog.WithoutAlpha(), Math.Pow(1 - fog.alpha, distance));
+            return Color3.Lerp(fog.WithoutAlpha(), original, Math.Pow(1.0 - fog.alpha, distance));
         }
     }
 }

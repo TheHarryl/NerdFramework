@@ -3,9 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.31729.503
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GraphicsConsole", "Mathi\GraphicsConsole.csproj", "{912D158A-76B4-4EBD-B334-FA185FC518BA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConsoleGraphics", "Mathi\ConsoleGraphics.csproj", "{912D158A-76B4-4EBD-B334-FA185FC518BA}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NerdFramework", "HarrylMath\NerdFramework.csproj", "{3A9300B9-3827-4ADF-8B8A-FB0831E11ACF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MonoGameGraphics", "MonoGameGraphics\MonoGameGraphics.csproj", "{6CD20634-64CB-4443-AA9D-BC11EBC5B680}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -61,6 +63,26 @@ Global
 		{3A9300B9-3827-4ADF-8B8A-FB0831E11ACF}.Release|x64.Build.0 = Release|Any CPU
 		{3A9300B9-3827-4ADF-8B8A-FB0831E11ACF}.Release|x86.ActiveCfg = Release|Any CPU
 		{3A9300B9-3827-4ADF-8B8A-FB0831E11ACF}.Release|x86.Build.0 = Release|Any CPU
+		{6CD20634-64CB-4443-AA9D-BC11EBC5B680}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6CD20634-64CB-4443-AA9D-BC11EBC5B680}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6CD20634-64CB-4443-AA9D-BC11EBC5B680}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{6CD20634-64CB-4443-AA9D-BC11EBC5B680}.Debug|ARM.Build.0 = Debug|Any CPU
+		{6CD20634-64CB-4443-AA9D-BC11EBC5B680}.Debug|ARM64.ActiveCfg = Debug|Any CPU
+		{6CD20634-64CB-4443-AA9D-BC11EBC5B680}.Debug|ARM64.Build.0 = Debug|Any CPU
+		{6CD20634-64CB-4443-AA9D-BC11EBC5B680}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{6CD20634-64CB-4443-AA9D-BC11EBC5B680}.Debug|x64.Build.0 = Debug|Any CPU
+		{6CD20634-64CB-4443-AA9D-BC11EBC5B680}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{6CD20634-64CB-4443-AA9D-BC11EBC5B680}.Debug|x86.Build.0 = Debug|Any CPU
+		{6CD20634-64CB-4443-AA9D-BC11EBC5B680}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6CD20634-64CB-4443-AA9D-BC11EBC5B680}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6CD20634-64CB-4443-AA9D-BC11EBC5B680}.Release|ARM.ActiveCfg = Release|Any CPU
+		{6CD20634-64CB-4443-AA9D-BC11EBC5B680}.Release|ARM.Build.0 = Release|Any CPU
+		{6CD20634-64CB-4443-AA9D-BC11EBC5B680}.Release|ARM64.ActiveCfg = Release|Any CPU
+		{6CD20634-64CB-4443-AA9D-BC11EBC5B680}.Release|ARM64.Build.0 = Release|Any CPU
+		{6CD20634-64CB-4443-AA9D-BC11EBC5B680}.Release|x64.ActiveCfg = Release|Any CPU
+		{6CD20634-64CB-4443-AA9D-BC11EBC5B680}.Release|x64.Build.0 = Release|Any CPU
+		{6CD20634-64CB-4443-AA9D-BC11EBC5B680}.Release|x86.ActiveCfg = Release|Any CPU
+		{6CD20634-64CB-4443-AA9D-BC11EBC5B680}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

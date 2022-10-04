@@ -8,10 +8,32 @@
             return b;
         }
 
+        public static double Min(params double[] values)
+        {
+            double min = values[0];
+            for (int i = 1; i < values.Length; i++)
+            {
+                if (values[i] < min)
+                    min = values[i];
+            }
+            return min;
+        }
+
         public static double Max(double a, double b)
         {
             if (a >= b) return a;
             return b;
+        }
+
+        public static double Max(params double[] values)
+        {
+            double min = values[0];
+            for (int i = 1; i < values.Length; i++)
+            {
+                if (values[i] > min)
+                    min = values[i];
+            }
+            return min;
         }
 
         public static double Abs(double x)

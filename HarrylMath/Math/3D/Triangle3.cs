@@ -209,7 +209,7 @@
             /* 1st Check:
              * Would the ray collide on the triangle's front face?
              */
-            if (Vector3.Dot(ray.v, Normal()) < 0) return false;
+            if (Vector3.Dot(ray.v, Normal()) > 0) return false;
 
             /* 2nd Check:
              * Simplifies the question in terms of the line the ray resides in and the plane the triangle resides in

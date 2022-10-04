@@ -34,9 +34,9 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\harry\\Desktop\\Mathi\\Mathi\\GraphicsConsole.csproj",
-      "projectName": "GraphicsConsole",
-      "projectPath": "C:\\Users\\harry\\Desktop\\Mathi\\Mathi\\GraphicsConsole.csproj",
+      "projectUniqueName": "C:\\Users\\harry\\Desktop\\Mathi\\Mathi\\ConsoleGraphics.csproj",
+      "projectName": "ConsoleGraphics",
+      "projectPath": "C:\\Users\\harry\\Desktop\\Mathi\\Mathi\\ConsoleGraphics.csproj",
       "packagesPath": "C:\\Users\\harry\\.nuget\\packages\\",
       "outputPath": "C:\\Users\\harry\\Desktop\\Mathi\\Mathi\\obj\\",
       "projectStyle": "PackageReference",
