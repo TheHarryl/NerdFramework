@@ -5,16 +5,18 @@ namespace NerdFramework
     public class Light3Caster
     {
         public Ray3Caster rayCaster;
-        public Triangle3Group origin;
+
+        public Triangle3Group reference;
+
         public Color3Sequence color;
 
         public double distance;
         public double volumentricCoefficient;
 
-        public Light3Caster(Ray3Caster caster, Triangle3Group origin, Color3Sequence color, double distance, double volumentricCoefficient = 0.1)
+        public Light3Caster(Ray3Caster caster, Triangle3Group reference, Color3Sequence color, double distance, double volumentricCoefficient = 0.1)
         {
             this.rayCaster = caster;
-            this.origin = origin;
+            this.reference = reference;
             this.color = color;
             this.distance = distance;
             this.volumentricCoefficient = volumentricCoefficient;
@@ -34,9 +36,18 @@ namespace NerdFramework
             }
         }
 
-        public Color3 LightAt(double distance)
+        public Color3 LightAt(double distance, double angle)
         {
-            return color.ColorAt(distance / this.distance);
+            double interpolant = angle / Math.QuarterPI;
+
+            Color3 light = color.ColorAt(distance / this.distance);
+            light = Color3.Lerp(light, Color3.Black, interpolant > 1.0 ? 1.0 : interpolant);
+            return light;
+        }
+
+        public bool InRange(Vector3 point)
+        {
+            return (point - this.reference.origin).Magnitude() <= distance;
         }
     }
 }

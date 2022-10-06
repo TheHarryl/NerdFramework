@@ -188,9 +188,10 @@
              * THEREFORE any point within the Plane yields the minimum distance
              */
 
-            Vector3 n0 = n.Normalized();
-            Vector3 n1 = plane.n.Normalized();
-            if (n0 == n1 || n0 == -n1)
+            //Vector3 n0 = n.Normalized();
+            //Vector3 n1 = plane.n.Normalized();
+            //if (n0 == n1 || n0 == -n1)
+            if (Vector3.Parallel(n, plane.n))
             {
                 // Returns the minimum using the formula between the Plane and a point, using a point of the other Plane
                 return Min(plane.p);

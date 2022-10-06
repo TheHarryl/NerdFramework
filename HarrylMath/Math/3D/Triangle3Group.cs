@@ -226,6 +226,7 @@ namespace NerdFramework
             {
                 triangle.RotateX(radians, origin + _origin);
             }
+            //_origin = (_origin - origin).RotateX(radians) + origin;
         }
 
         public void RotateY(double radians, Vector3 origin)
@@ -234,6 +235,7 @@ namespace NerdFramework
             {
                 triangle.RotateY(radians, origin + _origin);
             }
+            //_origin = (_origin - origin).RotateY(radians) + origin;
         }
 
         public void RotateZ(double radians, Vector3 origin)
@@ -242,6 +244,7 @@ namespace NerdFramework
             {
                 triangle.RotateZ(radians, origin + _origin);
             }
+            //_origin = (_origin - origin).RotateZ(radians) + origin;
         }
 
         public void Rotate(double r1, double r2, double r3, Vector3 origin)
@@ -250,6 +253,7 @@ namespace NerdFramework
             {
                 triangle.Rotate(r1, r2, r3, origin + _origin);
             }
+            //_origin = (_origin - origin).Rotate(r1, r2, r3) + origin;
         }
 
         public static Triangle3Group operator +(Triangle3Group a, Triangle3 b)

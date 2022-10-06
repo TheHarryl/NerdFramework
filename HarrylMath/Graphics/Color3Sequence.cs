@@ -20,6 +20,7 @@ namespace NerdFramework
         public Color3Sequence(Color3 color)
         {
             steps.Add(0.0, color);
+            steps.Add(1.0, Color3.Black);
         }
 
         public Color3Sequence(params Color3[] colors)

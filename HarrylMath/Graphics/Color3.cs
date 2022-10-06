@@ -46,6 +46,16 @@ namespace NerdFramework
             return new Color3(r, g, b);
         }
 
+        public Color3 Invisible()
+        {
+            return new Color3(r, g, b, 0.0);
+        }
+
+        public override string ToString()
+        {
+            return "(" + r + ", " + g + ", " + b + ": " + alpha + ")";
+        }
+
         public override bool Equals(object obj)
         {
             return obj is Color3 color &&

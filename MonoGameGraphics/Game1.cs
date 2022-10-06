@@ -2,6 +2,8 @@
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using NerdFramework;
+using System;
+using System.Diagnostics;
 using Vector3 = NerdFramework.Vector3;
 
 namespace MonoGameGraphics
@@ -15,6 +17,9 @@ namespace MonoGameGraphics
         //private Triangle3Group tris = Triangle3Group.FromCube(Vector3.Zero, 20);
         private Triangle3Group tris = Triangle3Group.FromIcophere(new Vector3(0, 0, 15), 15, 1);
         private Texture2D screen;
+
+        private int frameCount = 0;
+        private DateTime startFrameCount = DateTime.Now;
 
         public Game1()
         {
@@ -32,6 +37,8 @@ namespace MonoGameGraphics
             screen = new Texture2D(_graphics.GraphicsDevice, renderer.width, renderer.height);
 
             base.Initialize();
+
+            Trace.WriteLine((new Color3Sequence(Color3.White)).ColorAt(0.5));
         }
 
         protected override void LoadContent()
@@ -44,7 +51,8 @@ namespace MonoGameGraphics
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
-            tris.Rotate(-0.6 * gameTime.ElapsedGameTime.TotalSeconds, 1.0 * gameTime.ElapsedGameTime.TotalSeconds, 0.0, new Vector3(0, 0, 0));
+            tris.Rotate(-2 * gameTime.ElapsedGameTime.TotalSeconds, 1.01 * gameTime.ElapsedGameTime.TotalSeconds, 0.0 * gameTime.ElapsedGameTime.TotalSeconds, new Vector3(0, 0, 0));
+            renderer.cameraLight.rayCaster.d.p = (renderer.cameraLight.rayCaster.d.p - new Vector3(0, 0, 15)).Rotate(0.1 * gameTime.ElapsedGameTime.TotalSeconds, -4.0 * gameTime.ElapsedGameTime.TotalSeconds, 0.0) + new Vector3(0, 0, 15);
 
             base.Update(gameTime);
         }
@@ -68,6 +76,14 @@ namespace MonoGameGraphics
             base.Draw(gameTime);
 
             _spriteBatch.End();
+
+            frameCount++;
+            if (DateTime.Now - startFrameCount >= new TimeSpan(0, 0, 1))
+            {
+                Trace.WriteLine(frameCount + " FPS");
+                frameCount = 0;
+                startFrameCount = DateTime.Now;
+            }
         }
     }
 }

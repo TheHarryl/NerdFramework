@@ -109,6 +109,9 @@
         }
 
         public static double PI = 3.1415926535897931;
+        public static double HalfPI = PI / 2.0;
+        public static double QuarterPI = PI / 4.0;
+        public static double TwoPI = PI * 2.0;
 
         public static double DegreesToRadians(double radians)
         {

@@ -2,11 +2,11 @@
 {
     public class Matrix
     {
-        private double[][] _elements;
+        public double[][] elements;
 
-        public Matrix(int rowLength, params double[] elements)
+        public Matrix(params double[][] elements)
         {
-
+            this.elements = elements;
         }
 
         public double Equals()

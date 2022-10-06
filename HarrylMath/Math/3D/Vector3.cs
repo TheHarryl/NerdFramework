@@ -35,7 +35,12 @@
 
         public double Magnitude()
         {
-            return Math.Sqrt(x * x + y * y + z * z);
+            /* a⋅b = |a||b|cos(theta)
+             * a⋅a = |a||a|cos(0) = |a||a|
+             * |a| = sqrt(a⋅a)
+             */
+
+            return Math.Sqrt(Dot(this, this));
         }
 
         public Vector3 Normalized()
@@ -204,6 +209,20 @@
             return ((b.y * c.z) - (b.z * c.y)) * a.x - ((b.x * c.z) - (b.z * c.x)) * a.y + ((b.x * c.y) - (b.y * c.x)) * a.z;
         }
 
+        public static bool Parallel(Vector3 a, Vector3 b)
+        {
+            /* IF a = b * s:
+             * a ∥ b
+             * 
+             * CANNOT check if a/s = b,
+             * as a component of s COULD be zero
+             */
+
+            Vector3 v1 = a.Normalized();
+            Vector3 v2 = b.Normalized();
+            return (v1 == v2 || v1 == -v2);
+        }
+
         public static Vector3 Lerp(Vector3 a, Vector3 b, double alpha)
         {
             return a * (1 - alpha) + b * alpha;
@@ -279,7 +298,7 @@
 
         public static bool operator !=(Vector3 a, Vector3 b)
         {
-            return Math.Abs(a.x - b.x) >= 0.00001 && Math.Abs(a.y - b.y) >= -0.00001 && Math.Abs(a.z - b.z) >= 0.00001;
+            return Math.Abs(a.x - b.x) >= 0.00001 || Math.Abs(a.y - b.y) >= -0.00001 || Math.Abs(a.z - b.z) >= 0.00001;
         }
     }
 }

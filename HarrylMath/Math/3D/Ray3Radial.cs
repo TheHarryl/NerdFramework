@@ -28,7 +28,7 @@
 
         public override bool Meets(Vector3 point)
         {
-            return Vector3.Angle(d.v, point - d.p) <= angle;
+            return Vector3.Angle(d.v, point - d.p) <= angle / 2.0;
         }
 
         public override void RotateX(double radians)

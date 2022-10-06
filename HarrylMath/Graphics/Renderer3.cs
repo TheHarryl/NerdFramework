@@ -8,6 +8,7 @@ namespace NerdFramework
     public class Renderer3
     {
         public Ray3Caster camera;
+        public Light3Caster cameraLight;
 
         public Triangle3Group scene = new Triangle3Group(new List<Triangle3>());
         public List<Light3Caster> lightSources = new List<Light3Caster>();
@@ -19,11 +20,10 @@ namespace NerdFramework
         public double[,] depthBuffer;
         public Color3[,] lightBuffer;
 
-        private double criticalAngle = Math.PI / 2.0;
-
         public Renderer3(Ray3Caster camera, int width, int height)
         {
             this.camera = camera;
+            this.cameraLight = new Light3Caster(new Ray3Radial(new Ray3(camera.d.p, camera.d.v), Math.TwoPI), scene, new Color3Sequence(Color3.White), 10000);
 
             this.width = width;
             this.height = height;
@@ -102,20 +102,23 @@ namespace NerdFramework
                 for (int x = 0; x < width; x++)
                 {
                     depthBuffer[y, x] = double.MaxValue;
+                    lightBuffer[y, x] = Color3.Black;
 
                     Ray3 ray = camera.RayAt((double)x / width, (double)y / height);
                     foreach (Triangle3 triangle in scene.triangles)
                     {
                         if (triangle.Meets(ray))
                         {
-                            double distance = (triangle.Intersection(ray) - ray.p).Magnitude();
+                            Vector3 intersection = triangle.Intersection(ray);
+                            double distance = (intersection - ray.p).Magnitude();
                             if (distance >= depthBuffer[y, x]) continue;
                             depthBuffer[y, x] = distance;
 
-                            double interpolant = Vector3.Angle(triangle.Normal(), -camera.d.v) / criticalAngle;
-                            if (interpolant > 1.0)
-                                interpolant = 1.0;
-                            lightBuffer[y, x] = Color3.Lerp(Color3.White, Color3.Black, interpolant);
+                            double angle = Vector3.Angle(triangle.Normal(), (intersection - cameraLight.rayCaster.d.p));
+                            //double interpolant = angle / Math.HalfPI;
+                            //if (interpolant > 1.0)
+                            //    interpolant = 1.0;
+                            lightBuffer[y, x] = cameraLight.LightAt(distance, angle);
                         }
                     }
 

@@ -209,17 +209,30 @@
             /* 1st Check:
              * Would the ray collide on the triangle's front face?
              */
-            if (Vector3.Dot(ray.v, Normal()) > 0) return false;
+
+            if (Vector3.Dot(ray.v, Normal()) >= 0.0) return false;
 
             /* 2nd Check:
              * Simplifies the question in terms of the line the ray resides in and the plane the triangle resides in
              * Do they meet?
              */
 
-            Vector3 n = Normal();
-            Line3 line = new Line3(ray.p, ray.v);
-            Plane3 plane = new Plane3(a, n);
-            if (!plane.Meets(line)) return false;
+            /* I'm actually gonna comment out this check for the sake of optimization.
+             * Put on your tinfoil hat and hear me out here.
+             * All this step really does is check and make sure that the ray and triangle aren't parallel.
+             * However, since the Vector3's are made of doubles, PERFECTLY PARALLEL vectors are almost impossible.
+             * Eg.) Vectors are likely to math out to be at least 0.00001 degrees away from perfectly parallel.
+             * Commenting this out will introduce an unchecked edge case, but one that is very very unlikely to exist.
+             * 
+             * To *kinda* check for it, I'm changing the ">" in the 1st check to ">=" to weed out perfectly parallel cases.
+             * The consequence is that this function won't really work for perfectly parallel cases,
+             * but to the benefit of an extremely small performance uplift.
+             */
+
+            //Vector3 n = Normal();
+            //Line3 line = new Line3(ray.p, ray.v);
+            //Plane3 plane = new Plane3(a, n);
+            //if (!plane.Meets(line)) return false;
 
             /* Final Check:
              * Is this point of intersection within the triangle?
@@ -240,12 +253,25 @@
              * t = [n⋅(q - p)]/(n⋅v)
              */
 
-            Vector3 pointOfIntersection = plane.Intersection(line);
+            Vector3 pointOfIntersection = Intersection(ray); //plane.Intersection(line);
 
             //if (Vector3.Dot((pointOfIntersection - line.p), line.v) < 0) return false;
             //if ((pointOfIntersection - line.p).Normalized() != line.v.Normalized()) return false;
 
             return Meets(pointOfIntersection);
+        }
+
+        public Vector3 IfMeetsGetIntersection(Ray3 ray)
+        {
+            /* Repackages the Meets(Ray) method to return the intersection (or a zero vector, if not exists)
+             * for optimization purposes where you'd need the intersection for a secondary operation.
+             */
+
+            if (Vector3.Dot(ray.v, Normal()) >= 0.0) return Vector3.Zero;
+
+            Vector3 pointOfIntersection = Intersection(ray);
+
+            return Meets(pointOfIntersection) ? pointOfIntersection : Vector3.Zero;
         }
 
         /*public bool Meets(Triangle3 triangle)
