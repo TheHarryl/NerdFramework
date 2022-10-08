@@ -21,6 +21,8 @@
 
         public override Vector2 Projection(Vector3 point)
         {
+            return new Vector2(point.x / w.x + 0.5, point.y / h.y + 0.5);
+
             /* Get projection of point onto camera as intersection of shortest path from point to camera's plane
              * 
              * Plane:
@@ -65,7 +67,7 @@
              * s += 0.5
              */
 
-            Plane3 plane = new Plane3(d.p, d.v);
+            /*Plane3 plane = new Plane3(d.p, d.v);
             Line3 line = new Line3(point, d.v);
 
             Vector3 intersection = plane.Intersection(line);
@@ -73,12 +75,10 @@
             double hSlope = h.x / h.y;
             double wSlope = w.x / w.y;
 
-            //System.Diagnostics.Debug.WriteLine((intersection.x + d.p.y * wSlope - d.p.x - intersection.y * wSlope) + " " + (h.x - h.y * wSlope) + 0.5);
-
             return new Vector2(
                 (intersection.x + d.p.y * hSlope - d.p.x - intersection.y * hSlope) / (w.x - w.y * hSlope) + 0.5,
                 (intersection.x + d.p.y * wSlope - d.p.x - intersection.y * wSlope) / (h.x - h.y * wSlope) + 0.5
-            );
+            );*/
         }
 
         public override bool Meets(Vector3 point)

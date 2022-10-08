@@ -33,6 +33,11 @@
             this.z = s;
         }
 
+        public Vector2 WithoutZ()
+        {
+            return new Vector2(x, y);
+        }
+
         public double Magnitude()
         {
             /* a⋅b = |a||b|cos(theta)

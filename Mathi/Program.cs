@@ -16,8 +16,9 @@ namespace Mathi
             Console.SetBufferSize(800, 800);
             Console.TreatControlCAsInput = true;
 
-            Triangle3Group tris = Triangle3Group.FromIcophere(Vector3.Zero, 15, 1);
-            tris.origin = new Vector3(0, 0, 15);
+
+            //Triangle3Group tris = Triangle3Group.FromCube(Vector3.Zero, 20);
+            Triangle3Group tris = Triangle3Group.FromIcophere(new Vector3(0, 0, 15), 15, 2);
             renderer.scene = tris;
 
             DateTime _lastTime = DateTime.Now; // marks the beginning the measurement began

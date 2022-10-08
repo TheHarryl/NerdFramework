@@ -3,8 +3,8 @@ namespace NerdFramework
 {
     public struct Vector2
     {
-        public readonly double x;
-        public readonly double y;
+        public double x;
+        public double y;
 
         public static Vector2 Zero = new Vector2();
         public static Vector2 One = new Vector2(1.0, 1.0);

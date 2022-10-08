@@ -38,7 +38,7 @@ namespace NerdFramework
 
         public Color3 LightAt(double distance, double angle)
         {
-            double interpolant = angle / Math.QuarterPI;
+            double interpolant = angle / Math.HalfPI;
 
             Color3 light = color.ColorAt(distance / this.distance);
             light = Color3.Lerp(light, Color3.Black, interpolant > 1.0 ? 1.0 : interpolant);

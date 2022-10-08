@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework.Input;
 using NerdFramework;
 using System;
 using System.Diagnostics;
+using Vector2 = NerdFramework.Vector2;
 using Vector3 = NerdFramework.Vector3;
 
 namespace MonoGameGraphics
@@ -15,7 +16,7 @@ namespace MonoGameGraphics
 
         private Renderer3 renderer = new Renderer3(new Ray3Region(new Ray3(Vector3.Zero, Vector3.zAxis), 70, 35), 200, 100);
         //private Triangle3Group tris = Triangle3Group.FromCube(Vector3.Zero, 20);
-        private Triangle3Group tris = Triangle3Group.FromIcophere(new Vector3(0, 0, 15), 15, 1);
+        private Triangle3Group tris = Triangle3Group.FromIcophere(new Vector3(0, 0, 15), 15, 2);
         private Texture2D screen;
 
         private int frameCount = 0;
@@ -33,7 +34,7 @@ namespace MonoGameGraphics
 
         protected override void Initialize()
         {
-            renderer.scene = tris;
+            renderer.scene = new Triangle3Group(tris.triangles);
             screen = new Texture2D(_graphics.GraphicsDevice, renderer.width, renderer.height);
 
             base.Initialize();
@@ -51,8 +52,8 @@ namespace MonoGameGraphics
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
-            tris.Rotate(-2 * gameTime.ElapsedGameTime.TotalSeconds, 1.01 * gameTime.ElapsedGameTime.TotalSeconds, 0.0 * gameTime.ElapsedGameTime.TotalSeconds, new Vector3(0, 0, 0));
-            renderer.cameraLight.rayCaster.d.p = (renderer.cameraLight.rayCaster.d.p - new Vector3(0, 0, 15)).Rotate(0.1 * gameTime.ElapsedGameTime.TotalSeconds, -4.0 * gameTime.ElapsedGameTime.TotalSeconds, 0.0) + new Vector3(0, 0, 15);
+            tris.Rotate(-1 * gameTime.ElapsedGameTime.TotalSeconds, 0.5 * gameTime.ElapsedGameTime.TotalSeconds, 0.0 * gameTime.ElapsedGameTime.TotalSeconds, new Vector3(0, 0, 0));
+            //renderer.cameraLight.rayCaster.d.p = (renderer.cameraLight.rayCaster.d.p - new Vector3(0, 0, 15)).Rotate(-2.0 * gameTime.ElapsedGameTime.TotalSeconds, 2.0 * gameTime.ElapsedGameTime.TotalSeconds, 0.0) + new Vector3(0, 0, 15);
 
             base.Update(gameTime);
         }
@@ -62,7 +63,8 @@ namespace MonoGameGraphics
             GraphicsDevice.Clear(Color.Black);
             _spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.None, RasterizerState.CullCounterClockwise);
 
-            renderer.RenderRaytraced();
+            //renderer.RenderRaytraced();
+            renderer.RenderRasterized();
             Color[] data = new Color[renderer.height * renderer.width];
             for (int y = 0; y < renderer.height; y++)
             {
