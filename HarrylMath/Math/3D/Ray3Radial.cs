@@ -31,6 +31,11 @@
             return Vector3.Angle(d.v, point - d.p) <= angle / 2.0;
         }
 
+        public override double Distance(Vector3 point)
+        {
+            return (point - d.p).Magnitude();
+        }
+
         public override void RotateX(double radians)
         {
             d.RotateX(radians);

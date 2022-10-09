@@ -11,6 +11,7 @@ namespace NerdFramework
         public abstract Ray3 RayAt(double wAlpha, double hAlpha);
         public abstract Vector2 Projection(Vector3 point);
         public abstract bool Meets(Vector3 point);
+        public abstract double Distance(Vector3 point);
 
         public abstract void RotateX(double radians);
         public abstract void RotateY(double radians);

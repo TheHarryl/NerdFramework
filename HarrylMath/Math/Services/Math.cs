@@ -44,14 +44,12 @@
 
         public static int Floor(double x)
         {
-            return (int)x;
+            return (int)System.Math.Floor(x);
         }
 
         public static int Ceil(double x)
         {
-            if ((int)x < x)
-                return (int)x + 1;
-            return (int)x;
+            return (int)System.Math.Ceiling(x);
         }
 
         public static double Sqrt(double x, int steps = 20)

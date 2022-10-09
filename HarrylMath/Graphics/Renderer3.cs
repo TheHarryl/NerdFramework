@@ -14,22 +14,39 @@ namespace NerdFramework
         public List<Light3Caster> lightSources = new List<Light3Caster>();
 
         public Color3 fog = new Color3(0, 0, 0, 0.05);
-        public readonly int width;
-        public readonly int height;
+        private int _width = 1;
+        private int _height = 1;
+        public int width
+        {
+            get => _width;
+            set
+            {
+                _width = value;
+                depthBuffer = new double[_height, _width];
+                lightBuffer = new Color3[_height, _width];
+            }
+        }
+        public int height
+        {
+            get => _height;
+            set
+            {
+                _height = value;
+                depthBuffer = new double[_height, _width];
+                lightBuffer = new Color3[_height, _width];
+            }
+        }
 
         public double[,] depthBuffer;
         public Color3[,] lightBuffer;
 
-        public Renderer3(Ray3Caster camera, int width, int height)
+        public Renderer3(Ray3Caster camera, int width = 200, int height = 100)
         {
             this.camera = camera;
             this.cameraLight = new Light3Caster(new Ray3Radial(new Ray3(camera.d.p - new Vector3(0.0, 0.0, 100), camera.d.v), Math.TwoPI), scene, new Color3Sequence(Color3.White), 10000);
 
             this.width = width;
             this.height = height;
-
-            depthBuffer = new double[height, width];
-            lightBuffer = new Color3[height, width];
         }
 
         public void FillLine(Color3 color, Vector2 begin, Vector2 end)
@@ -69,11 +86,127 @@ namespace NerdFramework
             }
         }
 
-        public void FillTriangle(Color3 color, int x1, int y1, int x2, int y2)
+        public void FillTriangle(Color3 color, Vector2 a, Vector2 b, Vector2 c)
         {
-            for (int y = y1; y <= y2; y++)
-            {
+            /* Triangle:
+             * OP = OA + ABt + ACs
+             * 
+             * AP = ABt + ACs
+             * AP.x = AB.x*t + AC.x*s
+             * t >= 0
+             * s >= 0
+             * t + s <= 1
+             * 
+             * t = [P.x - P.y*(C.x/C.y)] / [B.x - B.y*(C.x/C.y)]
+             * s = [P.x - P.y*(B.x/B.y)] / [C.x - C.y*(B.x/B.y)]
+             */
 
+            double minX = Math.Min(a.x, b.x, c.x);
+            double maxX = Math.Max(a.x, b.x, c.x);
+            double minY = Math.Min(a.y, b.y, c.y);
+            double maxY = Math.Max(a.y, b.y, c.y);
+
+            for (int y = (int)minY; y <= (int)maxY; y++)
+            {
+                for (int x = (int)minX; x <= (int)maxX; x++)
+                {
+                }
+            }
+            /*for (int y = (int)minY; y <= (int)maxY; y++)
+            {
+                Vector2 AB = b - a;
+                Vector2 AC = c - a;
+                double ABx;
+                if (Math.Abs(AB.y) <= 0.001)
+                    ABx = AB.x;
+                else
+                    ABx = b.x * (y - a.y) / AB.y;
+                double ACx;
+                if (Math.Abs(AC.y) <= 0.001)
+                    ACx = AC.x;
+                else
+                    ACx = c.x * (y - a.y) / AC.y;
+
+                for (int x = (int)Math.Min(ABx, ACx); x <= (int)Math.Max(ABx, ACx); x++)
+                {
+                    System.Diagnostics.Trace.WriteLine(x + " " + y);
+                    lightBuffer[y < 0 ? 0 : (y > 200 ? 200 : y), x < 0 ? 0 : (x > 100 ? 100 : x)] = color;
+                }
+            }*/
+        }
+
+        public void FillTriangle(ColorTriangle2 colorTriangle)
+        {
+            /* Triangle:
+             * OP = OA + ABt + ACs
+             * 
+             * AP = ABt + ACs
+             * AP.x = AB.x*t + AC.x*s
+             */
+
+            double minX = Math.Min(colorTriangle.a.x, colorTriangle.b.x, colorTriangle.c.x);
+            double maxX = Math.Max(colorTriangle.a.x, colorTriangle.b.x, colorTriangle.c.x);
+            double minY = Math.Min(colorTriangle.a.y, colorTriangle.b.y, colorTriangle.c.y);
+            double maxY = Math.Max(colorTriangle.a.y, colorTriangle.b.y, colorTriangle.c.y);
+
+            for (int y = (int)minY; y <= (int)maxY; y++)
+            {
+                for (int x = (int)minX; x <= (int)maxX; x++)
+                {
+                    Vector2 pos = colorTriangle.Parameterization(new Vector2(x, y));
+                    if (pos.x >= 0.0 && pos.y >= 0.0 && pos.x + pos.y <= 1.0)
+                    {
+                        lightBuffer[y, x] = colorTriangle.ColorAt(pos.x, pos.y);
+                    }
+                }
+            }
+        }
+
+        public void FillCircle(Color3 color, Vector2 pos, int radius)
+        {
+            /* Circle:
+             * (x - p.x)^2 + (y - p.y)^2 = r^2
+             * (x - p.x) = [r^2 - (y - p.y)^2]^0.5
+             * x = +/-[r^2 - (y - p.y)^2]^0.5 + p.x
+             * 
+             * MinX: -[r^2 - (y - p.y)^2]^0.5 + p.x
+             * MaxX: [r^2 - (y - p.y)^2]^0.5 + p.x
+             * MinY: p.y - r
+             * MaxY: p.y + r
+             */
+
+            for (int y = (int)pos.y - radius; y <= (int)pos.y + radius; y++)
+            {
+                double yOffset = y - pos.y;
+                for (int x = (int)(-Math.Sqrt(radius * radius - yOffset * yOffset) + pos.x); x <= (int)(Math.Sqrt(radius * radius - yOffset * yOffset) + pos.x); x++)
+                {
+                    lightBuffer[y, x] = color;
+                }
+            }
+        }
+
+        public void FillCircle(Color3Sequence color, Vector2 pos, int radius)
+        {
+            /* Circle:
+             * (x - p.x)^2 + (y - p.y)^2 = r^2
+             * (x - p.x) = [r^2 - (y - p.y)^2]^0.5
+             * x = +/-[r^2 - (y - p.y)^2]^0.5 + p.x
+             * 
+             * MinX: -[r^2 - (y - p.y)^2]^0.5 + p.x
+             * MaxX: [r^2 - (y - p.y)^2]^0.5 + p.x
+             * MinY: p.y - r
+             * MaxY: p.y + r
+             */
+
+            for (int y = (int)pos.y - radius; y <= (int)pos.y + radius; y++)
+            {
+                double yOffset = y - pos.y;
+                for (int x = (int)(-Math.Sqrt(radius * radius - yOffset * yOffset) + pos.x); x <= (int)(Math.Sqrt(radius * radius - yOffset * yOffset) + pos.x); x++)
+                {
+                    double xOffset = x - pos.x;
+                    double interpolant = (xOffset * xOffset + yOffset * yOffset) / (radius * radius);
+                    lightBuffer[y, x] = color.ColorAt(interpolant);
+                }
             }
         }
 
@@ -86,6 +219,13 @@ namespace NerdFramework
 
         public void RenderRasterized()
         {
+            for (int y = 0; y < height; y++)
+            {
+                for (int x = 0; x < width; x++)
+                {
+                    lightBuffer[y, x] = Color3.Black;
+                }
+            }
             //scene.triangles = scene.triangles.OrderBy(t => ((t.a + t.b + t.c) / 3.0 - camera.d.p).Magnitude()).ToList();
             List<ColorTriangle2> projectedTriangles = new List<ColorTriangle2>();
             foreach (Triangle3 triangle in scene.triangles)
@@ -96,20 +236,20 @@ namespace NerdFramework
                 Vector2 b = camera.Projection(triangle.b) * new Vector2(width, height);
                 Vector2 c = camera.Projection(triangle.c) * new Vector2(width, height);
                 Vector3 normal = triangle.Normal();
-                double distance1 = (triangle.a - camera.d.p).Magnitude();
-                double distance2 = (triangle.b - camera.d.p).Magnitude();
-                double distance3 = (triangle.c - camera.d.p).Magnitude();
+                double distance1 = camera.Distance(triangle.a);
+                double distance2 = camera.Distance(triangle.b);
+                double distance3 = camera.Distance(triangle.c);
                 Color3 colorA = RenderFog(CalculateLighting(triangle.a, normal), distance1);
                 Color3 colorB = RenderFog(CalculateLighting(triangle.b, normal), distance2);
                 Color3 colorC = RenderFog(CalculateLighting(triangle.c, normal), distance3);
-
-                projectedTriangles.Add(new ColorTriangle2(a, b, c, colorA, colorB, colorC));
+                FillTriangle(new ColorTriangle2(a, b, c, colorA, colorB, colorC));
+                //projectedTriangles.Add(new ColorTriangle2(a, b, c, colorA, colorB, colorC));
             }
-            for (int y = 0; y < height; y++)
+            /*for (int y = 0; y < height; y++)
             {
                 for (int x = 0; x < width; x++)
                 {
-                    //depthBuffer[y, x] = double.MaxValue;
+                    depthBuffer[y, x] = double.MaxValue;
                     lightBuffer[y, x] = Color3.Black;
 
                     Vector2 point = new Vector2(x, y);
@@ -123,7 +263,7 @@ namespace NerdFramework
                         }
                     }
                 }
-            }
+            }*/
         }
 
         public void RenderRaytraced()

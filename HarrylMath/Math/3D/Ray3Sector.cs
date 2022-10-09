@@ -33,6 +33,11 @@
             throw new System.NotImplementedException();
         }
 
+        public override double Distance(Vector3 point)
+        {
+            return (point - d.p).Magnitude();
+        }
+
         public override void RotateX(double radians)
         {
             d.RotateX(radians);

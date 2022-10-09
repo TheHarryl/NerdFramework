@@ -86,6 +86,12 @@
             throw new System.NotImplementedException();
         }
 
+        public override double Distance(Vector3 point)
+        {
+            Plane3 plane = new Plane3(d.p, d.v);
+            return plane.Min(point);
+        }
+
         public override void RotateX(double radians)
         {
             d.RotateX(radians);

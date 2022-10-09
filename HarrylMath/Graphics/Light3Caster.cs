@@ -22,20 +22,6 @@ namespace NerdFramework
             this.volumentricCoefficient = volumentricCoefficient;
         }
 
-        public void Quantize(int quantization = 5)
-        {
-            Color3 first = color.steps.Values.First();
-            Color3 last = color.steps.Values.Last();
-
-            for (int i = 1; i < quantization; i++)
-            {
-                double stepInterval0 = Tween.QuartIn(0, 1, (i-1) / quantization);
-                double stepInterval1 = Tween.QuartIn(0, 1, i / quantization);
-                color.steps.Add(stepInterval1, Color3.Lerp(first, last, stepInterval0));
-                color.steps.Add(stepInterval1 + 0.01, Color3.Lerp(first, last, stepInterval1));
-            }
-        }
-
         public Color3 LightAt(double distance, double angle)
         {
             double interpolant = angle / Math.HalfPI;
