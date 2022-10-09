@@ -3,7 +3,7 @@ using System.Linq;
 
 namespace NerdFramework
 {
-    public class Triangle3GroupSoft : Triangle3Group
+    public class Triangle3GroupSoft : Triangle3Collection
     {
         public Dictionary<Vector3, List<KeyValuePair<Vector3, double>>> connections = new Dictionary<Vector3, List<KeyValuePair<Vector3, double>>>();
 

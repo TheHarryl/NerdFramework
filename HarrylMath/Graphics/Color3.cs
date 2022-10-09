@@ -11,6 +11,7 @@ namespace NerdFramework
         public int b;
         public double alpha;
 
+        public static Color3 None = new Color3(0, 0, 0, 0.0);
         public static Color3 White = new Color3(255, 255, 255);
         public static Color3 Black = new Color3(0, 0, 0);
         public static Color3 Red = new Color3(255, 0, 0);
@@ -30,13 +31,36 @@ namespace NerdFramework
             return a * (1 - alpha) + b * alpha;
         }
 
+        public static Color3 Average(Color3 color1, Color3 color2)
+        {
+            return (color1 + color2) / 2.0;
+        }
+
+        public static Color3 Average(params Color3[] colors)
+        {
+            int r = 0;
+            int g = 0;
+            int b = 0;
+            double alpha = 0.0;
+
+            for (int i = 0; i < colors.Length; i++)
+            {
+                r += colors[i].r;
+                g += colors[i].g;
+                b += colors[i].b;
+                alpha += colors[i].alpha;
+            }
+
+            return new Color3(r / colors.Length, g / colors.Length, b / colors.Length, alpha / colors.Length);
+        }
+
         public Color3 Grayscale()
         {
-            int avg = Average();
+            int avg = Value();
             return new Color3(avg, avg, avg, alpha);
         }
 
-        public int Average()
+        public int Value()
         {
             return (r + g + b) / 3;
         }

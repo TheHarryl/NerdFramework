@@ -57,7 +57,7 @@
             c = (c - origin) * scale + origin;
         }
 
-        public void RotateX(double radians, Vector3 origin)
+        public virtual void RotateX(double radians, Vector3 origin)
         {
             Vector3 OA = (a - origin).RotateX(radians);
             Vector3 OB = (b - origin).RotateX(radians);
@@ -68,7 +68,7 @@
             c = origin + OC;
         }
 
-        public void RotateY(double radians, Vector3 origin)
+        public virtual void RotateY(double radians, Vector3 origin)
         {
             Vector3 OA = (a - origin).RotateY(radians);
             Vector3 OB = (b - origin).RotateY(radians);
@@ -79,7 +79,7 @@
             c = origin + OC;
         }
 
-        public void RotateZ(double radians, Vector3 origin)
+        public virtual void RotateZ(double radians, Vector3 origin)
         {
             Vector3 OA = (a - origin).RotateZ(radians);
             Vector3 OB = (b - origin).RotateZ(radians);
@@ -90,7 +90,7 @@
             c = origin + OC;
         }
 
-        public void Rotate(double r1, double r2, double r3, Vector3 origin)
+        public virtual void Rotate(double r1, double r2, double r3, Vector3 origin)
         {
             Vector3 OA = (a - origin).Rotate(r1, r2, r3);
             Vector3 OB = (b - origin).Rotate(r1, r2, r3);
@@ -373,9 +373,9 @@
 
         }*/
 
-        public static Triangle3Group operator +(Triangle3 a, Triangle3 b)
+        public static Triangle3Collection operator +(Triangle3 a, Triangle3 b)
         {
-            return new Triangle3Group(new System.Collections.Generic.List<Triangle3>() { a, b });
+            return new Triangle3Collection(new System.Collections.Generic.List<Triangle3>() { a, b });
         }
     }
 }

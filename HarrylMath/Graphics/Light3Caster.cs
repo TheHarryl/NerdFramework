@@ -6,14 +6,14 @@ namespace NerdFramework
     {
         public Ray3Caster rayCaster;
 
-        public Triangle3Group reference;
+        public Triangle3Collection reference;
 
         public Color3Sequence color;
 
         public double distance;
         public double volumentricCoefficient;
 
-        public Light3Caster(Ray3Caster caster, Triangle3Group reference, Color3Sequence color, double distance, double volumentricCoefficient = 0.1)
+        public Light3Caster(Ray3Caster caster, Triangle3Collection reference, Color3Sequence color, double distance, double volumentricCoefficient = 0.1)
         {
             this.rayCaster = caster;
             this.reference = reference;
@@ -27,7 +27,7 @@ namespace NerdFramework
             double interpolant = angle / Math.HalfPI;
 
             Color3 light = color.ColorAt(distance / this.distance);
-            light = Color3.Lerp(light, Color3.Black, interpolant > 1.0 ? 1.0 : interpolant);
+            light = Color3.Lerp(light, Color3.None, interpolant > 1.0 ? 1.0 : interpolant);
             return light;
         }
 

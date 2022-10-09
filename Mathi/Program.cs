@@ -18,7 +18,7 @@ namespace Mathi
 
 
             //Triangle3Group tris = Triangle3Group.FromCube(Vector3.Zero, 20);
-            Triangle3Group tris = Triangle3Group.FromIcophere(new Vector3(0, 0, 15), 15, 2);
+            Triangle3Collection tris = MeshParser.FromIcoSphere(new Vector3(0, 0, 15), 15, 2);
             renderer.scene = tris;
 
             DateTime _lastTime = DateTime.Now; // marks the beginning the measurement began
@@ -61,7 +61,7 @@ namespace Mathi
                         line += "\n";
                     for (int x = 0; x < renderer.width; x++)
                     {
-                        line += ASCIIShader.FromAlpha(renderer.lightBuffer[y, x].Average() / 255.0);
+                        line += ASCIIShader.FromAlpha(renderer.lightBuffer[y, x].Value() / 255.0);
                     }
                 }
                 System.Console.Write(line);

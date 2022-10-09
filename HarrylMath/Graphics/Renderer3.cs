@@ -10,10 +10,10 @@ namespace NerdFramework
         public Ray3Caster camera;
         public Light3Caster cameraLight;
 
-        public Triangle3Group scene = new Triangle3Group(new List<Triangle3>());
+        public Triangle3Collection scene = new Triangle3Collection(new List<Triangle3>());
         public List<Light3Caster> lightSources = new List<Light3Caster>();
 
-        public Color3 fog = new Color3(0, 0, 0, 0.05);
+        public Color3 fog = new Color3(0, 0, 0, 0.0);//0.05);
         private int _width = 1;
         private int _height = 1;
         public int width
@@ -73,10 +73,10 @@ namespace NerdFramework
             double error = (dx / 2f);
             int ystep = (begin.y < end.y) ? 1 : -1;
             double y = begin.y;
-            for (int x = (int)begin.x; x <= end.x; x++)
+            for (int x = (int)Math.Max(begin.x, 0.0); x <= Math.Min(end.x, width-1); x++)
             {
                 if (x - 1 >= 0 && x < width && y - 1 >= 0 && y < height)
-                    lightBuffer[height - (int)(steep ? x : y), (int)(steep ? y : x)] = color;
+                    lightBuffer[(int)Math.Min(Math.Max((steep ? x : y), 0.0), height-1), (int)(steep ? y : x)] = color;
                 error = error - dy;
                 if (error < 0)
                 {
@@ -106,10 +106,16 @@ namespace NerdFramework
             double minY = Math.Min(a.y, b.y, c.y);
             double maxY = Math.Max(a.y, b.y, c.y);
 
-            for (int y = (int)minY; y <= (int)maxY; y++)
+            Triangle2 triangle = new Triangle2(a, b, c);
+            for (int y = (int)Math.Max(minY, 0.0); y <= (int)Math.Min(maxY, _height - 1); y++)
             {
-                for (int x = (int)minX; x <= (int)maxX; x++)
+                for (int x = (int)Math.Max(minX, 0.0); x <= (int)Math.Min((int)maxX, _width - 1); x++)
                 {
+                    Vector2 pos = triangle.Parameterization(new Vector2(x, y));
+                    if (pos.x >= 0.0 && pos.y >= 0.0 && pos.x + pos.y <= 1.0)
+                    {
+                        lightBuffer[y, x] = color;
+                    }
                 }
             }
             /*for (int y = (int)minY; y <= (int)maxY; y++)
@@ -135,7 +141,7 @@ namespace NerdFramework
             }*/
         }
 
-        public void FillTriangle(ColorTriangle2 colorTriangle)
+        public void FillTriangle(RasterizedTriangle2 colorTriangle)
         {
             /* Triangle:
              * OP = OA + ABt + ACs
@@ -149,14 +155,16 @@ namespace NerdFramework
             double minY = Math.Min(colorTriangle.a.y, colorTriangle.b.y, colorTriangle.c.y);
             double maxY = Math.Max(colorTriangle.a.y, colorTriangle.b.y, colorTriangle.c.y);
 
-            for (int y = (int)minY; y <= (int)maxY; y++)
+            for (int y = (int)Math.Max(minY, 0.0); y <= (int)Math.Min(maxY, _height - 1); y++)
             {
-                for (int x = (int)minX; x <= (int)maxX; x++)
+                for (int x = (int)Math.Max(minX, 0.0); x <= (int)Math.Min((int)maxX, _width - 1) ; x++)
                 {
                     Vector2 pos = colorTriangle.Parameterization(new Vector2(x, y));
-                    if (pos.x >= 0.0 && pos.y >= 0.0 && pos.x + pos.y <= 1.0)
+                    double dist = colorTriangle.DistanceAt(pos.x, pos.y);
+                    if (pos.x >= 0.0 && pos.y >= 0.0 && pos.x + pos.y <= 1.0 && dist < depthBuffer[y, x])
                     {
                         lightBuffer[y, x] = colorTriangle.ColorAt(pos.x, pos.y);
+                        depthBuffer[y, x] = dist;
                     }
                 }
             }
@@ -217,24 +225,61 @@ namespace NerdFramework
             return cameraLight.LightAt(distance, angle);
         }
 
+        public void RenderSampled()
+        {
+            Color3[,] newLightBuffer = new Color3[height, width];
+            for (int y = 0; y < height; y++)
+            {
+                for (int x = 0; x < width; x++)
+                {
+                    int minY = (int)Math.Max(y - 1, 0.0);
+                    int maxY = (int)Math.Min(y + 1, _height - 1);
+                    int minX = (int)Math.Max(x - 1, 0.0);
+                    int maxX = (int)Math.Min(x + 1, _width - 1);
+                    Color3[] colors = new Color3[(maxX - minX + 1) * (maxY - minY + 1)];
+                    int i = 0;
+                    for (int y1 = minY; y1 <= maxY; y1++)
+                    {
+                        for (int x1 = minX; x1 <= maxX; x1++)
+                        {
+                            colors[i] = lightBuffer[y1, x1];
+                            i++;
+                        }
+                    }
+                    newLightBuffer[y, x] = Color3.Average(colors);
+                }
+            }
+            lightBuffer = newLightBuffer;
+        }
+
         public void RenderRasterized()
         {
             for (int y = 0; y < height; y++)
             {
                 for (int x = 0; x < width; x++)
                 {
+                    depthBuffer[y, x] = double.MaxValue;
                     lightBuffer[y, x] = Color3.Black;
                 }
             }
-            //scene.triangles = scene.triangles.OrderBy(t => ((t.a + t.b + t.c) / 3.0 - camera.d.p).Magnitude()).ToList();
-            List<ColorTriangle2> projectedTriangles = new List<ColorTriangle2>();
+            //scene.triangles = scene.triangles.OrderBy(t => -((t.a + t.b + t.c) / 3.0 - camera.d.p).Magnitude()).ToList();
+            List<RasterizedTriangle2> projectedTriangles = new List<RasterizedTriangle2>();
             foreach (Triangle3 triangle in scene.triangles)
             {
                 if (Vector3.Dot(camera.d.v, triangle.Normal()) >= 0.0) continue;
 
-                Vector2 a = camera.Projection(triangle.a) * new Vector2(width, height);
-                Vector2 b = camera.Projection(triangle.b) * new Vector2(width, height);
-                Vector2 c = camera.Projection(triangle.c) * new Vector2(width, height);
+                Vector2 a = camera.Projection(triangle.a); 
+                Vector2 b = camera.Projection(triangle.b);
+                Vector2 c = camera.Projection(triangle.c);
+
+                Rectangle2 visible = new Rectangle2(Vector2.Zero, Vector2.One);
+
+                if (!visible.Overlaps(a) && !visible.Overlaps(b) && !visible.Overlaps(c)) continue;
+
+                a *= new Vector2(width, height);
+                b *= new Vector2(width, height);
+                c *= new Vector2(width, height);
+
                 Vector3 normal = triangle.Normal();
                 double distance1 = camera.Distance(triangle.a);
                 double distance2 = camera.Distance(triangle.b);
@@ -242,7 +287,10 @@ namespace NerdFramework
                 Color3 colorA = RenderFog(CalculateLighting(triangle.a, normal), distance1);
                 Color3 colorB = RenderFog(CalculateLighting(triangle.b, normal), distance2);
                 Color3 colorC = RenderFog(CalculateLighting(triangle.c, normal), distance3);
-                FillTriangle(new ColorTriangle2(a, b, c, colorA, colorB, colorC));
+                FillTriangle(new RasterizedTriangle2(a, b, c, colorA, colorB, colorC, distance1, distance2, distance3));
+                //FillLine(Color3.Black, a, b);
+                //FillLine(Color3.Black, a, c);
+                //FillLine(Color3.Black, c, b);
                 //projectedTriangles.Add(new ColorTriangle2(a, b, c, colorA, colorB, colorC));
             }
             /*for (int y = 0; y < height; y++)
