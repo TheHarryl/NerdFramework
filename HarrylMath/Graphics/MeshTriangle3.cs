@@ -17,6 +17,7 @@
         public Vector3 normalC;
 
         public NormalType normalType;
+        public string material;
 
         public MeshTriangle3(Vector3 a, Vector3 b, Vector3 c) : base(a, b, c)
         {
@@ -29,9 +30,10 @@
             this.normalC = Vector3.Zero;
 
             normalType = NormalType.Default;
+            this.material = "None";
         }
 
-        public MeshTriangle3(Vector3 a, Vector3 b, Vector3 c, Vector2 textureU, Vector2 textureV, Vector2 textureW, Vector3 normalA, Vector3 normalB, Vector3 normalC, NormalType normalType = NormalType.Interpolated) : base(a, b, c)
+        public MeshTriangle3(Vector3 a, Vector3 b, Vector3 c, Vector2 textureU, Vector2 textureV, Vector2 textureW, Vector3 normalA, Vector3 normalB, Vector3 normalC, NormalType normalType = NormalType.Interpolated, string material = "None") : base(a, b, c)
         {
             this.textureU = textureU;
             this.textureV = textureV;
@@ -42,6 +44,7 @@
             this.normalC = normalC;
 
             this.normalType = normalType;
+            this.material = material;
         }
 
         public override void RotateX(double radians, Vector3 origin)

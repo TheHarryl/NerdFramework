@@ -9,6 +9,7 @@ namespace NerdFramework
         public Color3[,] data;
 
         public static Texture2 None = new Texture2(new Color3[1, 1] { { Color3.None } });
+        public static Texture2 One = new Texture2(new Color3[1, 1] { { Color3.White } });
 
         public Texture2(Color3[,] data)
         {

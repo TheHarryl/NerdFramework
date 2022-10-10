@@ -13,6 +13,7 @@
         public Vector3 normalD;
 
         public NormalType normalType;
+        public string material;
 
         public MeshQuad3(Vector3 a, Vector3 b, Vector3 c, Vector3 d, Vector2 textureU, Vector2 textureV, Vector2 textureW, Vector2 textureX, Vector3 normalA, Vector3 normalB, Vector3 normalC, Vector3 normalD) : base(a, b, c, d)
         {
@@ -36,6 +37,7 @@
             this.normalD = normalD;
 
             this.normalType = NormalType.Interpolated;
+            this.material = "None";
         }
 
         public MeshQuad3(Vector3 a, Vector3 b, Vector3 c, Vector3 d) : base(a, b, c, d)
@@ -51,16 +53,17 @@
             this.normalD = Vector3.Zero;
 
             this.normalType = NormalType.Default;
+            this.material = "None";
         }
 
         public new MeshTriangle3 GetTriangle1()
         {
-            return new MeshTriangle3(a, b, c, textureU, textureV, textureW, normalA, normalB, normalC, normalType);
+            return new MeshTriangle3(a, b, c, textureU, textureV, textureW, normalA, normalB, normalC, normalType, material);
         }
 
         public new MeshTriangle3 GetTriangle2()
         {
-            return new MeshTriangle3(a, c, d, textureU, textureW, textureX, normalA, normalC, normalD, normalType);
+            return new MeshTriangle3(a, c, d, textureU, textureW, textureX, normalA, normalC, normalD, normalType, material);
         }
     }
 }

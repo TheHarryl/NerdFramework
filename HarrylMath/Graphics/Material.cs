@@ -29,6 +29,7 @@
 
             shininess = 0.0;
             textureMap = Texture2.None;
+            textureMap = Texture2.One;
         }
     }
 }

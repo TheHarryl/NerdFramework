@@ -12,6 +12,8 @@ namespace NerdFramework
             List<Vector3> normals = new List<Vector3>();
             List<MeshTriangle3> triangles = new List<MeshTriangle3>();
 
+            string currentMaterial = "None";
+
             if (fileLocation.ToLower().EndsWith(".obj"))
             {
                 string[] lines = System.IO.File.ReadAllLines(@fileLocation);
@@ -21,6 +23,9 @@ namespace NerdFramework
                     string[] args = line.Split(" ");
                     switch (args[0])
                     {
+                        case "usemtl":
+                            currentMaterial = args[1];
+                            break;
                         case "v":
                             vertices.Add(new Vector3(Convert.ToDouble(args[1]), Convert.ToDouble(args[2]), Convert.ToDouble(args[3])));
                             break;
@@ -59,6 +64,7 @@ namespace NerdFramework
                                     triangle.normalC = faceNormals[2];
                                     triangle.normalType = NormalType.Interpolated;
                                 }
+                                triangle.material = currentMaterial;
                                 triangles.Add(triangle);
                             }
                             else if (faceVertices.Count == 4)
@@ -79,6 +85,7 @@ namespace NerdFramework
                                     quad.normalD = faceNormals[3];
                                     quad.normalType = NormalType.Interpolated;
                                 }
+                                quad.material = currentMaterial;
                                 triangles.Add(quad.GetTriangle1());
                                 triangles.Add(quad.GetTriangle2());
                             }

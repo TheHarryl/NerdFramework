@@ -7,7 +7,7 @@ namespace NerdFramework
 {
     public class Renderer3
     {
-        public Dictionary<string, Material> materials;
+        public Dictionary<string, Material> materials = new Dictionary<string, Material>();
 
         public Ray3Caster camera;
         public Light3Caster cameraLight;
@@ -49,6 +49,8 @@ namespace NerdFramework
 
             this.width = width;
             this.height = height;
+
+            this.materials.Add("None", new Material());
         }
 
         public void AddMaterial(string name, Material material)
@@ -58,6 +60,12 @@ namespace NerdFramework
         public void AddMaterials(Dictionary<string, Material> materials)
         {
             materials.ToList().ForEach(x => this.materials[x.Key] = x.Value);
+        }
+        public Material GetMaterial(string name)
+        {
+            if (!materials.ContainsKey(name))
+                return materials["None"];
+            return materials[name];
         }
 
         public void FillLine(Color3 color, Vector2 begin, Vector2 end)
@@ -298,6 +306,8 @@ namespace NerdFramework
                 Color3 colorA;
                 Color3 colorB;
                 Color3 colorC;
+
+                Material material = GetMaterial(triangle.material);
 
                 if (triangle.normalType == NormalType.Interpolated)
                 {
