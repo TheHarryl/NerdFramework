@@ -19,6 +19,15 @@
             this.c = c;
         }
 
+        public double Area()
+        {
+            /* |a×b| = |A||B|sin(theta) = Area of Parallelogram
+             * Parallelogram is two triangles
+             */
+
+            return Vector3.Cross((b - a).AsVector3(), (c - a).AsVector3()).Magnitude() / 2.0;
+        }
+
         public Vector2 Parameterization(Vector2 point)
         {
             // Repackages the Meets(Point) method to spit out t and s

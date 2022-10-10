@@ -16,12 +16,12 @@ namespace MonoGameGraphics
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
 
-        private Renderer3 renderer = new Renderer3(new Ray3Region(new Ray3(Vector3.Zero, Vector3.zAxis), 70, 35), 800, 400);
+        private Renderer3 renderer = new Renderer3(new Ray3Region(new Ray3(Vector3.Zero, Vector3.zAxis), 100, 75), 800, 600);
         //private MeshTriangle3Collection tris = MeshParser.FromCube(Vector3.Zero, 20).polygons;
         //private MeshTriangle3Collection tris = MeshParser.FromIcoSphere(new Vector3(-15, 0, 15), 15, 4).polygons;
         //private MeshTriangle3Collection tris = MeshParser.FromUVSphere(new Vector3(0, 0, 15), 15);
         //private MeshTriangle3Collection tris = MeshParser.FromQuadSphere(new Vector3(-15, 0, 15), 15, 1).polygons;
-        private MeshTriangle3Collection tris = MeshParser.FromFile("C:\\Users\\harry\\Desktop\\Mathi\\HarrylMath\\Test\\male.obj").polygons;
+        private MeshTriangle3Collection tris = MeshParser.FromFile("C:\\Users\\harry\\Desktop\\Mathi\\HarrylMath\\Test\\luke.obj").polygons;
         private Texture2D screen;
 
         private int frameCount = 0;
@@ -50,7 +50,7 @@ namespace MonoGameGraphics
 
             Trace.WriteLine(tris.triangles.Count);
             tris.origin = new Vector3(-15.0, -5.0, 20.0);
-            tris.scale = Vector3.One * 17;
+            tris.scale = Vector3.One * 3;
         }
 
         protected override void LoadContent()

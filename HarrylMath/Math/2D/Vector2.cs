@@ -37,6 +37,11 @@ namespace NerdFramework
             return this / Magnitude();
         }
 
+        public Vector3 AsVector3()
+        {
+            return new Vector3(x, y, 0.0);
+        }
+
         public static Vector2 operator +(Vector2 a, Vector2 b)
         {
             return new Vector2(a.x + b.x, a.y + b.y);

@@ -283,21 +283,25 @@ namespace NerdFramework
                 double distance1 = camera.Distance(triangle.a);
                 double distance2 = camera.Distance(triangle.b);
                 double distance3 = camera.Distance(triangle.c);
-                
+
+                Color3 colorA;
+                Color3 colorB;
+                Color3 colorC;
+
                 if (triangle.normalType == NormalType.Interpolated)
                 {
-                    Color3 colorA = RenderFog(CalculateLighting(triangle.a, triangle.normalA), distance1);
-                    Color3 colorB = RenderFog(CalculateLighting(triangle.b, triangle.normalB), distance2);
-                    Color3 colorC = RenderFog(CalculateLighting(triangle.c, triangle.normalC), distance3);
-                    FillTriangle(new RasterizedTriangle2(a, b, c, colorA, colorB, colorC, distance1, distance2, distance3));
+                    colorA = RenderFog(CalculateLighting(triangle.a, triangle.normalA), distance1);
+                    colorB = RenderFog(CalculateLighting(triangle.b, triangle.normalB), distance2);
+                    colorC = RenderFog(CalculateLighting(triangle.c, triangle.normalC), distance3);
                 } else
                 {
                     Vector3 normal = triangle.Normal();
-                    Color3 colorA = RenderFog(CalculateLighting(triangle.a, normal), distance1);
-                    Color3 colorB = RenderFog(CalculateLighting(triangle.b, normal), distance2);
-                    Color3 colorC = RenderFog(CalculateLighting(triangle.c, normal), distance3);
-                    FillTriangle(new RasterizedTriangle2(a, b, c, colorA, colorB, colorC, distance1, distance2, distance3));
+                    colorA = RenderFog(CalculateLighting(triangle.a, normal), distance1);
+                    colorB = RenderFog(CalculateLighting(triangle.b, normal), distance2);
+                    colorC = RenderFog(CalculateLighting(triangle.c, normal), distance3);
                 }
+                FillTriangle(new RasterizedTriangle2(a, b, c, colorA, colorB, colorC, distance1, distance2, distance3));
+
                 //FillLine(Color3.Black, a, b);
                 //FillLine(Color3.Black, a, c);
                 //FillLine(Color3.Black, c, b);
