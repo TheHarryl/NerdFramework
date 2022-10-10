@@ -321,7 +321,7 @@ namespace NerdFramework
                     colorB = RenderFog(CalculateLighting(triangle.b, normal), distance2);
                     colorC = RenderFog(CalculateLighting(triangle.c, normal), distance3);
                 }
-                FillTriangle(new RasterizedTriangle2(a, b, c, colorA, colorB, colorC, distance1, distance2, distance3));
+                FillTriangle(new RasterizedTriangle2(a, b, c, colorA, colorB, colorC, distance1, distance2, distance3, material));
 
                 //FillLine(Color3.Black, a, b);
                 //FillLine(Color3.Black, a, c);

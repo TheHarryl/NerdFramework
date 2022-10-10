@@ -10,7 +10,9 @@
         public double distB;
         public double distC;
 
-        public RasterizedTriangle2(Vector2 a, Vector2 b, Vector2 c, Color3 colorA, Color3 colorB, Color3 colorC, double distA, double distB, double distC) : base(a, b, c)
+        public Material material;
+
+        public RasterizedTriangle2(Vector2 a, Vector2 b, Vector2 c, Color3 colorA, Color3 colorB, Color3 colorC, double distA, double distB, double distC, Material material) : base(a, b, c)
         {
             /* Triangle:
              * a: point1
@@ -25,6 +27,8 @@
             this.distA = distA;
             this.distB = distB;
             this.distC = distC;
+
+            this.material = material;
         }
 
         public Color3 ColorAt(double t, double s)
