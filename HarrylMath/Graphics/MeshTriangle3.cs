@@ -1,40 +1,38 @@
 ﻿namespace NerdFramework
 {
+    public enum NormalType
+    {
+        Default,
+        Interpolated
+    }
+
     public class MeshTriangle3 : Triangle3
     {
-        public Vector3 a;
-        public Vector3 b;
-        public Vector3 c;
-
-        public Vector3 textureU;
-        public Vector3 textureV;
-        public Vector3 textureW;
+        public Vector2 textureU;
+        public Vector2 textureV;
+        public Vector2 textureW;
 
         public Vector3 normalA;
         public Vector3 normalB;
         public Vector3 normalC;
 
+        public NormalType normalType;
+
         public MeshTriangle3(Vector3 a, Vector3 b, Vector3 c) : base(a, b, c)
         {
-            this.a = a;
-            this.b = b;
-            this.c = c;
-
-            this.textureU = Vector3.Zero;
-            this.textureV = Vector3.Zero;
-            this.textureW = Vector3.Zero;
+            this.textureU = new Vector2(0.0, 0.0);
+            this.textureV = new Vector2(0.0, 1.0);
+            this.textureW = new Vector2(1.0, 1.0);
 
             this.normalA = Vector3.Zero;
             this.normalB = Vector3.Zero;
             this.normalC = Vector3.Zero;
+
+            normalType = NormalType.Default;
         }
 
-        public MeshTriangle3(Vector3 a, Vector3 b, Vector3 c, Vector3 textureU, Vector3 textureV, Vector3 textureW, Vector3 normalA, Vector3 normalB, Vector3 normalC) : base(a, b, c)
+        public MeshTriangle3(Vector3 a, Vector3 b, Vector3 c, Vector2 textureU, Vector2 textureV, Vector2 textureW, Vector3 normalA, Vector3 normalB, Vector3 normalC, NormalType normalType = NormalType.Interpolated) : base(a, b, c)
         {
-            this.a = a;
-            this.b = b;
-            this.c = c;
-
             this.textureU = textureU;
             this.textureV = textureV;
             this.textureW = textureW;
@@ -42,85 +40,47 @@
             this.normalA = normalA;
             this.normalB = normalB;
             this.normalC = normalC;
+
+            this.normalType = normalType;
         }
 
         public override void RotateX(double radians, Vector3 origin)
         {
-            Vector3 OA = (a - origin).RotateX(radians);
-            Vector3 OB = (b - origin).RotateX(radians);
-            Vector3 OC = (c - origin).RotateX(radians);
+            base.RotateX(radians, origin);
 
-            Vector3 OAn = (normalA - origin).RotateX(radians);
-            Vector3 OBn = (normalB - origin).RotateX(radians);
-            Vector3 OCn = (normalC - origin).RotateX(radians);
-
-            a = origin + OA;
-            b = origin + OB;
-            c = origin + OC;
-
-            normalA = origin + OAn;
-            normalB = origin + OBn;
-            normalC = origin + OCn;
+            normalA = normalA.RotateX(radians);
+            normalB = normalB.RotateX(radians);
+            normalC = normalC.RotateX(radians);
         }
 
         public override void RotateY(double radians, Vector3 origin)
         {
-            Vector3 OA = (a - origin).RotateY(radians);
-            Vector3 OB = (b - origin).RotateY(radians);
-            Vector3 OC = (c - origin).RotateY(radians);
+            base.RotateY(radians, origin);
 
-            Vector3 OAn = (normalA - origin).RotateY(radians);
-            Vector3 OBn = (normalB - origin).RotateY(radians);
-            Vector3 OCn = (normalC - origin).RotateY(radians);
-
-            a = origin + OA;
-            b = origin + OB;
-            c = origin + OC;
-
-            normalA = origin + OAn;
-            normalB = origin + OBn;
-            normalC = origin + OCn;
+            normalA = normalA.RotateY(radians);
+            normalB = normalB.RotateY(radians);
+            normalC = normalC.RotateY(radians);
         }
 
         public override void RotateZ(double radians, Vector3 origin)
         {
-            Vector3 OA = (a - origin).RotateZ(radians);
-            Vector3 OB = (b - origin).RotateZ(radians);
-            Vector3 OC = (c - origin).RotateZ(radians);
+            base.RotateZ(radians, origin);
 
-            Vector3 OAn = (normalA - origin).RotateZ(radians);
-            Vector3 OBn = (normalB - origin).RotateZ(radians);
-            Vector3 OCn = (normalC - origin).RotateZ(radians);
-
-            a = origin + OA;
-            b = origin + OB;
-            c = origin + OC;
-
-            normalA = origin + OAn;
-            normalB = origin + OBn;
-            normalC = origin + OCn;
+            normalA = normalA.RotateZ(radians);
+            normalB = normalB.RotateZ(radians);
+            normalC = normalC.RotateZ(radians);
         }
 
         public override void Rotate(double r1, double r2, double r3, Vector3 origin)
         {
-            Vector3 OA = (a - origin).Rotate(r1, r2, r3);
-            Vector3 OB = (b - origin).Rotate(r1, r2, r3);
-            Vector3 OC = (c - origin).Rotate(r1, r2, r3);
+            base.Rotate(r1, r2, r3, origin);
 
-            Vector3 OAn = (normalA - origin).Rotate(r1, r2, r3);
-            Vector3 OBn = (normalB - origin).Rotate(r1, r2, r3);
-            Vector3 OCn = (normalC - origin).Rotate(r1, r2, r3);
-
-            a = origin + OA;
-            b = origin + OB;
-            c = origin + OC;
-
-            normalA = origin + OAn;
-            normalB = origin + OBn;
-            normalC = origin + OCn;
+            normalA = normalA.Rotate(r1, r2, r3);
+            normalB = normalB.Rotate(r1, r2, r3);
+            normalC = normalC.Rotate(r1, r2, r3);
         }
 
-        public Vector3 TextureCoordsAt(double t, double s)
+        public Vector2 TextureCoordsAt(double t, double s)
         {
             return textureU * (1.0 - t - s) + textureV * t + textureW * s;
         }

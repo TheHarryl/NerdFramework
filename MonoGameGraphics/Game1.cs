@@ -17,11 +17,11 @@ namespace MonoGameGraphics
         private SpriteBatch _spriteBatch;
 
         private Renderer3 renderer = new Renderer3(new Ray3Region(new Ray3(Vector3.Zero, Vector3.zAxis), 70, 35), 800, 400);
-        //private Triangle3Group tris = MeshParser.FromCube(Vector3.Zero, 20);
-        //private Triangle3Group tris = MeshParser.FromIcoSphere(new Vector3(-15, 0, 15), 15, 4);
-        //private Triangle3Group tris = MeshParser.FromUVSphere(new Vector3(0, 0, 15), 15);
-        //private Triangle3Group tris = MeshParser.FromQuadSphere(new Vector3(-15, 0, 15), 15, 1);
-        private Triangle3Collection tris = MeshParser.FromFile("C:\\Users\\harry\\Desktop\\Mathi\\HarrylMath\\Test\\luke.obj");
+        //private MeshTriangle3Collection tris = MeshParser.FromCube(Vector3.Zero, 20).polygons;
+        //private MeshTriangle3Collection tris = MeshParser.FromIcoSphere(new Vector3(-15, 0, 15), 15, 4).polygons;
+        //private MeshTriangle3Collection tris = MeshParser.FromUVSphere(new Vector3(0, 0, 15), 15);
+        //private MeshTriangle3Collection tris = MeshParser.FromQuadSphere(new Vector3(-15, 0, 15), 15, 1).polygons;
+        private MeshTriangle3Collection tris = MeshParser.FromFile("C:\\Users\\harry\\Desktop\\Mathi\\HarrylMath\\Test\\male.obj").polygons;
         private Texture2D screen;
 
         private int frameCount = 0;
@@ -43,7 +43,7 @@ namespace MonoGameGraphics
 
         protected override void Initialize()
         {
-            renderer.scene = new Triangle3Collection(tris.triangles);
+            renderer.scene = tris;
             screen = new Texture2D(_graphics.GraphicsDevice, renderer.width, renderer.height);
 
             base.Initialize();
@@ -70,7 +70,7 @@ namespace MonoGameGraphics
             {
                 downPos = false;
                 iterations++;
-                tris = MeshParser.FromIcoSphere(new Vector3(-15, 0, 15), 15, iterations);
+                tris = MeshParser.FromQuadSphere(new Vector3(-15, 0, 15), 15, iterations, NormalType.Interpolated).polygons;
                 renderer.scene = tris;
                 System.Diagnostics.Trace.WriteLine(tris.triangles.Count);
             }
@@ -78,7 +78,7 @@ namespace MonoGameGraphics
             {
                 downNeg = false;
                 iterations--;
-                tris = MeshParser.FromIcoSphere(new Vector3(-15, 0, 15), 15, iterations);
+                tris = MeshParser.FromQuadSphere(new Vector3(-15, 0, 15), 15, iterations, NormalType.Interpolated).polygons;
                 renderer.scene = tris;
                 System.Diagnostics.Trace.WriteLine(tris.triangles.Count);
             } if (Keyboard.GetState().IsKeyDown(Keys.Down))

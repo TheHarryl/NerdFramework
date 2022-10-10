@@ -6,5 +6,9 @@ namespace NerdFramework
 {
     public class ImageParser
     {
+        public static Texture2 FromFile(string fileLocation)
+        {
+            return Texture2.None;
+        }
     }
 }

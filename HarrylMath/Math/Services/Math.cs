@@ -36,6 +36,36 @@
             return min;
         }
 
+        public static int MinIndex(params double[] values)
+        {
+            double min = values[0];
+            int index = 0;
+            for (int i = 1; i < values.Length; i++)
+            {
+                if (values[i] < min)
+                {
+                    min = values[i];
+                    index = i;
+                }
+            }
+            return index;
+        }
+
+        public static int MaxIndex(params double[] values)
+        {
+            double min = values[0];
+            int index = 0;
+            for (int i = 1; i < values.Length; i++)
+            {
+                if (values[i] > min)
+                {
+                    min = values[i];
+                    index = i;
+                }
+            }
+            return index;
+        }
+
         public static double Abs(double x)
         {
             if (x < 0.0) return x * -1.0;

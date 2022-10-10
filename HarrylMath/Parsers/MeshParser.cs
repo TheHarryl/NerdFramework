@@ -1,17 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Text;
 
 namespace NerdFramework
 {
     public static class MeshParser
     {
-        public static Triangle3Collection FromFile(string fileLocation)
+        public static Mesh FromFile(string fileLocation, bool overrideNormalInterpolation = false)
         {
             List<Vector3> vertices = new List<Vector3>();
+            List<Vector2> textureCoords = new List<Vector2>();
             List<Vector3> normals = new List<Vector3>();
-            List<Triangle3> triangles = new List<Triangle3>();
+            List<MeshTriangle3> triangles = new List<MeshTriangle3>();
 
             if (fileLocation.ToLower().EndsWith(".obj"))
             {
@@ -20,44 +19,78 @@ namespace NerdFramework
                 foreach (string line in lines)
                 {
                     string[] args = line.Split(" ");
-                    if (args[0] == "v")
+                    switch (args[0])
                     {
-                        if (args.Length == 4)
-                        {
+                        case "v":
                             vertices.Add(new Vector3(Convert.ToDouble(args[1]), Convert.ToDouble(args[2]), Convert.ToDouble(args[3])));
-                        }
-                    }
-                    else if (args[0] == "vn")
-                    {
-                        normals.Add(new Vector3(Convert.ToDouble(args[1]), Convert.ToDouble(args[2]), Convert.ToDouble(args[3])));
-                    }
-                    else if (args[0] == "f")
-                    {
-                        List<Vector3> faceVertices = new List<Vector3>();
-                        List<Vector3> faceNormals = new List<Vector3>();
-                        for (int i = 1; i < args.Length; i++)
-                        {
-                            string[] args1 = args[i].Split("/");
-                            faceVertices.Add(vertices[Int32.Parse(args1[0]) - 1]);
-                            if (args1.Length == 1) continue;
-                            //faceNormals.Add(vertices[Int32.Parse(args1[2]) - 1]);
-                        }
-                        if (faceVertices.Count == 3)
-                            triangles.Add(new Triangle3(faceVertices[0], faceVertices[1], faceVertices[2]));
-                        else if (faceVertices.Count == 4)
-                        {
-                            Quad3 quad = new Quad3(faceVertices[0], faceVertices[1], faceVertices[2], faceVertices[3]);
-                            triangles.Add(quad.GetTriangle1());
-                            triangles.Add(quad.GetTriangle2());
-                        }
+                            break;
+                        case "vt":
+                            textureCoords.Add(new Vector2(Convert.ToDouble(args[1]), Convert.ToDouble(args[2])));
+                            break;
+                        case "vn":
+                            normals.Add(new Vector3(Convert.ToDouble(args[1]), Convert.ToDouble(args[2]), Convert.ToDouble(args[3])));
+                            break;
+                        case "f":
+                            List<Vector3> faceVertices = new List<Vector3>();
+                            List<Vector2> faceTextures = new List<Vector2>();
+                            List<Vector3> faceNormals = new List<Vector3>();
+                            for (int i = 1; i < args.Length; i++)
+                            {
+                                string[] args1 = args[i].Split("/");
+                                faceVertices.Add(vertices[Int32.Parse(args1[0]) - 1]);
+                                if (args1.Length >= 2 && !args1[1].Equals(""))
+                                    faceTextures.Add(textureCoords[Int32.Parse(args1[1]) - 1]);
+                                if (args1.Length >= 3)
+                                    faceNormals.Add(normals[Int32.Parse(args1[2]) - 1]);
+                            }
+                            if (faceVertices.Count == 3)
+                            {
+                                MeshTriangle3 triangle = new MeshTriangle3(faceVertices[0], faceVertices[1], faceVertices[2]);
+                                if (faceTextures.Count == 3)
+                                {
+                                    triangle.textureU = faceTextures[0];
+                                    triangle.textureV = faceTextures[1];
+                                    triangle.textureW = faceTextures[2];
+                                }
+                                if (faceNormals.Count == 3 && !overrideNormalInterpolation)
+                                {
+                                    triangle.normalA = faceNormals[0];
+                                    triangle.normalB = faceNormals[1];
+                                    triangle.normalC = faceNormals[2];
+                                    triangle.normalType = NormalType.Interpolated;
+                                }
+                                triangles.Add(triangle);
+                            }
+                            else if (faceVertices.Count == 4)
+                            {
+                                MeshQuad3 quad = new MeshQuad3(faceVertices[0], faceVertices[1], faceVertices[2], faceVertices[3]);
+                                if (faceTextures.Count == 4)
+                                {
+                                    quad.textureU = faceTextures[0];
+                                    quad.textureV = faceTextures[1];
+                                    quad.textureW = faceTextures[2];
+                                    quad.textureX = faceTextures[3];
+                                }
+                                if (faceNormals.Count == 4 && !overrideNormalInterpolation)
+                                {
+                                    quad.normalA = faceNormals[0];
+                                    quad.normalB = faceNormals[1];
+                                    quad.normalC = faceNormals[2];
+                                    quad.normalD = faceNormals[3];
+                                    quad.normalType = NormalType.Interpolated;
+                                }
+                                triangles.Add(quad.GetTriangle1());
+                                triangles.Add(quad.GetTriangle2());
+                            }
+                            break;
                     }
                 }
             }
 
-            return new Triangle3Collection(triangles);
+            return new Mesh(new MeshTriangle3Collection(triangles));
         }
 
-        public static Triangle3Collection FromCube(Vector3 origin, double sideLength)
+        public static Mesh FromCube(Vector3 origin, double sideLength)
         {
             double v = sideLength / 2.0;
             Vector3 a = new Vector3(v, v, -v);
@@ -69,27 +102,27 @@ namespace NerdFramework
             Vector3 g = new Vector3(-v, -v, -v);
             Vector3 h = new Vector3(-v, -v, v);
 
-            Triangle3Collection group = new Triangle3Collection(new List<Triangle3>()
+            MeshTriangle3Collection group = new MeshTriangle3Collection(new List<MeshTriangle3>()
             {
-                new Triangle3(b, d, f),
-                new Triangle3(h, f, d),
-                new Triangle3(b, a, d),
-                new Triangle3(c, d, a),
-                new Triangle3(d, c, h),
-                new Triangle3(g, h, c),
-                new Triangle3(h, g, f),
-                new Triangle3(e, f, g),
-                new Triangle3(f, e, b),
-                new Triangle3(a, b, e),
-                new Triangle3(a, e, c),
-                new Triangle3(g, c, e),
+                new MeshTriangle3(b, d, f),
+                new MeshTriangle3(h, f, d),
+                new MeshTriangle3(b, a, d),
+                new MeshTriangle3(c, d, a),
+                new MeshTriangle3(d, c, h),
+                new MeshTriangle3(g, h, c),
+                new MeshTriangle3(h, g, f),
+                new MeshTriangle3(e, f, g),
+                new MeshTriangle3(f, e, b),
+                new MeshTriangle3(a, b, e),
+                new MeshTriangle3(a, e, c),
+                new MeshTriangle3(g, c, e),
             });
             group.origin = origin;
 
-            return group;
+            return new Mesh(group);
         }
 
-        public static Triangle3Collection FromUVSphere(Vector3 origin, double radius, int segments = 2, int rings = 4)
+        public static Mesh FromUVSphere(Vector3 origin, double radius, int segments = 2, int rings = 4)
         {
             Vector3[] ring = new Vector3[segments];
 
@@ -116,7 +149,7 @@ namespace NerdFramework
             }
             vertices.Add(new Vector3(0.0, radius, 0.0));
 
-            List<Triangle3> triangles = new List<Triangle3>();
+            List<MeshTriangle3> triangles = new List<MeshTriangle3>();
             for (int y = 0; y < rings - 1; y++)
             {
                 for (int x = 0; x < segments; x++)
@@ -125,19 +158,19 @@ namespace NerdFramework
                     Vector3 b = vertices[1 + (y + 1) * segments + x];
                     Vector3 c = vertices[2 + (y + 1) * segments + x];
                     Vector3 d = vertices[2 + y * segments + x];
-                    Quad3 quad = new Quad3(a, b, c, d);
+                    MeshQuad3 quad = new MeshQuad3(a, b, c, d);
                     triangles.Add(quad.GetTriangle1());
                     triangles.Add(quad.GetTriangle2());
                 }
             }
 
-            Triangle3Collection group = new Triangle3Collection(triangles);
+            MeshTriangle3Collection group = new MeshTriangle3Collection(triangles);
             group.origin = origin;
 
-            return group;
+            return new Mesh(group);
         }
 
-        public static Triangle3Collection FromIcoSphere(Vector3 origin, double radius, int iterations = 2)
+        public static Mesh FromIcoSphere(Vector3 origin, double radius, int iterations = 2, NormalType normalType = NormalType.Default)
         {
             double goldenRatio = (1.0 + Math.Sqrt(5)) / 2.0;
             Vector3 a = new Vector3(goldenRatio, 1.0, 0.0).Normalized();
@@ -154,35 +187,35 @@ namespace NerdFramework
             Vector3 l = new Vector3(0.0, -goldenRatio, 1.0).Normalized();
 
             // This was NOT poggers to make
-            List<Triangle3> icosahedron = new List<Triangle3>()
+            List<MeshTriangle3> icosahedron = new List<MeshTriangle3>()
             {
-                new Triangle3(e, l, b),
-                new Triangle3(e, b, a),
-                new Triangle3(e, a, i),
-                new Triangle3(f, i, d),
-                new Triangle3(f, d, c),
-                new Triangle3(f, c, l),
-                new Triangle3(e, i, f),
-                new Triangle3(f, l, e),
-                new Triangle3(b, k, h),
-                new Triangle3(b, h, a),
-                new Triangle3(h, j, a),
-                new Triangle3(d, j, g),
-                new Triangle3(d, g, c),
-                new Triangle3(c, g, k),
-                new Triangle3(g, j, h),
-                new Triangle3(h, k, g),
-                new Triangle3(i, a, j),
-                new Triangle3(i, j, d),
-                new Triangle3(l, c, k),
-                new Triangle3(l, k, b)
+                new MeshTriangle3(e, l, b),
+                new MeshTriangle3(e, b, a),
+                new MeshTriangle3(e, a, i),
+                new MeshTriangle3(f, i, d),
+                new MeshTriangle3(f, d, c),
+                new MeshTriangle3(f, c, l),
+                new MeshTriangle3(e, i, f),
+                new MeshTriangle3(f, l, e),
+                new MeshTriangle3(b, k, h),
+                new MeshTriangle3(b, h, a),
+                new MeshTriangle3(h, j, a),
+                new MeshTriangle3(d, j, g),
+                new MeshTriangle3(d, g, c),
+                new MeshTriangle3(c, g, k),
+                new MeshTriangle3(g, j, h),
+                new MeshTriangle3(h, k, g),
+                new MeshTriangle3(i, a, j),
+                new MeshTriangle3(i, j, d),
+                new MeshTriangle3(l, c, k),
+                new MeshTriangle3(l, k, b)
             };
 
-            List<Triangle3> Subdivide(List<Triangle3> tris)
+            List<MeshTriangle3> Subdivide(List<MeshTriangle3> tris)
             {
-                List<Triangle3> newTriangles = new List<Triangle3>();
+                List<MeshTriangle3> newTriangles = new List<MeshTriangle3>();
 
-                foreach (Triangle3 triangle in tris)
+                foreach (MeshTriangle3 triangle in tris)
                 {
                     /*      A
                      *    /   \
@@ -205,10 +238,10 @@ namespace NerdFramework
                     Vector3 e = ((a + c) / 2).Normalized();
                     Vector3 f = ((b + c) / 2).Normalized();
 
-                    newTriangles.Add(new Triangle3(a, d, e));
-                    newTriangles.Add(new Triangle3(d, b, f));
-                    newTriangles.Add(new Triangle3(e, f, c));
-                    newTriangles.Add(new Triangle3(d, f, e));
+                    newTriangles.Add(new MeshTriangle3(a, d, e));
+                    newTriangles.Add(new MeshTriangle3(d, b, f));
+                    newTriangles.Add(new MeshTriangle3(e, f, c));
+                    newTriangles.Add(new MeshTriangle3(d, f, e));
                 }
 
                 return newTriangles;
@@ -219,20 +252,26 @@ namespace NerdFramework
                 icosahedron = Subdivide(icosahedron);
             }
 
-            foreach (Triangle3 triangle in icosahedron)
+            foreach (MeshTriangle3 triangle in icosahedron)
             {
+                if (normalType == NormalType.Interpolated)
+                {
+                    triangle.normalA = triangle.a;
+                    triangle.normalB = triangle.b;
+                    triangle.normalC = triangle.c;
+                }
                 triangle.a *= radius;
                 triangle.b *= radius;
                 triangle.c *= radius;
             }
 
-            Triangle3Collection group = new Triangle3Collection(icosahedron);
+            MeshTriangle3Collection group = new MeshTriangle3Collection(icosahedron);
             group.origin = origin;
 
-            return group;
+            return new Mesh(group);
         }
 
-        public static Triangle3Collection FromQuadSphere(Vector3 origin, double radius, int iterations = 2)
+        public static Mesh FromQuadSphere(Vector3 origin, double radius, int iterations = 2, NormalType normalType = NormalType.Default)
         {
             Vector3 a = new Vector3(1, 1, -1).Normalized();
             Vector3 b = new Vector3(1, 1, 1).Normalized();
@@ -243,21 +282,21 @@ namespace NerdFramework
             Vector3 g = new Vector3(-1, -1, -1).Normalized();
             Vector3 h = new Vector3(-1, -1, 1).Normalized();
 
-            List<Quad3> hexahedron = new List<Quad3>()
+            List<MeshQuad3> hexahedron = new List<MeshQuad3>()
             {
-                new Quad3(c, d, b, a),
-                new Quad3(g, h, d, c),
-                new Quad3(e, f, h, g),
-                new Quad3(a, b, f, e),
-                new Quad3(d, h, f, b),
-                new Quad3(g, c, a, e)
+                new MeshQuad3(c, d, b, a),
+                new MeshQuad3(g, h, d, c),
+                new MeshQuad3(e, f, h, g),
+                new MeshQuad3(a, b, f, e),
+                new MeshQuad3(d, h, f, b),
+                new MeshQuad3(g, c, a, e)
             };
 
-            List<Quad3> Subdivide(List<Quad3> quads)
+            List<MeshQuad3> Subdivide(List<MeshQuad3> quads)
             {
-                List<Quad3> newQuads = new List<Quad3>();
+                List<MeshQuad3> newQuads = new List<MeshQuad3>();
 
-                foreach (Quad3 quad in quads)
+                foreach (MeshQuad3 quad in quads)
                 {
                     /* A ----- D
                      * |       |
@@ -283,10 +322,10 @@ namespace NerdFramework
                     Vector3 h = ((b + a) / 2.0).Normalized();
                     Vector3 i = ((a + d + c + b) / 4.0).Normalized();
 
-                    newQuads.Add(new Quad3(a, h, i, e));
-                    newQuads.Add(new Quad3(e, i, f, d));
-                    newQuads.Add(new Quad3(h, b, g, i));
-                    newQuads.Add(new Quad3(i, g, c, f));
+                    newQuads.Add(new MeshQuad3(a, h, i, e));
+                    newQuads.Add(new MeshQuad3(e, i, f, d));
+                    newQuads.Add(new MeshQuad3(h, b, g, i));
+                    newQuads.Add(new MeshQuad3(i, g, c, f));
                 }
 
                 return newQuads;
@@ -297,10 +336,18 @@ namespace NerdFramework
                 hexahedron = Subdivide(hexahedron);
             }
 
-            List<Triangle3> quadSphere = new List<Triangle3>();
+            List<MeshTriangle3> quadSphere = new List<MeshTriangle3>();
 
-            foreach (Quad3 quad in hexahedron)
+            foreach (MeshQuad3 quad in hexahedron)
             {
+                if (normalType == NormalType.Interpolated)
+                {
+                    quad.normalA = quad.a;
+                    quad.normalB = quad.b;
+                    quad.normalC = quad.c;
+                    quad.normalD = quad.d;
+                }
+
                 quad.a *= radius;
                 quad.b *= radius;
                 quad.c *= radius;
@@ -309,10 +356,10 @@ namespace NerdFramework
                 quadSphere.Add(quad.GetTriangle2());
             }
 
-            Triangle3Collection group = new Triangle3Collection(quadSphere);
+            MeshTriangle3Collection group = new MeshTriangle3Collection(quadSphere);
             group.origin = origin;
 
-            return group;
+            return new Mesh(group);
         }
     }
 }

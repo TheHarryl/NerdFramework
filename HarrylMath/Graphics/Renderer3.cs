@@ -10,7 +10,7 @@ namespace NerdFramework
         public Ray3Caster camera;
         public Light3Caster cameraLight;
 
-        public Triangle3Collection scene = new Triangle3Collection(new List<Triangle3>());
+        public MeshTriangle3Collection scene = new MeshTriangle3Collection(new List<MeshTriangle3>());
         public List<Light3Caster> lightSources = new List<Light3Caster>();
 
         public Color3 fog = new Color3(0, 0, 0, 0.0);//0.05);
@@ -264,7 +264,7 @@ namespace NerdFramework
             }
             //scene.triangles = scene.triangles.OrderBy(t => -((t.a + t.b + t.c) / 3.0 - camera.d.p).Magnitude()).ToList();
             List<RasterizedTriangle2> projectedTriangles = new List<RasterizedTriangle2>();
-            foreach (Triangle3 triangle in scene.triangles)
+            foreach (MeshTriangle3 triangle in scene.triangles)
             {
                 if (Vector3.Dot(camera.d.v, triangle.Normal()) >= 0.0) continue;
 
@@ -280,14 +280,24 @@ namespace NerdFramework
                 b *= new Vector2(width, height);
                 c *= new Vector2(width, height);
 
-                Vector3 normal = triangle.Normal();
                 double distance1 = camera.Distance(triangle.a);
                 double distance2 = camera.Distance(triangle.b);
                 double distance3 = camera.Distance(triangle.c);
-                Color3 colorA = RenderFog(CalculateLighting(triangle.a, normal), distance1);
-                Color3 colorB = RenderFog(CalculateLighting(triangle.b, normal), distance2);
-                Color3 colorC = RenderFog(CalculateLighting(triangle.c, normal), distance3);
-                FillTriangle(new RasterizedTriangle2(a, b, c, colorA, colorB, colorC, distance1, distance2, distance3));
+                
+                if (triangle.normalType == NormalType.Interpolated)
+                {
+                    Color3 colorA = RenderFog(CalculateLighting(triangle.a, triangle.normalA), distance1);
+                    Color3 colorB = RenderFog(CalculateLighting(triangle.b, triangle.normalB), distance2);
+                    Color3 colorC = RenderFog(CalculateLighting(triangle.c, triangle.normalC), distance3);
+                    FillTriangle(new RasterizedTriangle2(a, b, c, colorA, colorB, colorC, distance1, distance2, distance3));
+                } else
+                {
+                    Vector3 normal = triangle.Normal();
+                    Color3 colorA = RenderFog(CalculateLighting(triangle.a, normal), distance1);
+                    Color3 colorB = RenderFog(CalculateLighting(triangle.b, normal), distance2);
+                    Color3 colorC = RenderFog(CalculateLighting(triangle.c, normal), distance3);
+                    FillTriangle(new RasterizedTriangle2(a, b, c, colorA, colorB, colorC, distance1, distance2, distance3));
+                }
                 //FillLine(Color3.Black, a, b);
                 //FillLine(Color3.Black, a, c);
                 //FillLine(Color3.Black, c, b);
