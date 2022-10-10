@@ -6,14 +6,14 @@ namespace NerdFramework
     {
         public Ray3Caster rayCaster;
 
-        public Triangle3Collection reference;
+        public MeshTriangle3Collection reference;
 
         public Color3Sequence color;
 
         public double distance;
         public double volumentricCoefficient;
 
-        public Light3Caster(Ray3Caster caster, Triangle3Collection reference, Color3Sequence color, double distance, double volumentricCoefficient = 0.1)
+        public Light3Caster(Ray3Caster caster, MeshTriangle3Collection reference, Color3Sequence color, double distance, double volumentricCoefficient = 0.1)
         {
             this.rayCaster = caster;
             this.reference = reference;
