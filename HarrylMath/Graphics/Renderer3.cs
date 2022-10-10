@@ -7,6 +7,8 @@ namespace NerdFramework
 {
     public class Renderer3
     {
+        public Dictionary<string, Material> materials;
+
         public Ray3Caster camera;
         public Light3Caster cameraLight;
 
@@ -47,6 +49,15 @@ namespace NerdFramework
 
             this.width = width;
             this.height = height;
+        }
+
+        public void AddMaterial(string name, Material material)
+        {
+            materials[name] = material;
+        }
+        public void AddMaterials(Dictionary<string, Material> materials)
+        {
+            materials.ToList().ForEach(x => this.materials[x.Key] = x.Value);
         }
 
         public void FillLine(Color3 color, Vector2 begin, Vector2 end)

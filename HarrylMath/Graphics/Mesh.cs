@@ -9,7 +9,7 @@ namespace NerdFramework
         public MeshTriangle3Collection polygons;
         public List<BoundingShape3> colliders;
         public List<Bone> bones;
-        public Color3[,] texture;
+        public Dictionary<string, MeshTriangle3Collection> texturedPolygons;
 
         public Mesh(MeshTriangle3Collection polygons)
         {
