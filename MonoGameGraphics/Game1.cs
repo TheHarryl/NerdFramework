@@ -87,10 +87,7 @@ namespace MonoGameGraphics
                 }
             }
 
-            System.Diagnostics.Trace.WriteLine(textures["luke face.png"].data.Length + " 123");
-
             renderer.AddMaterials(MaterialParser.FromFile("C:\\Users\\harry\\Desktop\\Mathi\\HarrylMath\\Test\\luke.mtl", textures));
-            System.Diagnostics.Trace.WriteLine(renderer.GetMaterial("luke face.png").textureMap.data.Length + " 123");
         }
 
         protected override void Update(GameTime gameTime)
@@ -141,7 +138,7 @@ namespace MonoGameGraphics
                 tris.Rotate(0.0 * gameTime.ElapsedGameTime.TotalSeconds, -1.0 * gameTime.ElapsedGameTime.TotalSeconds, 0.0 * gameTime.ElapsedGameTime.TotalSeconds, new Vector3(0, 0, 0));
             }
 
-            tris.Rotate(-0.01 * gameTime.ElapsedGameTime.TotalSeconds, 0.005 * gameTime.ElapsedGameTime.TotalSeconds, 0.0 * gameTime.ElapsedGameTime.TotalSeconds, new Vector3(0, 0, 0));
+            tris.Rotate(-0.0001 * gameTime.ElapsedGameTime.TotalSeconds, 0.0005 * gameTime.ElapsedGameTime.TotalSeconds, 0.0 * gameTime.ElapsedGameTime.TotalSeconds, new Vector3(0, 0, 0));
             //renderer.cameraLight.rayCaster.d.p = (renderer.cameraLight.rayCaster.d.p - new Vector3(0, 0, 15)).Rotate(-0.2 * gameTime.ElapsedGameTime.TotalSeconds, 0.2 * gameTime.ElapsedGameTime.TotalSeconds, 0.0) + new Vector3(0, 0, 15);
 
             base.Update(gameTime);

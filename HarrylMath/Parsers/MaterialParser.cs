@@ -47,8 +47,14 @@ namespace NerdFramework
                         case "Tr":
                             materials[currentMaterialName].alpha = 1.0 - double.Parse(args[1]);
                             break;
+                        case "Tf":
+                            materials[currentMaterialName].alpha = (double.Parse(args[1]) + double.Parse(args[2]) + double.Parse(args[3])) / 3.0;
+                            break;
                         case "map_Kd":
-                            materials[currentMaterialName].textureMap = textures[string.Join(" ", args.Skip(1).ToArray())];
+                            if (args[1].StartsWith("-"))
+                                materials[currentMaterialName].textureMap = textures[string.Join(" ", args.Skip(5).ToArray())];
+                            else
+                                materials[currentMaterialName].textureMap = textures[string.Join(" ", args.Skip(1).ToArray())];
                             break;
                     }
                 }

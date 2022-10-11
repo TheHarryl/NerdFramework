@@ -26,6 +26,11 @@ namespace NerdFramework
             this.alpha = alpha;
         }
 
+        public static Color3 FromVector3(Vector3 v)
+        {
+            return new Color3((int)(v.x * 255.0), (int)(v.y * 255.0), (int)(v.z * 255.0));
+        }
+
         public static Color3 Lerp(Color3 a, Color3 b, double alpha)
         {
             return a * (1 - alpha) + b * alpha;
@@ -54,7 +59,22 @@ namespace NerdFramework
             return new Color3(r / colors.Length, g / colors.Length, b / colors.Length, alpha / colors.Length);
         }
 
-        public Color3 Grayscale()
+        public Color3 WithOverlayed(Color3 color)
+        {
+            return color + this * (1 - color.alpha);
+        }
+
+        public Color3 WithAlpha(double alpha)
+        {
+            return new Color3(r, g, b, this.alpha * alpha);
+        }
+
+        public Color3 Baked()
+        {
+            return new Color3((int)(r * alpha), (int)(g * alpha), (int)(b * alpha));
+        }
+
+        public Color3 Grayscaled()
         {
             int avg = Value();
             return new Color3(avg, avg, avg, alpha);
@@ -121,7 +141,7 @@ namespace NerdFramework
 
         public static Color3 operator *(Color3 a, Color3 b)
         {
-            return new Color3(a.r * b.r, a.g * b.g, a.b * b.b, a.alpha * b.alpha);
+            return new Color3((a.r * b.r) / 255, (a.g * b.g) / 255, (a.b * b.b) / 255, a.alpha * b.alpha);
         }
 
         public static Color3 operator *(Color3 a, double b)
@@ -131,7 +151,7 @@ namespace NerdFramework
 
         public static Color3 operator /(Color3 a, Color3 b)
         {
-            return new Color3((int)(a.r / b.r), (int)(a.g / b.g), (int)(a.b / b.b), a.alpha / b.alpha);
+            return new Color3((a.r / b.r) * 255, (a.g / b.g) * 255, (a.b / b.b) * 255, a.alpha / b.alpha);
         }
 
         public static Color3 operator /(Color3 a, double b)

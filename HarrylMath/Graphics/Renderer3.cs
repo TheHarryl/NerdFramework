@@ -180,13 +180,24 @@ namespace NerdFramework
                 {
                     Vector2 pos = colorTriangle.Parameterization(new Vector2(x, y));
                     double dist = colorTriangle.DistanceAt(pos.x, pos.y);
-                    if (pos.x >= 0.0 && pos.y >= 0.0 && pos.x + pos.y <= 1.0 && dist < depthBuffer[y, x])
+                    if (pos.x >= 0.0 && pos.y >= 0.0 && pos.x + pos.y <= 1.0)
                     {
-                        Vector2 textureCoords = colorTriangle.TextureCoordsAt(pos.x, pos.y);
-                        double lightValue = colorTriangle.ColorAt(pos.x, pos.y).Value() / 255.0;
-                        //Tween.QuadOutIn
-                        lightBuffer[y, x] = Color3.Lerp(Color3.Black, colorTriangle.material.textureMap.ColorAt(textureCoords.x, textureCoords.y), Tween.Linear(0.0, 1.0, lightValue));
-                        depthBuffer[y, x] = dist;
+                        if (dist < depthBuffer[y, x])
+                        {
+                            Vector2 textureCoords = colorTriangle.TextureCoordsAt(pos.x, pos.y);
+                            double lightValue = colorTriangle.ColorAt(pos.x, pos.y).Value() / 255.0;
+                            //Tween.QuadOutIn
+                            Color3 color = Color3.Lerp(Color3.Black, Color3.FromVector3(colorTriangle.material.diffuseColor).WithOverlayed(colorTriangle.material.textureMap.ColorAt(textureCoords.x, textureCoords.y)), lightValue).WithAlpha(colorTriangle.material.alpha);
+                            lightBuffer[y, x] = lightBuffer[y, x].WithOverlayed(color);
+                            depthBuffer[y, x] = dist;
+                        } else if (lightBuffer[y, x].alpha < 0.9999)
+                        {
+                            Vector2 textureCoords = colorTriangle.TextureCoordsAt(pos.x, pos.y);
+                            double lightValue = colorTriangle.ColorAt(pos.x, pos.y).Value() / 255.0;
+                            //Tween.QuadOutIn
+                            Color3 color = Color3.Lerp(Color3.Black, Color3.FromVector3(colorTriangle.material.diffuseColor).WithOverlayed(colorTriangle.material.textureMap.ColorAt(textureCoords.x, textureCoords.y)), lightValue).WithAlpha(colorTriangle.material.alpha);
+                            lightBuffer[y, x] = color.WithOverlayed(lightBuffer[y, x]);
+                        }
                     }
                 }
             }

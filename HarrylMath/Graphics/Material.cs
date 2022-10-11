@@ -28,8 +28,9 @@
             illuminationModel = IlluminationModel.Flat;
 
             shininess = 0.0;
+            alpha = 1.0;
+
             textureMap = Texture2.None;
-            textureMap = Texture2.One;
         }
     }
 }
