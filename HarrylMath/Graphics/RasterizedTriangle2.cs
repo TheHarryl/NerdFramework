@@ -10,9 +10,13 @@
         public double distB;
         public double distC;
 
+        public Vector2 textureU;
+        public Vector2 textureV;
+        public Vector2 textureW;
+
         public Material material;
 
-        public RasterizedTriangle2(Vector2 a, Vector2 b, Vector2 c, Color3 colorA, Color3 colorB, Color3 colorC, double distA, double distB, double distC, Material material) : base(a, b, c)
+        public RasterizedTriangle2(Vector2 a, Vector2 b, Vector2 c, Color3 colorA, Color3 colorB, Color3 colorC, double distA, double distB, double distC, Vector2 textureU, Vector2 textureV, Vector2 textureW, Material material) : base(a, b, c)
         {
             /* Triangle:
              * a: point1
@@ -28,6 +32,10 @@
             this.distB = distB;
             this.distC = distC;
 
+            this.textureU = textureU;
+            this.textureV = textureV;
+            this.textureW = textureW;
+
             this.material = material;
         }
 
@@ -38,6 +46,10 @@
         public double DistanceAt(double t, double s)
         {
             return distA * (1.0 - t - s) + distB * t + distC * s;
+        }
+        public Vector2 TextureCoordsAt(double t, double s)
+        {
+            return textureU * (1.0 - t - s) + textureV * t + textureW * s;
         }
     }
 }

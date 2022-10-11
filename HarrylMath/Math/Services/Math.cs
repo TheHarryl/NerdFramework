@@ -153,6 +153,11 @@
         public static double Sin(double radians, int steps = 10)
         {
             return System.Math.Sin(radians);
+
+            /* Possible fast solution?
+             * https://gamedev.stackexchange.com/a/4780
+             */
+
             /*
             double x1 = 0.0;
             

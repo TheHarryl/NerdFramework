@@ -5,6 +5,7 @@ using NerdFramework;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using Math = NerdFramework.Math;
 using Vector2 = NerdFramework.Vector2;
 using Vector3 = NerdFramework.Vector3;
@@ -50,12 +51,46 @@ namespace MonoGameGraphics
 
             Trace.WriteLine(tris.triangles.Count);
             tris.origin = new Vector3(-15.0, -5.0, 20.0);
-            tris.scale = Vector3.One * 3;
+            tris.RotateY(Math.TwoPI, Vector3.Zero);
+            tris.scale = Vector3.One * 3;//17;
+        }
+
+        public Texture2 ConvertTexture(Texture2D texture)
+        {
+            Color[] rawData = new Color[texture.Width * texture.Height];
+            texture.GetData<Color>(rawData);
+
+            Color3[,] rawDataAsGrid = new Color3[texture.Height, texture.Width];
+            for (int row = 0; row < texture.Height; row++)
+            {
+                for (int column = 0; column < texture.Width; column++)
+                {
+                    Color color = rawData[row * texture.Width + column];
+                    rawDataAsGrid[texture.Height - row - 1, column] = new Color3(color.R, color.G, color.B, color.A);
+                }
+            }
+            return new Texture2(rawDataAsGrid);
         }
 
         protected override void LoadContent()
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
+            Dictionary<string, Texture2> textures = new Dictionary<string, Texture2>();
+
+            List<string> tNames = new List<string>() { "belt.jpg", "chest.png", "leg.png", "luke face.png", "luke hair.png" };
+
+            foreach (string name in tNames)
+            {
+                using (FileStream fs = new FileStream("C:\\Users\\harry\\Desktop\\Mathi\\HarrylMath\\Test\\texture\\" + name, FileMode.Open))
+                {
+                    textures.Add(name, ConvertTexture(Texture2D.FromStream(_graphics.GraphicsDevice, fs)));
+                }
+            }
+
+            System.Diagnostics.Trace.WriteLine(textures["luke face.png"].data.Length + " 123");
+
+            renderer.AddMaterials(MaterialParser.FromFile("C:\\Users\\harry\\Desktop\\Mathi\\HarrylMath\\Test\\luke.mtl", textures));
+            System.Diagnostics.Trace.WriteLine(renderer.GetMaterial("luke face.png").textureMap.data.Length + " 123");
         }
 
         protected override void Update(GameTime gameTime)
@@ -70,7 +105,7 @@ namespace MonoGameGraphics
             {
                 downPos = false;
                 iterations++;
-                tris = MeshParser.FromQuadSphere(new Vector3(-15, 0, 15), 15, iterations, NormalType.Interpolated).polygons;
+                tris = MeshParser.FromIcoSphere(new Vector3(-15, 0, 15), 15, iterations, NormalType.Interpolated).polygons;
                 renderer.scene = tris;
                 System.Diagnostics.Trace.WriteLine(tris.triangles.Count);
             }

@@ -1,21 +1,24 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace NerdFramework
 {
     public class MaterialParser
     {
-        public static Dictionary<string, Material> FromFile(string fileLocation, bool overrideNormalInterpolation = false)
+        public static Dictionary<string, Material> FromFile(string fileLocation, Dictionary<string, Texture2> textures)
         {
             Dictionary<string, Material> materials = new Dictionary<string, Material>();
 
-            if (fileLocation.ToLower().EndsWith(".obj"))
+            /* Material (MTL) Specifications
+             * http://paulbourke.net/dataformats/mtl/
+             */
+            if (fileLocation.ToLower().EndsWith(".mtl"))
             {
                 string[] lines = System.IO.File.ReadAllLines(@fileLocation);
                 string currentMaterialName = "";
 
                 foreach (string line in lines)
                 {
-                    Material currentMaterial = materials[currentMaterialName];
                     string[] args = line.Split(" ");
                     switch (args[0])
                     {
@@ -24,28 +27,28 @@ namespace NerdFramework
                             currentMaterialName = args[1];
                             break;
                         case "Ka":
-                            currentMaterial.ambientColor = new Vector3(double.Parse(args[1]), double.Parse(args[2]), double.Parse(args[3]));
+                            materials[currentMaterialName].ambientColor = new Vector3(double.Parse(args[1]), double.Parse(args[2]), double.Parse(args[3]));
                             break;
                         case "Kd":
-                            currentMaterial.diffuseColor = new Vector3(double.Parse(args[1]), double.Parse(args[2]), double.Parse(args[3]));
+                            materials[currentMaterialName].diffuseColor = new Vector3(double.Parse(args[1]), double.Parse(args[2]), double.Parse(args[3]));
                             break;
                         case "Ks":
-                            currentMaterial.specularColor = new Vector3(double.Parse(args[1]), double.Parse(args[2]), double.Parse(args[3]));
+                            materials[currentMaterialName].specularColor = new Vector3(double.Parse(args[1]), double.Parse(args[2]), double.Parse(args[3]));
                             break;
                         case "illum":
-                            currentMaterial.illuminationModel = (IlluminationModel)int.Parse(args[1]);
+                            materials[currentMaterialName].illuminationModel = (IlluminationModel)int.Parse(args[1]);
                             break;
                         case "Ns":
-                            currentMaterial.shininess = double.Parse(args[1]);
+                            materials[currentMaterialName].shininess = double.Parse(args[1]);
                             break;
                         case "d":
-                            currentMaterial.alpha = double.Parse(args[1]);
+                            materials[currentMaterialName].alpha = double.Parse(args[1]);
                             break;
                         case "Tr":
-                            currentMaterial.alpha = 1.0 - double.Parse(args[1]);
+                            materials[currentMaterialName].alpha = 1.0 - double.Parse(args[1]);
                             break;
-                        case "map_Ka":
-                            currentMaterial.textureMap = ImageParser.FromFile(fileLocation);
+                        case "map_Kd":
+                            materials[currentMaterialName].textureMap = textures[string.Join(" ", args.Skip(1).ToArray())];
                             break;
                     }
                 }

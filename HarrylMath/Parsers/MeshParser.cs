@@ -14,6 +14,9 @@ namespace NerdFramework
 
             string currentMaterial = "None";
 
+            /* Object (OBJ) Specifications
+             * http://paulbourke.net/dataformats/obj/
+             */
             if (fileLocation.ToLower().EndsWith(".obj"))
             {
                 string[] lines = System.IO.File.ReadAllLines(@fileLocation);

@@ -18,7 +18,19 @@ namespace NerdFramework
 
         public Color3 ColorAt(double t, double s)
         {
-            int tMin = Math.Floor(t);
+            while (t < 0)
+                t += 1;
+            while (t > 1)
+                t -= 1;
+            while (s < 0)
+                s += 1;
+            while (s > 1)
+                s -= 1;
+            int x = (int)(t * data.GetLength(1));
+            int y = (int)(s * data.GetLength(0));
+
+            return data[y, x];
+            /*int tMin = Math.Floor(t);
             int tMax = Math.Ceil(t);
             int sMin = Math.Floor(s);
             int sMax = Math.Ceil(s);
@@ -28,7 +40,8 @@ namespace NerdFramework
             double sMinWeight = s - sMin;
             double sMaxWeight = sMax - s;
 
-            return data[sMin, tMin] * (2 - (sMinWeight + tMinWeight)) + data[sMax, tMax] * (2 - (sMaxWeight + tMaxWeight));
+            //System.Diagnostics.Trace.WriteLine(data.Length);
+            return Color3.White;//data[sMin, tMin] * (2 - (sMinWeight + tMinWeight)) + data[sMax, tMax] * (2 - (sMaxWeight + tMaxWeight));*/
         }
         public Color3 ColorAt(Vector2 parameters) { return ColorAt(parameters.x, parameters.y); }
     }

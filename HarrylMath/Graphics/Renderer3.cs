@@ -182,7 +182,10 @@ namespace NerdFramework
                     double dist = colorTriangle.DistanceAt(pos.x, pos.y);
                     if (pos.x >= 0.0 && pos.y >= 0.0 && pos.x + pos.y <= 1.0 && dist < depthBuffer[y, x])
                     {
-                        lightBuffer[y, x] = colorTriangle.ColorAt(pos.x, pos.y);
+                        Vector2 textureCoords = colorTriangle.TextureCoordsAt(pos.x, pos.y);
+                        double lightValue = colorTriangle.ColorAt(pos.x, pos.y).Value() / 255.0;
+                        //Tween.QuadOutIn
+                        lightBuffer[y, x] = Color3.Lerp(Color3.Black, colorTriangle.material.textureMap.ColorAt(textureCoords.x, textureCoords.y), Tween.Linear(0.0, 1.0, lightValue));
                         depthBuffer[y, x] = dist;
                     }
                 }
@@ -271,6 +274,18 @@ namespace NerdFramework
             lightBuffer = newLightBuffer;
         }
 
+        public void RenderShader(Func<int, int, bool> filter, Func<Color3, Color3> modification)
+        {
+            for (int y = 0; y < height; y++)
+            {
+                for (int x = 0; x < width; x++)
+                {
+                    if (filter(y, x))
+                        lightBuffer[y, x] = modification(lightBuffer[y, x]);
+                }
+            }
+        }
+
         public void RenderRasterized()
         {
             for (int y = 0; y < height; y++)
@@ -321,32 +336,12 @@ namespace NerdFramework
                     colorB = RenderFog(CalculateLighting(triangle.b, normal), distance2);
                     colorC = RenderFog(CalculateLighting(triangle.c, normal), distance3);
                 }
-                FillTriangle(new RasterizedTriangle2(a, b, c, colorA, colorB, colorC, distance1, distance2, distance3, material));
+                FillTriangle(new RasterizedTriangle2(a, b, c, colorA, colorB, colorC, distance1, distance2, distance3, triangle.textureU, triangle.textureV, triangle.textureW, material));
 
-                //FillLine(Color3.Black, a, b);
-                //FillLine(Color3.Black, a, c);
-                //FillLine(Color3.Black, c, b);
-                //projectedTriangles.Add(new ColorTriangle2(a, b, c, colorA, colorB, colorC));
+                //FillLine(Color3.Red, a, b);
+                //FillLine(Color3.Green, a, c);
+                //FillLine(Color3.Blue, c, b);
             }
-            /*for (int y = 0; y < height; y++)
-            {
-                for (int x = 0; x < width; x++)
-                {
-                    depthBuffer[y, x] = double.MaxValue;
-                    lightBuffer[y, x] = Color3.Black;
-
-                    Vector2 point = new Vector2(x, y);
-                    foreach (ColorTriangle2 projectedTriangle in projectedTriangles)
-                    {
-                        Vector2 pos = projectedTriangle.Parameterization(point);
-                        if (pos.x >= 0.0 && pos.y >= 0.0 && pos.x + pos.y <= 1.0)
-                        {
-                            lightBuffer[y, x] = projectedTriangle.ColorAt(pos.x, pos.y);
-                            break;
-                        }
-                    }
-                }
-            }*/
         }
 
         public void RenderRaytraced()
