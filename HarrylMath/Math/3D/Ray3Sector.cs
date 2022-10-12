@@ -2,30 +2,58 @@
 {
     public class Ray3Sector : Ray3Caster
     {
-        protected Vector3 w0;
-        protected Vector3 w1;
-        protected Vector3 h0;
-        protected Vector3 h1;
+        protected double FOV;
 
-        public Ray3Sector(Ray3 direction, double wRadians, double hRadians)
+        protected double width;
+        protected double height;
+        protected double r;
+        protected double v;
+
+        public Ray3Sector(Ray3 direction, double width, double height, double FOV)
         {
             this.d = new Ray3(direction.p, Vector3.zAxis);
-            this.w0 = d.v.RotateX(-hRadians / 2).RotateY(-wRadians / 2);
-            this.w1 = d.v.RotateX(-hRadians / 2).RotateY(wRadians / 2);
-            this.h0 = d.v.RotateX(hRadians / 2).RotateY(-wRadians / 2);
-            this.h1 = d.v.RotateX(hRadians / 2).RotateY(wRadians / 2);
+            this.w = Vector3.xAxis * width;
+            this.h = Vector3.yAxis * height;
+            this.width = width;
+            this.height = height;
+            this.FOV = FOV;
+
+            /* arc length = 2*PI*r*(theta/180)
+             * width = 2PI*r*(FOV/180)
+             * r = (width*180) / (2*PI*FOV)
+             * 
+             * a^2 + b^2 = c^2
+             * d^2 + (w/2)^2 = r^2
+             * d = sqrt(r^2 - w^2/4)
+             */
+
+            this.r = (width * 180) / (Math.TwoPI * FOV);
+            this.v = Math.Sqrt(r * r - width * width / 4);
 
             RotateTo(direction.v);
         }
 
         public override Ray3 RayAt(double wAlpha, double hAlpha)
         {
-            return new Ray3(d.p, Vector3.Lerp(Vector3.Lerp(w0, w1, wAlpha), Vector3.Lerp(h0, h1, wAlpha), hAlpha));
+            Vector3 v1 = (d.p + d.v * v) + w * (wAlpha - 0.5) + h * (hAlpha - 0.5);
+            Vector3 v0 = d.p;
+            return new Ray3(d.p, v1 - v0);
         }
 
         public override Vector2 Projection(Vector3 point)
         {
-            throw new System.NotImplementedException();
+            /* arc length = 2*PI*r*(theta/180)
+             * width = 2PI*r*(FOV/180)
+             * r = (width*180) / (2*PI*FOV)
+             * 
+             * a^2 + b^2 = c^2
+             * d^2 + (w/2)^2 = r^2
+             * d = sqrt(r^2 - w^2/4)
+             */
+
+            Vector3 intersection = new Plane3(d.p + d.v * v, d.v).Intersection(new Line3(point, d.p - point));
+
+            return new Vector2(intersection.x / w.x + 0.5, intersection.y / h.y + 0.5);
         }
 
         public override bool Meets(Vector3 point)
@@ -35,43 +63,36 @@
 
         public override double Distance(Vector3 point)
         {
-            return (point - d.p).Magnitude();
+            Plane3 plane = new Plane3(d.p, d.v);
+            return plane.Min(point);
         }
 
         public override void RotateX(double radians)
         {
             d.RotateX(radians);
-            w0 = w0.RotateX(radians);
-            w1 = w1.RotateX(radians);
-            h0 = h0.RotateX(radians);
-            h1 = h1.RotateX(radians);
+            w = w.RotateX(radians);
+            h = h.RotateX(radians);
         }
 
         public override void RotateY(double radians)
         {
             d.RotateY(radians);
-            w0 = w0.RotateY(radians);
-            w1 = w1.RotateY(radians);
-            h0 = h0.RotateY(radians);
-            h1 = h1.RotateY(radians);
+            w = w.RotateY(radians);
+            h = h.RotateY(radians);
         }
 
         public override void RotateZ(double radians)
         {
             d.RotateZ(radians);
-            w0 = w0.RotateZ(radians);
-            w1 = w1.RotateZ(radians);
-            h0 = h0.RotateZ(radians);
-            h1 = h1.RotateZ(radians);
+            w = w.RotateZ(radians);
+            h = h.RotateZ(radians);
         }
 
         public override void Rotate(double r1, double r2, double r3)
         {
             d.Rotate(r1, r2, r3);
-            w0 = w0.Rotate(r1, r2, r3);
-            w1 = w1.Rotate(r1, r2, r3);
-            h0 = h0.Rotate(r1, r2, r3);
-            h1 = h1.Rotate(r1, r2, r3);
+            w = w.Rotate(r1, r2, r3);
+            h = h.Rotate(r1, r2, r3);
         }
 
         public override void RotateTo(Vector3 vector)

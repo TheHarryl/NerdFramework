@@ -2,9 +2,6 @@
 {
     public class Ray3Region : Ray3Caster
     {
-        protected Vector3 w;
-        protected Vector3 h;
-
         public Ray3Region(Ray3 direction, double width, double height)
         {
             this.d = new Ray3(direction.p, Vector3.zAxis);

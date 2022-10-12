@@ -65,6 +65,19 @@ namespace NerdFramework
             return clone;
         }
 
+        public MeshTriangle3Collection Inverted()
+        {
+            MeshTriangle3Collection clone = Clone();
+            foreach (MeshTriangle3 triangle in clone.triangles)
+            {
+                Vector3 temp = triangle.b;
+                triangle.b = triangle.c;
+                triangle.c = temp;
+            }
+
+            return clone;
+        }
+
         public static void Move(List<MeshTriangle3> triangles, Vector3 offset)
         {
             foreach (MeshTriangle3 triangle in triangles)

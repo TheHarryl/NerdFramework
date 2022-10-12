@@ -18,14 +18,11 @@ namespace NerdFramework
 
         public Color3 ColorAt(double t, double s)
         {
-            while (t < 0)
-                t += 1;
-            while (t > 1)
-                t -= 1;
-            while (s < 0)
-                s += 1;
-            while (s > 1)
-                s -= 1;
+            t %= 1;
+            s %= 1;
+            if (t < 0) t++;
+            if (s < 0) s++;
+
             int x = (int)(t * data.GetLength(1));
             int y = (int)(s * data.GetLength(0));
 

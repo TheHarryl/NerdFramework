@@ -7,6 +7,8 @@ namespace NerdFramework
     public abstract class Ray3Caster
     {
         public Ray3 d;
+        public Vector3 w;
+        public Vector3 h;
 
         public abstract Ray3 RayAt(double wAlpha, double hAlpha);
         public abstract Vector2 Projection(Vector3 point);

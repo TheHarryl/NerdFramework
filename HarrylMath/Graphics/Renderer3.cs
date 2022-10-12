@@ -50,7 +50,8 @@ namespace NerdFramework
             this.width = width;
             this.height = height;
 
-            this.materials.Add("None", new Material());
+            Material defaultMaterial = new Material();
+            this.materials.Add("None", defaultMaterial);
         }
 
         public void AddMaterial(string name, Material material)
@@ -184,18 +185,12 @@ namespace NerdFramework
                     {
                         if (dist < depthBuffer[y, x])
                         {
-                            Vector2 textureCoords = colorTriangle.TextureCoordsAt(pos.x, pos.y);
-                            double lightValue = colorTriangle.ColorAt(pos.x, pos.y).Value() / 255.0;
-                            //Tween.QuadOutIn
-                            Color3 color = Color3.Lerp(Color3.Black, Color3.FromVector3(colorTriangle.material.diffuseColor).WithOverlayed(colorTriangle.material.textureMap.ColorAt(textureCoords.x, textureCoords.y)), lightValue).WithAlpha(colorTriangle.material.alpha);
+                            Color3 color = colorTriangle.TotalColorAt(pos.x, pos.y);
                             lightBuffer[y, x] = lightBuffer[y, x].WithOverlayed(color);
                             depthBuffer[y, x] = dist;
                         } else if (lightBuffer[y, x].alpha < 0.9999)
                         {
-                            Vector2 textureCoords = colorTriangle.TextureCoordsAt(pos.x, pos.y);
-                            double lightValue = colorTriangle.ColorAt(pos.x, pos.y).Value() / 255.0;
-                            //Tween.QuadOutIn
-                            Color3 color = Color3.Lerp(Color3.Black, Color3.FromVector3(colorTriangle.material.diffuseColor).WithOverlayed(colorTriangle.material.textureMap.ColorAt(textureCoords.x, textureCoords.y)), lightValue).WithAlpha(colorTriangle.material.alpha);
+                            Color3 color = colorTriangle.TotalColorAt(pos.x, pos.y);
                             lightBuffer[y, x] = color.WithOverlayed(lightBuffer[y, x]);
                         }
                     }
@@ -304,10 +299,10 @@ namespace NerdFramework
                 for (int x = 0; x < width; x++)
                 {
                     depthBuffer[y, x] = double.MaxValue;
-                    lightBuffer[y, x] = Color3.Black;
+                    lightBuffer[y, x] = Color3.None;
                 }
             }
-            //scene.triangles = scene.triangles.OrderBy(t => -((t.a + t.b + t.c) / 3.0 - camera.d.p).Magnitude()).ToList();
+            scene.triangles = scene.triangles.OrderBy(t => ((t.a + t.b + t.c) / 3.0 - camera.d.p).Magnitude()).ToList();
             List<RasterizedTriangle2> projectedTriangles = new List<RasterizedTriangle2>();
             foreach (MeshTriangle3 triangle in scene.triangles)
             {

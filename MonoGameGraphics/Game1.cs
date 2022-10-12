@@ -31,6 +31,10 @@ namespace MonoGameGraphics
         private bool downPos = false;
 
         private int iterations = 1;
+        private double cameraSpeed = 2.0;
+
+        private MouseState lastMouseState;
+        private MouseState mouseState;
 
         public Game1()
         {
@@ -137,6 +141,25 @@ namespace MonoGameGraphics
             {
                 tris.Rotate(0.0 * gameTime.ElapsedGameTime.TotalSeconds, -1.0 * gameTime.ElapsedGameTime.TotalSeconds, 0.0 * gameTime.ElapsedGameTime.TotalSeconds, new Vector3(0, 0, 0));
             }
+            if (Keyboard.GetState().IsKeyDown(Keys.D))
+            {
+                renderer.camera.d.p += renderer.camera.d.v * cameraSpeed * gameTime.ElapsedGameTime.TotalSeconds;
+            }
+            if (Keyboard.GetState().IsKeyDown(Keys.A))
+            {
+                renderer.camera.d.p -= renderer.camera.w.Normalized() * cameraSpeed * gameTime.ElapsedGameTime.TotalSeconds;
+            }
+            if (Keyboard.GetState().IsKeyDown(Keys.S))
+            {
+                renderer.camera.d.p -= renderer.camera.d.v * cameraSpeed * gameTime.ElapsedGameTime.TotalSeconds;
+            }
+            if (Keyboard.GetState().IsKeyDown(Keys.H))
+            {
+                renderer.camera.d.p += renderer.camera.w.Normalized() * cameraSpeed * gameTime.ElapsedGameTime.TotalSeconds;
+            }
+
+            lastMouseState = mouseState;
+            mouseState = Mouse.GetState();
 
             tris.Rotate(-0.0001 * gameTime.ElapsedGameTime.TotalSeconds, 0.0005 * gameTime.ElapsedGameTime.TotalSeconds, 0.0 * gameTime.ElapsedGameTime.TotalSeconds, new Vector3(0, 0, 0));
             //renderer.cameraLight.rayCaster.d.p = (renderer.cameraLight.rayCaster.d.p - new Vector3(0, 0, 15)).Rotate(-0.2 * gameTime.ElapsedGameTime.TotalSeconds, 0.2 * gameTime.ElapsedGameTime.TotalSeconds, 0.0) + new Vector3(0, 0, 15);

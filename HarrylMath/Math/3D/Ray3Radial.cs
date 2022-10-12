@@ -2,8 +2,6 @@
 {
     public class Ray3Radial : Ray3Caster
     {
-        protected Vector3 w;
-        protected Vector3 h;
         protected double angle;
 
         public Ray3Radial(Ray3 direction, double angle)

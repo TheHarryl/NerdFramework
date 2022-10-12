@@ -51,5 +51,15 @@
         {
             return textureU * (1.0 - t - s) + textureV * t + textureW * s;
         }
+
+        public Color3 TotalColorAt(double t, double s)
+        {
+            Vector2 textureCoords = TextureCoordsAt(t, s);
+            Color3 diffuseLight = Color3.FromVector3(material.diffuseColor);
+            Color3 textureLight = material.textureMap.ColorAt(textureCoords.x, textureCoords.y);
+            double lightValue = ColorAt(t, s).Value() / 255.0;
+            //Tween.QuadOutIn
+            return Color3.Lerp(Color3.Black, diffuseLight.WithOverlayed(textureLight), lightValue).WithAlpha(material.alpha);
+        }
     }
 }
