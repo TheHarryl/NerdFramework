@@ -61,7 +61,35 @@ namespace NerdFramework
 
         public Color3 WithOverlayed(Color3 color)
         {
-            return color + this * (1 - color.alpha);
+            return color + this * (1.0 - color.alpha);
+        }
+
+        public static Color3 Flatten(Color3 bottomLayer, Color3 topLayer)
+        {
+            if (topLayer.alpha > 0.99999) return topLayer;
+            return new Color3(
+                (int)(topLayer.r + bottomLayer.r * (1.0 - topLayer.alpha)),
+                (int)(topLayer.g + bottomLayer.g * (1.0 - topLayer.alpha)),
+                (int)(topLayer.b + bottomLayer.b * (1.0 - topLayer.alpha)),
+                topLayer.alpha + bottomLayer.alpha * (1.0 - topLayer.alpha)
+            );
+        }
+
+        public static Color3 Flatten(params Color3[] layers)
+        {
+            double r = layers[layers.Length - 1].r;
+            double g = layers[layers.Length - 1].g;
+            double b = layers[layers.Length - 1].b;
+            double alpha = layers[layers.Length - 1].alpha;
+
+            for (int i = layers.Length - 2; i >= 0 && alpha < 0.99999; i--)
+            {
+                r += layers[i].r * (1.0 - alpha);
+                g += layers[i].g * (1.0 - alpha);
+                b += layers[i].b * (1.0 - alpha);
+                alpha += layers[i].alpha * (1.0 - alpha);
+            }
+            return new Color3((int)r, (int)g, (int)b, alpha);
         }
 
         public Color3 WithAlpha(double alpha)
@@ -85,7 +113,7 @@ namespace NerdFramework
             return (r + g + b) / 3;
         }
 
-        public Color3 WithoutAlpha()
+        public Color3 Opaque()
         {
             return new Color3(r, g, b);
         }

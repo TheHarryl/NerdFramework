@@ -388,7 +388,7 @@ namespace NerdFramework
             /* Uses alpha as intensity of fog per unit distance
              */
 
-            return Color3.Lerp(fog.WithoutAlpha(), original, Math.Pow(1.0 - fog.alpha, distance));
+            return Color3.Lerp(fog.Opaque(), original, Math.Pow(1.0 - fog.alpha, distance));
         }
     }
 }

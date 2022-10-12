@@ -55,11 +55,19 @@
         public Color3 TotalColorAt(double t, double s)
         {
             Vector2 textureCoords = TextureCoordsAt(t, s);
-            Color3 diffuseLight = Color3.FromVector3(material.diffuseColor);
             Color3 textureLight = material.textureMap.ColorAt(textureCoords.x, textureCoords.y);
             double lightValue = ColorAt(t, s).Value() / 255.0;
             //Tween.QuadOutIn
-            return Color3.Lerp(Color3.Black, diffuseLight.WithOverlayed(textureLight), lightValue).WithAlpha(material.alpha);
+            if (textureLight.alpha < 0.9999)
+            {
+                Color3 diffuseLight = Color3.FromVector3(material.diffuseColor);
+                return Color3.Lerp(Color3.Black, diffuseLight.WithOverlayed(textureLight), lightValue).WithAlpha(material.alpha);
+            } else
+            {
+                Color3 diffuseLight = Color3.FromVector3(material.diffuseColor);
+                return Color3.Lerp(Color3.Black, diffuseLight.WithOverlayed(textureLight), lightValue).WithAlpha(material.alpha);
+                //return Color3.Lerp(Color3.Black, textureLight, lightValue).WithAlpha(material.alpha);
+            }
         }
     }
 }
