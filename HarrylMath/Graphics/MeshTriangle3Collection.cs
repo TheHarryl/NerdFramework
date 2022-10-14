@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace NerdFramework
 {
@@ -51,10 +52,10 @@ namespace NerdFramework
             this.origin = Vector3.Zero;
             this.scale = Vector3.One;
             List<MeshTriangle3> clonedTriangles = new List<MeshTriangle3>();
-            foreach (MeshTriangle3 triangle in triangles)
+            Parallel.ForEach(triangles, triangle =>
             {
                 clonedTriangles.Add(new MeshTriangle3(triangle.a, triangle.b, triangle.c, triangle.textureU, triangle.textureV, triangle.textureW, triangle.normalA, triangle.normalB, triangle.normalC));
-            }
+            });
             this.origin = oldOrigin;
             this.scale = oldScale;
 
@@ -68,75 +69,88 @@ namespace NerdFramework
         public MeshTriangle3Collection Inverted()
         {
             MeshTriangle3Collection clone = Clone();
-            foreach (MeshTriangle3 triangle in clone.triangles)
+            Parallel.ForEach(triangles, triangle =>
             {
                 Vector3 temp = triangle.b;
                 triangle.b = triangle.c;
                 triangle.c = temp;
-            }
+            });
 
             return clone;
         }
 
+        /*public Box3 Bounds()
+        {
+            Vector3 min = triangles[0].a;
+            Vector3 max = triangles[0].a;
+            for (int i = 0; i < triangles.Count; i++)
+            {
+                if (triangles.a)
+            }
+        }*/
+
         public static void Move(List<MeshTriangle3> triangles, Vector3 offset)
         {
-            foreach (MeshTriangle3 triangle in triangles)
+            Parallel.ForEach(triangles, triangle =>
             {
                 triangle.Move(offset);
-            }
+            });
         }
 
         public static void Scale(List<MeshTriangle3> triangles, Vector3 scale, Vector3 origin)
         {
-            foreach (MeshTriangle3 triangle in triangles)
+            Parallel.ForEach(triangles, triangle =>
             {
                 triangle.Scale(scale, origin);
-            }
+            });
         }
 
         public bool Meets(Ray3 ray)
         {
-            foreach (MeshTriangle3 triangle in triangles)
+            bool meets = false;
+            Parallel.ForEach(triangles, triangle =>
             {
-                if (triangle.Meets(ray))
-                    return true;
-            }
-            return false;
+                if (triangle.Meets(ray)) {
+                    meets = true;
+                    return;
+                }
+            });
+            return meets;
         }
 
         public void RotateX(double radians, Vector3 origin)
         {
-            foreach (MeshTriangle3 triangle in triangles)
+            Parallel.ForEach(triangles, triangle =>
             {
                 triangle.RotateX(radians, origin + _origin);
-            }
+            });
             //_origin = (_origin - origin).RotateX(radians) + origin;
         }
 
         public void RotateY(double radians, Vector3 origin)
         {
-            foreach (MeshTriangle3 triangle in triangles)
+            Parallel.ForEach(triangles, triangle =>
             {
                 triangle.RotateY(radians, origin + _origin);
-            }
+            });
             //_origin = (_origin - origin).RotateY(radians) + origin;
         }
 
         public void RotateZ(double radians, Vector3 origin)
         {
-            foreach (MeshTriangle3 triangle in triangles)
+            Parallel.ForEach(triangles, triangle =>
             {
                 triangle.RotateZ(radians, origin + _origin);
-            }
+            });
             //_origin = (_origin - origin).RotateZ(radians) + origin;
         }
 
         public void Rotate(double r1, double r2, double r3, Vector3 origin)
         {
-            foreach (MeshTriangle3 triangle in triangles)
+            Parallel.ForEach(triangles, triangle =>
             {
                 triangle.Rotate(r1, r2, r3, origin + _origin);
-            }
+            });
             //_origin = (_origin - origin).Rotate(r1, r2, r3) + origin;
         }
 
