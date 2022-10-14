@@ -63,7 +63,7 @@ namespace NerdFramework
             }
             if (step1 == null)
                 return steps.Values.Last();
-            foreach (KeyValuePair<double, Color3> step in steps)
+            foreach (KeyValuePair<double, Color3> step in steps.Reverse())
             {
                 if (step.Key < step1.Value.Key)
                 {

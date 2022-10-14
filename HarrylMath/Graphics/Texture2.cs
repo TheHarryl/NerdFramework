@@ -6,10 +6,24 @@ namespace NerdFramework
 {
     public class Texture2
     {
-        public Color3[,] data;
+        public int width { get; private set; }
+        public int height { get; private set; }
+
+        private Color3[,] _data;
+        public Color3[,] data
+        {
+            get => _data;
+            set
+            {
+                _data = value;
+                width = data.GetLength(1);
+                height = data.GetLength(0);
+            }
+        }
 
         public static Texture2 None = new Texture2(new Color3[1, 1] { { Color3.None } });
-        public static Texture2 One = new Texture2(new Color3[1, 1] { { Color3.White } });
+        public static Texture2 White = new Texture2(new Color3[1, 1] { { Color3.White } });
+        public static Texture2 Black = new Texture2(new Color3[1, 1] { { Color3.Black } });
 
         public Texture2(Color3[,] data)
         {
@@ -18,27 +32,13 @@ namespace NerdFramework
 
         public Color3 ColorAt(double t, double s)
         {
-            t %= 1;
-            s %= 1;
-            if (t < 0) t++;
-            if (s < 0) s++;
+            t -= Math.Floor(t);
+            s -= Math.Floor(s);
 
-            int x = (int)(t * data.GetLength(1));
-            int y = (int)(s * data.GetLength(0));
+            int x = (int)(t * width);
+            int y = (int)(s * height);
 
             return data[y, x];
-            /*int tMin = Math.Floor(t);
-            int tMax = Math.Ceil(t);
-            int sMin = Math.Floor(s);
-            int sMax = Math.Ceil(s);
-
-            double tMinWeight = t - tMin; 
-            double tMaxWeight = tMax - t;
-            double sMinWeight = s - sMin;
-            double sMaxWeight = sMax - s;
-
-            //System.Diagnostics.Trace.WriteLine(data.Length);
-            return Color3.White;//data[sMin, tMin] * (2 - (sMinWeight + tMinWeight)) + data[sMax, tMax] * (2 - (sMaxWeight + tMaxWeight));*/
         }
         public Color3 ColorAt(Vector2 parameters) { return ColorAt(parameters.x, parameters.y); }
     }

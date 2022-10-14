@@ -27,7 +27,7 @@ namespace NerdFramework
             double interpolant = angle / Math.HalfPI;
 
             Color3 light = color.ColorAt(distance / this.distance);
-            light = Color3.Lerp(light, Color3.None, interpolant > 1.0 ? 1.0 : interpolant);
+            light = Color3.Lerp(light, Color3.None, interpolant);
             return light;
         }
 

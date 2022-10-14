@@ -42,6 +42,12 @@ namespace NerdFramework
             return new Vector3(x, y, 0.0);
         }
 
+        public static Vector2 FromParameterization3(double t, double s, Vector2 a, Vector2 b, Vector2 c)
+        {
+            double u = 1.0 - t - s;
+            return new Vector2(a.x*u + b.x*t + c.x*s, a.y*u + b.y*t + c.y*s);
+        }
+
         public static Vector2 operator +(Vector2 a, Vector2 b)
         {
             return new Vector2(a.x + b.x, a.y + b.y);

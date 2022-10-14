@@ -59,30 +59,24 @@ namespace NerdFramework
             return new Color3(r / colors.Length, g / colors.Length, b / colors.Length, alpha / colors.Length);
         }
 
-        public Color3 WithOverlayed(Color3 color)
-        {
-            return color + this * (1.0 - color.alpha);
-        }
-
         public static Color3 Flatten(Color3 bottomLayer, Color3 topLayer)
         {
-            if (topLayer.alpha > 0.99999) return topLayer;
             return new Color3(
-                (int)(topLayer.r + bottomLayer.r * (1.0 - topLayer.alpha)),
-                (int)(topLayer.g + bottomLayer.g * (1.0 - topLayer.alpha)),
-                (int)(topLayer.b + bottomLayer.b * (1.0 - topLayer.alpha)),
-                topLayer.alpha + bottomLayer.alpha * (1.0 - topLayer.alpha)
+                (int)(topLayer.r * topLayer.alpha + bottomLayer.r * (1.0 - topLayer.alpha)),
+                (int)(topLayer.g * topLayer.alpha + bottomLayer.g * (1.0 - topLayer.alpha)),
+                (int)(topLayer.b * topLayer.alpha + bottomLayer.b * (1.0 - topLayer.alpha)),
+                topLayer.alpha * topLayer.alpha + bottomLayer.alpha * (1.0 - topLayer.alpha)
             );
         }
 
-        public static Color3 Flatten(params Color3[] layers)
+        /*public static Color3 Flatten(params Color3[] layers)
         {
             double r = layers[layers.Length - 1].r;
             double g = layers[layers.Length - 1].g;
             double b = layers[layers.Length - 1].b;
             double alpha = layers[layers.Length - 1].alpha;
 
-            for (int i = layers.Length - 2; i >= 0 && alpha < 0.99999; i--)
+            for (int i = layers.Length - 2; i >= 0 && alpha < 0.9999; i--)
             {
                 r += layers[i].r * (1.0 - alpha);
                 g += layers[i].g * (1.0 - alpha);
@@ -90,6 +84,44 @@ namespace NerdFramework
                 alpha += layers[i].alpha * (1.0 - alpha);
             }
             return new Color3((int)r, (int)g, (int)b, alpha);
+        }*/
+
+        public static Color3 Flatten(params Color4[] layers)
+        {
+            double r = layers[layers.Length - 1].color.r;
+            double g = layers[layers.Length - 1].color.g;
+            double b = layers[layers.Length - 1].color.b;
+            double alpha = layers[layers.Length - 1].color.alpha;
+
+            for (int i = layers.Length - 2; i >= 0 && alpha < 0.9999; i--)
+            {
+                r += layers[i].color.r * (1.0 - alpha) * layers[i].color.alpha;
+                g += layers[i].color.g * (1.0 - alpha) * layers[i].color.alpha;
+                b += layers[i].color.b * (1.0 - alpha) * layers[i].color.alpha;
+                alpha += layers[i].color.alpha * (1.0 - alpha);
+            }
+            return new Color3((int)r, (int)g, (int)b, alpha);
+        }
+
+        public static Color3 FromParameterization3(double t, double s, Color3 a, Color3 b, Color3 c)
+        {
+            double u = 1.0 - t - s;
+            return new Color3(
+                (int)(a.r*u + b.r*t + c.r*s),
+                (int)(a.g*u + b.g*t + c.g*s),
+                (int)(a.b*u + b.b*t + c.b*s),
+                a.alpha*u + b.alpha*t + c.alpha*s
+            );
+        }
+
+        public static int ValueFromParameterization3(double t, double s, Color3 a, Color3 b, Color3 c)
+        {
+            return (int)((a.r + a.g + a.b)*(1.0 - t - s) + (b.r + b.g + b.b)*t + (c.r + c.g + c.b)*s) / 3;
+        }
+
+        public double Luma()
+        {
+            return Math.Sqrt(Vector3.Dot(new Vector3(r / 255.0, g / 255.0, b / 255.0), new Vector3(0.299, 0.587, 0.114)));
         }
 
         public Color3 WithAlpha(double alpha)

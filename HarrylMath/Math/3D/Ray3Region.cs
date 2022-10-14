@@ -16,6 +16,11 @@
             return new Ray3(d.p + w * (wAlpha - 0.5) + h * (hAlpha - 0.5), d.v);
         }
 
+        public override Vector3 VectorAt(double wAlpha, double hAlpha)
+        {
+            return d.v;
+        }
+
         public override Vector2 Projection(Vector3 point)
         {
             return new Vector2(point.x / w.x + 0.5, point.y / h.y + 0.5);
@@ -115,6 +120,13 @@
             d.Rotate(r1, r2, r3);
             w = w.Rotate(r1, r2, r3);
             h = h.Rotate(r1, r2, r3);
+        }
+
+        public override void RotateAbout(Vector3 rotand, double radians)
+        {
+            d.RotateAbout(rotand, radians);
+            w = w.RotateAbout(rotand, radians);
+            h = h.RotateAbout(rotand, radians);
         }
 
         public override void RotateTo(Vector3 vector)

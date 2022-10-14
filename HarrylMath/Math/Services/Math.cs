@@ -2,6 +2,11 @@
 {
     public static class Math
     {
+        public static double FromParameterization3(double t, double s, double a, double b, double c)
+        {
+            return a * (1.0 - t - s) + b * t + c * s;
+        }
+
         public static double Min(double a, double b)
         {
             if (a <= b) return a;
@@ -27,13 +32,27 @@
 
         public static double Max(params double[] values)
         {
-            double min = values[0];
+            double max = values[0];
             for (int i = 1; i < values.Length; i++)
             {
-                if (values[i] > min)
+                if (values[i] > max)
+                    max = values[i];
+            }
+            return max;
+        }
+
+        public static double[] Bounds(params double[] values)
+        {
+            double min = values[0];
+            double max = values[0];
+            for (int i = 1; i < values.Length; i++)
+            {
+                if (values[i] > max)
+                    max = values[i];
+                else if (values[i] < min)
                     min = values[i];
             }
-            return min;
+            return new double[2] { min, max };
         }
 
         public static int MinIndex(params double[] values)
@@ -64,6 +83,15 @@
                 }
             }
             return index;
+        }
+
+        public static double Constrain(double x, double max, double min)
+        {
+            if (x > max)
+                return max;
+            if (x < min)
+                return min;
+            return x;
         }
 
         public static double Abs(double x)

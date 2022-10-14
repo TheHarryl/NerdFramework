@@ -53,6 +53,12 @@
             return this / Magnitude();
         }
 
+        public Vector3 NormalizedCubic()
+        {
+            double max = Math.Max(Math.Abs(this.x), Math.Abs(this.y), Math.Abs(this.z));
+            return new Vector3(x / max, y / max, z / max);
+        }
+
         public Vector3 RotateX(double radians)
         {
             /* x' = x
@@ -116,6 +122,12 @@
                 newVector = newVector.RotateZ(r3);
 
             return newVector;
+        }
+
+        public Vector3 RotateAbout(Vector3 rotand, double radians)
+        {
+            double c = Math.Cos(radians);
+            return this * c + rotand * Vector3.Dot(this, rotand) * (1 - c) + Vector3.Cross(rotand, this) * Math.Sin(radians);
         }
 
         public static Vector3 Angle3(Vector3 a, Vector3 b)
@@ -231,6 +243,12 @@
         public static Vector3 Lerp(Vector3 a, Vector3 b, double alpha)
         {
             return a * (1 - alpha) + b * alpha;
+        }
+
+        public static Vector3 FromParameterization3(double t, double s, Vector3 a, Vector3 b, Vector3 c)
+        {
+            double u = 1.0 - t - s;
+            return new Vector3(a.x*u + b.x*t + c.x*s, a.y*u + b.y*t + c.y*s, a.z*u + b.z*t + c.z*s);
         }
 
         public override string ToString()

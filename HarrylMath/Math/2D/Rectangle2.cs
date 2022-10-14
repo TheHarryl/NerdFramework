@@ -1,9 +1,11 @@
 ﻿namespace NerdFramework
 {
-    public class Rectangle2
+    public struct Rectangle2
     {
         public UDim2 p;
         public UDim2 s;
+
+        public static Rectangle2 One = new Rectangle2(Vector2.Zero, Vector2.One);
 
         public Rectangle2(UDim2 position, UDim2 size)
         {

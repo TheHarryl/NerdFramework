@@ -2,9 +2,16 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace NerdFramework
 {
+    public enum CPUMode
+    {
+        SingleThreaded,
+        MultiThreaded
+    }
+
     public class Renderer3
     {
         public Dictionary<string, Material> materials = new Dictionary<string, Material>();
@@ -15,7 +22,7 @@ namespace NerdFramework
         public MeshTriangle3Collection scene = new MeshTriangle3Collection(new List<MeshTriangle3>());
         public List<Light3Caster> lightSources = new List<Light3Caster>();
 
-        public Color3 fog = new Color3(0, 0, 0, 0.0);//0.05);
+        public Color3 fog = new Color3(0, 0, 0, 0.001);//0.05);
         private int _width = 1;
         private int _height = 1;
         public int width
@@ -26,6 +33,7 @@ namespace NerdFramework
                 _width = value;
                 depthBuffer = new double[_height, _width];
                 lightBuffer = new Color3[_height, _width];
+                normalBuffer = new Vector3[_height, _width];
             }
         }
         public int height
@@ -36,11 +44,22 @@ namespace NerdFramework
                 _height = value;
                 depthBuffer = new double[_height, _width];
                 lightBuffer = new Color3[_height, _width];
+                normalBuffer = new Vector3[_height, _width];
             }
         }
 
         public double[,] depthBuffer;
         public Color3[,] lightBuffer;
+        public Vector3[,] normalBuffer;
+
+        public CPUMode CPUMode;
+
+        public Texture2 skyboxFront = Texture2.Black;
+        public Texture2 skyboxLeft = Texture2.Black;
+        public Texture2 skyboxBack = Texture2.Black;
+        public Texture2 skyboxRight = Texture2.Black;
+        public Texture2 skyboxTop = Texture2.Black;
+        public Texture2 skyboxBottom = Texture2.Black;
 
         public Renderer3(Ray3Caster camera, int width = 200, int height = 100)
         {
@@ -52,6 +71,8 @@ namespace NerdFramework
 
             Material defaultMaterial = new Material();
             this.materials.Add("None", defaultMaterial);
+
+            this.CPUMode = CPUMode.MultiThreaded;
         }
 
         public void AddMaterial(string name, Material material)
@@ -93,10 +114,10 @@ namespace NerdFramework
             double error = (dx / 2f);
             int ystep = (begin.y < end.y) ? 1 : -1;
             double y = begin.y;
-            for (int x = (int)Math.Max(begin.x, 0.0); x <= Math.Min(end.x, width-1); x++)
+            for (int x = (int)Math.Max(begin.x, 0.0); x <= Math.Min(end.x, _width-1); x++)
             {
-                if (x - 1 >= 0 && x < width && y - 1 >= 0 && y < height)
-                    lightBuffer[(int)Math.Min(Math.Max((steep ? x : y), 0.0), height-1), (int)(steep ? y : x)] = color;
+                if (x - 1 >= 0 && x < _width && y - 1 >= 0 && y < _height)
+                    lightBuffer[(int)Math.Min(Math.Max((steep ? x : y), 0.0), _height-1), (int)(steep ? y : x)] = color;
                 error = error - dy;
                 if (error < 0)
                 {
@@ -161,43 +182,6 @@ namespace NerdFramework
             }*/
         }
 
-        public void FillTriangle(RasterizedTriangle2 colorTriangle)
-        {
-            /* Triangle:
-             * OP = OA + ABt + ACs
-             * 
-             * AP = ABt + ACs
-             * AP.x = AB.x*t + AC.x*s
-             */
-
-            double minX = Math.Min(colorTriangle.a.x, colorTriangle.b.x, colorTriangle.c.x);
-            double maxX = Math.Max(colorTriangle.a.x, colorTriangle.b.x, colorTriangle.c.x);
-            double minY = Math.Min(colorTriangle.a.y, colorTriangle.b.y, colorTriangle.c.y);
-            double maxY = Math.Max(colorTriangle.a.y, colorTriangle.b.y, colorTriangle.c.y);
-
-            for (int y = (int)Math.Max(minY, 0.0); y <= (int)Math.Min(maxY, _height - 1); y++)
-            {
-                for (int x = (int)Math.Max(minX, 0.0); x <= (int)Math.Min((int)maxX, _width - 1) ; x++)
-                {
-                    Vector2 pos = colorTriangle.Parameterization(new Vector2(x, y));
-                    double dist = colorTriangle.DistanceAt(pos.x, pos.y);
-                    if (pos.x >= 0.0 && pos.y >= 0.0 && pos.x + pos.y <= 1.0)
-                    {
-                        if (dist < depthBuffer[y, x])
-                        {
-                            Color3 color = colorTriangle.TotalColorAt(pos.x, pos.y);
-                            lightBuffer[y, x] = lightBuffer[y, x].WithOverlayed(color);
-                            depthBuffer[y, x] = dist;
-                        } else if (lightBuffer[y, x].alpha < 0.9999)
-                        {
-                            Color3 color = colorTriangle.TotalColorAt(pos.x, pos.y);
-                            lightBuffer[y, x] = color.WithOverlayed(lightBuffer[y, x]);
-                        }
-                    }
-                }
-            }
-        }
-
         public void FillCircle(Color3 color, Vector2 pos, int radius)
         {
             /* Circle:
@@ -248,77 +232,88 @@ namespace NerdFramework
 
         public Color3 CalculateLighting(Vector3 point, Vector3 normal)
         {
-            double angle = Vector3.Angle(normal, (cameraLight.rayCaster.d.p - point));
-            double distance = (point - cameraLight.rayCaster.d.p).Magnitude();
+            Vector3 displacement = cameraLight.rayCaster.d.p - point;
+            double angle = Vector3.Angle(normal, displacement);
+            double distance = displacement.Magnitude();
             return cameraLight.LightAt(distance, angle);
         }
 
         public void RenderSampled()
         {
-            Color3[,] newLightBuffer = new Color3[height, width];
-            for (int y = 0; y < height; y++)
+            RenderShader((x, y) =>
             {
-                for (int x = 0; x < width; x++)
+                int size = 1;
+                int y0 = (y > _height - 1 - size ? _height - 1 - size : (y < size ? size : y));
+                int x0 = (x > _width - 1 - size ? _width - 1 - size : (x < size ? size : x));
+                double max = Math.Max(depthBuffer[y0 - size, x0], depthBuffer[y0 + size, x0], depthBuffer[y0, x0 - size], depthBuffer[y0, x0 + size]);
+                return Math.Abs(max - depthBuffer[y, x]) > 1;
+            }, (x, y, color) =>
+            {
+                return Color3.Lerp(Color3.Black, color, 0.5);
+            });
+        }
+
+        public void RenderDynamicShader(Func<int, int, bool> filter, Func<int, int, Color3, Color3> modification)
+        {
+            Color3[,] newLightBuffer = new Color3[_height, _width];
+
+            Parallel.For(0, _height, y =>
+            {
+                for (int x = 0; x < _width; x++)
                 {
-                    int minY = (int)Math.Max(y - 1, 0.0);
-                    int maxY = (int)Math.Min(y + 1, _height - 1);
-                    int minX = (int)Math.Max(x - 1, 0.0);
-                    int maxX = (int)Math.Min(x + 1, _width - 1);
-                    Color3[] colors = new Color3[(maxX - minX + 1) * (maxY - minY + 1)];
-                    int i = 0;
-                    for (int y1 = minY; y1 <= maxY; y1++)
-                    {
-                        for (int x1 = minX; x1 <= maxX; x1++)
-                        {
-                            colors[i] = lightBuffer[y1, x1];
-                            i++;
-                        }
-                    }
-                    newLightBuffer[y, x] = Color3.Average(colors);
+                    if (filter(x, y))
+                        newLightBuffer[y, x] = modification(x, y, lightBuffer[y, x]);
                 }
-            }
+            });
+
             lightBuffer = newLightBuffer;
         }
 
-        public void RenderShader(Func<int, int, bool> filter, Func<Color3, Color3> modification)
+        public void RenderShader(Func<int, int, bool> filter, Func<int, int, Color3, Color3> modification)
         {
-            for (int y = 0; y < height; y++)
+            Parallel.For(0, _height, y =>
             {
-                for (int x = 0; x < width; x++)
+                for (int x = 0; x < _width; x++)
                 {
-                    if (filter(y, x))
-                        lightBuffer[y, x] = modification(lightBuffer[y, x]);
+                    if (filter(x, y))
+                        lightBuffer[y, x] = modification(x, y, lightBuffer[y, x]);
                 }
-            }
+            });
+        }
+
+        public void RenderDirectShader(Action<int, int> modification)
+        {
+            Parallel.For(0, _height, y =>
+            {
+                for (int x = 0; x < _width; x++)
+                {
+                    modification(x, y);
+                }
+            });
         }
 
         public void RenderRasterized()
         {
-            for (int y = 0; y < height; y++)
+            Parallel.For(0, _height, y =>
             {
-                for (int x = 0; x < width; x++)
+                for (int x = 0; x < _width; x++)
                 {
                     depthBuffer[y, x] = double.MaxValue;
-                    lightBuffer[y, x] = Color3.None;
+                    normalBuffer[y, x] = Vector3.Zero;
                 }
-            }
-            scene.triangles = scene.triangles.OrderBy(t => ((t.a + t.b + t.c) / 3.0 - camera.d.p).Magnitude()).ToList();
-            List<RasterizedTriangle2> projectedTriangles = new List<RasterizedTriangle2>();
-            foreach (MeshTriangle3 triangle in scene.triangles)
-            {
-                if (Vector3.Dot(camera.d.v, triangle.Normal()) >= 0.0) continue;
+            });
 
-                Vector2 a = camera.Projection(triangle.a); 
+            void RenderMeshTriangle3(MeshTriangle3 triangle)
+            {
+                Vector2 a = camera.Projection(triangle.a);
                 Vector2 b = camera.Projection(triangle.b);
                 Vector2 c = camera.Projection(triangle.c);
 
-                Rectangle2 visible = new Rectangle2(Vector2.Zero, Vector2.One);
+                if (!Rectangle2.One.Overlaps(a) && !Rectangle2.One.Overlaps(b) && !Rectangle2.One.Overlaps(c)) return;
 
-                if (!visible.Overlaps(a) && !visible.Overlaps(b) && !visible.Overlaps(c)) continue;
-
-                a *= new Vector2(width, height);
-                b *= new Vector2(width, height);
-                c *= new Vector2(width, height);
+                a *= new Vector2(_width, _height);
+                b *= new Vector2(_width, _height);
+                c *= new Vector2(_width, _height);
 
                 double distance1 = camera.Distance(triangle.a);
                 double distance2 = camera.Distance(triangle.b);
@@ -327,39 +322,132 @@ namespace NerdFramework
                 Color3 colorA;
                 Color3 colorB;
                 Color3 colorC;
+                Vector3 normal1;
+                Vector3 normal2;
+                Vector3 normal3;
 
                 Material material = GetMaterial(triangle.material);
 
                 if (triangle.normalType == NormalType.Interpolated)
                 {
-                    colorA = RenderFog(CalculateLighting(triangle.a, triangle.normalA), distance1);
-                    colorB = RenderFog(CalculateLighting(triangle.b, triangle.normalB), distance2);
-                    colorC = RenderFog(CalculateLighting(triangle.c, triangle.normalC), distance3);
-                } else
+                    normal1 = triangle.normalA;
+                    normal2 = triangle.normalB;
+                    normal3 = triangle.normalC;
+                }
+                else
                 {
                     Vector3 normal = triangle.Normal();
-                    colorA = RenderFog(CalculateLighting(triangle.a, normal), distance1);
-                    colorB = RenderFog(CalculateLighting(triangle.b, normal), distance2);
-                    colorC = RenderFog(CalculateLighting(triangle.c, normal), distance3);
+                    normal1 = normal;
+                    normal2 = normal;
+                    normal3 = normal;
                 }
-                FillTriangle(new RasterizedTriangle2(a, b, c, colorA, colorB, colorC, distance1, distance2, distance3, triangle.textureU, triangle.textureV, triangle.textureW, material));
+                colorA = RenderFog(CalculateLighting(triangle.a, normal1), distance1);
+                colorB = RenderFog(CalculateLighting(triangle.b, normal2), distance2);
+                colorC = RenderFog(CalculateLighting(triangle.c, normal3), distance3);
+
+                /* Triangle:
+                 * OP = OA + ABt + ACs
+                 * 
+                 * AP = ABt + ACs
+                 * AP.x = AB.x*t + AC.x*s
+                 */
+
+                double[] boundsX = Math.Bounds(a.x, b.x, c.x);
+                double[] boundsY = Math.Bounds(a.y, b.y, c.y);
+
+                Color3 TotalColorAt(double t, double s)
+                {
+                    Vector2 textureCoords = Vector2.FromParameterization3(t, s, triangle.textureU, triangle.textureV, triangle.textureW);
+
+                    Color3 textureLight = material.textureMap.ColorAt(textureCoords.x, textureCoords.y);
+                    Color3 diffuseLight = Color3.FromVector3(material.diffuseColor);
+                    double lightValue = Color3.ValueFromParameterization3(t, s, colorA, colorB, colorC) / 255.0;
+
+                    Color3 flattened = Color3.Flatten(diffuseLight, textureLight);
+                    //Color3.Lerp(Color3.Black, Color3.Flatten(diffuseLight, textureLight), lightValue).WithAlpha(material.alpha);
+                    return new Color3(
+                        (int)(flattened.r * lightValue),
+                        (int)(flattened.g * lightValue),
+                        (int)(flattened.b * lightValue),
+                        ((1.0 - lightValue) + (flattened.alpha * lightValue)) * material.alpha
+                    );
+                }
+
+                for (int y = (int)Math.Max(boundsY[0], 0.0); y <= Math.Min(boundsY[1], _height - 1); y++)
+                {
+                    for (int x = (int)Math.Max(boundsX[0], 0.0); x <= Math.Min(boundsX[1], _width - 1); x++)
+                    {
+                        Vector2 pos = Triangle2.Parameterization(a, b, c, new Vector2(x, y));
+                        double dist = Math.FromParameterization3(pos.x, pos.y, distance1, distance2, distance3);
+                        if (pos.x >= 0.0 && pos.y >= 0.0 && pos.x + pos.y <= 1.0)
+                        {
+                            if (dist < depthBuffer[y, x])
+                            {
+                                Color3 color = TotalColorAt(pos.x, pos.y);
+                                lightBuffer[y, x] = Color3.Flatten(lightBuffer[y, x], color);
+                                depthBuffer[y, x] = dist;
+                                normalBuffer[y, x] = Vector3.FromParameterization3(pos.x, pos.y, normal1, normal2, normal3);
+                            }
+                            else if (lightBuffer[y, x].alpha < 0.9999)
+                            {
+                                Color3 color = TotalColorAt(pos.x, pos.y);
+                                lightBuffer[y, x] = Color3.Flatten(color, lightBuffer[y, x]);
+                            }
+                        }
+                    }
+                }
 
                 //FillLine(Color3.Red, a, b);
                 //FillLine(Color3.Green, a, c);
                 //FillLine(Color3.Blue, c, b);
             }
+
+            IEnumerable<MeshTriangle3> processed = scene.triangles.AsParallel()
+                .Where(t => Vector3.Dot(camera.d.v, t.Normal()) < 0.0)
+                .OrderBy(t => -((t.a + t.b + t.c) / 3.0 - camera.d.p).Magnitude());
+
+            Parallel.ForEach(processed, RenderMeshTriangle3);
+
+            RenderDirectShader((x, y) => {
+                Color3 skyboxFromVector(Vector3 vector)
+                {
+                    Vector3 projected = vector.NormalizedCubic();
+
+                    if (projected.x == -1)
+                        return skyboxRight.ColorAt(projected.z + 0.5, projected.y + 0.5);
+                    else if (projected.x == 1)
+                        return skyboxLeft.ColorAt(projected.z + 0.5, projected.y + 0.5);
+                    else if (projected.y == -1)
+                        return skyboxBottom.ColorAt(projected.z + 0.5, projected.x + 0.5);
+                    else if (projected.y == 1)
+                        return skyboxTop.ColorAt(projected.z + 0.5, projected.x + 0.5);
+                    else if (projected.z == -1)
+                        return skyboxBack.ColorAt(projected.x + 0.5, projected.y + 0.5);
+                    else if (projected.z == 1)
+                        return skyboxFront.ColorAt(projected.x + 0.5, projected.y + 0.5);
+                    return Color3.None;
+                }
+
+                if (depthBuffer[y, x] != double.MaxValue)
+                {
+                    lightBuffer[y, x] = RenderFog(lightBuffer[y, x], depthBuffer[y, x]);
+                    if (lightBuffer[y, x].alpha < 0.9999)
+                        lightBuffer[y, x] = Color3.Flatten(skyboxFromVector(camera.VectorAt((double)x / _width, (double)y / _height)), lightBuffer[y, x]);
+                } else
+                    lightBuffer[y, x] = skyboxFromVector(camera.VectorAt((double)x / _width, (double)y / _height));
+            });
         }
 
         public void RenderRaytraced()
         {
-            for (int y = 0; y < height; y++)
+            for (int y = 0; y < _height; y++)
             {
-                for (int x = 0; x < width; x++)
+                for (int x = 0; x < _width; x++)
                 {
                     depthBuffer[y, x] = double.MaxValue;
                     lightBuffer[y, x] = Color3.Black;
 
-                    Ray3 ray = camera.RayAt((double)x / width, (double)y / height);
+                    Ray3 ray = camera.RayAt((double)x / _width, (double)y / _height);
                     foreach (Triangle3 triangle in scene.triangles)
                     {
                         if (triangle.Meets(ray))

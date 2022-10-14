@@ -60,6 +60,11 @@ namespace NerdFramework
             v = v.Rotate(r1, r2, r3);
         }
 
+        public void RotateAbout(Vector3 rotand, double radians)
+        {
+            v = v.RotateAbout(rotand, radians);
+        }
+
         public static Ray3 Lerp(Ray3 a, Ray3 b, double alpha)
         {
             return a * (1 - alpha) + b * alpha;

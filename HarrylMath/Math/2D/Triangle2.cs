@@ -28,6 +28,21 @@
             return Vector3.Cross((b - a).AsVector3(), (c - a).AsVector3()).Magnitude() / 2.0;
         }
 
+        public static Vector2 Parameterization(Vector2 a, Vector2 b, Vector2 c, Vector2 point)
+        {
+            // Repackages the Parameterization(Point) method for single use
+
+            Vector2 AB = b - a;
+            Vector2 AC = c - a;
+            Vector2 AP = point - a;
+            double ABdiff = AB.x / AB.y;
+            double ACdiff = AC.x / AC.y;
+            double t = (AP.x - AP.y * ACdiff) / (AB.x - AB.y * ACdiff);
+            double s = (AP.x - AP.y * ABdiff) / (AC.x - AC.y * ABdiff);
+
+            return new Vector2(t, s);
+        }
+
         public Vector2 Parameterization(Vector2 point)
         {
             // Repackages the Meets(Point) method to spit out t and s

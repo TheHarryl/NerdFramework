@@ -5,7 +5,7 @@ namespace NerdFramework
 {
     public static class MeshParser
     {
-        public static Mesh FromFile(string fileLocation, bool overrideNormalInterpolation = false)
+        public static Mesh FromFile(string fileLocation, bool overrideNormalInterpolation = false, string material = "")
         {
             List<Vector3> vertices = new List<Vector3>();
             List<Vector2> textureCoords = new List<Vector2>();
@@ -13,6 +13,8 @@ namespace NerdFramework
             List<MeshTriangle3> triangles = new List<MeshTriangle3>();
 
             string currentMaterial = "None";
+            if (currentMaterial != "")
+                currentMaterial = material;
 
             /* Object (OBJ) Specifications
              * http://paulbourke.net/dataformats/obj/
@@ -27,7 +29,8 @@ namespace NerdFramework
                     switch (args[0])
                     {
                         case "usemtl":
-                            currentMaterial = args[1];
+                            if (material == "")
+                                currentMaterial = args[1];
                             break;
                         case "v":
                             vertices.Add(new Vector3(Convert.ToDouble(args[1]), Convert.ToDouble(args[2]), Convert.ToDouble(args[3])));
@@ -266,6 +269,7 @@ namespace NerdFramework
             {
                 if (normalType == NormalType.Interpolated)
                 {
+                    triangle.normalType = normalType;
                     triangle.normalA = triangle.a;
                     triangle.normalB = triangle.b;
                     triangle.normalC = triangle.c;
@@ -352,6 +356,7 @@ namespace NerdFramework
             {
                 if (normalType == NormalType.Interpolated)
                 {
+                    quad.normalType = normalType;
                     quad.normalA = quad.a;
                     quad.normalB = quad.b;
                     quad.normalC = quad.c;

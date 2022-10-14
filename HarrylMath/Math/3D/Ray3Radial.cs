@@ -19,6 +19,11 @@
             throw new System.NotImplementedException();
         }
 
+        public override Vector3 VectorAt(double wAlpha, double hAlpha)
+        {
+            throw new System.NotImplementedException();
+        }
+
         public override Vector2 Projection(Vector3 point)
         {
             throw new System.NotImplementedException();
@@ -60,6 +65,13 @@
             d.Rotate(r1, r2, r3);
             w = w.Rotate(r1, r2, r3);
             h = h.Rotate(r1, r2, r3);
+        }
+
+        public override void RotateAbout(Vector3 rotand, double radians)
+        {
+            d.RotateAbout(rotand, radians);
+            w = w.RotateAbout(rotand, radians);
+            h = h.RotateAbout(rotand, radians);
         }
 
         public override void RotateTo(Vector3 vector)
