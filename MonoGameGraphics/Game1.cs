@@ -63,6 +63,7 @@ namespace MonoGameGraphics
             tris.origin = new Vector3(0.0, 0.0, 100.0);
             tris.RotateY(Math.PI, Vector3.Zero);
             tris.scale = Vector3.One * 3;//17;
+            tris.Rotate(-0.001, 0.005, 0.0, new Vector3(0, 0, 0));
         }
 
         public Texture2 ConvertTexture(Texture2D texture)
@@ -120,6 +121,7 @@ namespace MonoGameGraphics
                 downPos = false;
                 iterations++;
                 tris = MeshParser.FromIcoSphere(new Vector3(0.0, 0.0, 100.0), 15, iterations, NormalType.Interpolated).polygons;
+                tris.Rotate(-0.001, 0.005, 0.0, new Vector3(0, 0, 0));
                 renderer.scene = tris;
                 System.Diagnostics.Trace.WriteLine(tris.triangles.Count);
             }
@@ -130,6 +132,7 @@ namespace MonoGameGraphics
                 downNeg = false;
                 iterations--;
                 tris = MeshParser.FromQuadSphere(new Vector3(0.0, 0, 100.0), 15, iterations, NormalType.Interpolated).polygons;
+                tris.Rotate(-0.001, 0.005, 0.0, new Vector3(0, 0, 0));
                 renderer.scene = tris;
                 System.Diagnostics.Trace.WriteLine(tris.triangles.Count);
             }
@@ -179,7 +182,6 @@ namespace MonoGameGraphics
             if (scrollWheelDelta != 0)
                 renderer.camera.d.p += renderer.camera.d.v * cameraSpeed * scrollWheelDelta * 0.05;
 
-            tris.Rotate(-0.0001 * gameTime.ElapsedGameTime.TotalSeconds, 0.0005 * gameTime.ElapsedGameTime.TotalSeconds, 0.0 * gameTime.ElapsedGameTime.TotalSeconds, new Vector3(0, 0, 0));
             //renderer.cameraLight.rayCaster.d.p = (renderer.cameraLight.rayCaster.d.p - new Vector3(0, 0, 15)).Rotate(-0.2 * gameTime.ElapsedGameTime.TotalSeconds, 0.2 * gameTime.ElapsedGameTime.TotalSeconds, 0.0) + new Vector3(0, 0, 15);
 
             UpdateScreen();
