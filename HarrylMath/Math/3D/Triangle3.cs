@@ -101,6 +101,21 @@
             c = origin + OC;
         }
 
+        public static Vector2 Parameterization(Vector3 a, Vector3 b, Vector3 c, Vector3 point)
+        {
+            // Repackages the Parameterization(Point) method for single use
+
+            Vector3 AB = b - a;
+            Vector3 AC = c - a;
+            Vector3 AP = point - a;
+            double ABdiff = AB.x / AB.y;
+            double ACdiff = AC.x / AC.y;
+            double t = (AP.x - AP.y * ACdiff) / (AB.x - AB.y * ACdiff);
+            double s = (AP.x - AP.y * ABdiff) / (AC.x - AC.y * ABdiff);
+
+            return new Vector2(t, s);
+        }
+
         public Vector2 Parameterization(Vector3 point)
         {
             // Repackages the Meets(Point) method to spit out t and s

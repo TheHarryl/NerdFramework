@@ -4,7 +4,7 @@ using System.Text;
 
 namespace NerdFramework
 {
-    public class ImageParser
+    public static class ImageParser
     {
         public static Texture2 FromFile(string fileLocation)
         {

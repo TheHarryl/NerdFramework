@@ -3,7 +3,7 @@ using System.Linq;
 
 namespace NerdFramework
 {
-    public class MaterialParser
+    public static class MaterialParser
     {
         public static Dictionary<string, Material> FromFile(string fileLocation, Dictionary<string, Texture2> textures)
         {
@@ -52,9 +52,9 @@ namespace NerdFramework
                             break;
                         case "map_Kd":
                             if (args[1].StartsWith("-"))
-                                materials[currentMaterialName].textureMap = textures[string.Join(" ", args.Skip(5).ToArray())];
+                                materials[currentMaterialName].texture = textures[string.Join(" ", args.Skip(5).ToArray())];
                             else
-                                materials[currentMaterialName].textureMap = textures[string.Join(" ", args.Skip(1).ToArray())];
+                                materials[currentMaterialName].texture = textures[string.Join(" ", args.Skip(1).ToArray())];
                             break;
                     }
                 }

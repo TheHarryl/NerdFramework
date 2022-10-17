@@ -28,7 +28,7 @@
              */
 
             this.r = (width * 180) / (Math.TwoPI * FOV);
-            this.v = Math.Sqrt(r * r - width * width / 4) / 8;
+            this.v = Math.Sqrt(r * r - width * width / 4) / 20;
 
             RotateTo(direction.v);  
         }
@@ -57,8 +57,10 @@
              * d = sqrt(r^2 - w^2/4)
              */
 
-            Vector3 intersection = new Plane3(d.p + d.v * v, d.v).Intersection(new Line3(point, d.p - point));
-            return new Vector2(intersection.x / w.x + 0.5, intersection.y / h.y + 0.5);
+            Vector3 origin = d.p + d.v * v - w * 0.5 - h * 0.5;
+            Vector3 intersection = new Plane3(origin, d.v).Intersection(new Line3(point, d.p - point));
+
+            return Triangle3.Parameterization(origin, origin + w, origin + h, intersection);// new Vector2(intersection.x / w.x + 0.5, intersection.y / h.y + 0.5);
             
             /*double distX = new Plane3(d.p - w/2, w).Min(intersection);
             double distY = new Plane3(d.p - h/2, h).Min(intersection);

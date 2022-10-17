@@ -12,7 +12,7 @@ namespace NerdFramework
         MultiThreaded
     }
 
-    public class Renderer3
+    public class Renderer3 : Renderer2
     {
         public Dictionary<string, Material> materials = new Dictionary<string, Material>();
 
@@ -23,9 +23,7 @@ namespace NerdFramework
         public List<Light3Caster> lightSources = new List<Light3Caster>();
 
         public Color3 fog = new Color3(0, 0, 0, 0.001);//0.05);
-        private int _width = 1;
-        private int _height = 1;
-        public int width
+        public new int width
         {
             get => _width;
             set
@@ -36,7 +34,7 @@ namespace NerdFramework
                 normalBuffer = new Vector3[_height, _width];
             }
         }
-        public int height
+        public new int height
         {
             get => _height;
             set
@@ -49,7 +47,6 @@ namespace NerdFramework
         }
 
         public double[,] depthBuffer;
-        public Color3[,] lightBuffer;
         public Vector3[,] normalBuffer;
 
         public CPUMode CPUMode;
@@ -61,7 +58,7 @@ namespace NerdFramework
         public Texture2 skyboxTop = Texture2.Black;
         public Texture2 skyboxBottom = Texture2.Black;
 
-        public Renderer3(Ray3Caster camera, int width = 200, int height = 100)
+        public Renderer3(Ray3Caster camera, int width = 200, int height = 100) : base(width, height)
         {
             this.camera = camera;
             this.cameraLight = new Light3Caster(new Ray3Radial(new Ray3(camera.d.p - new Vector3(0.0, 0.0, 100), camera.d.v), Math.TwoPI), scene, new Color3Sequence(Color3.White), 10000);
@@ -309,7 +306,11 @@ namespace NerdFramework
                 Vector2 b = camera.Projection(triangle.b);
                 Vector2 c = camera.Projection(triangle.c);
 
-                if (!Rectangle2.One.Overlaps(a) && !Rectangle2.One.Overlaps(b) && !Rectangle2.One.Overlaps(c)) return;
+                if ((a.x < 0.0 && b.x < 0.0 && c.x < 0.0) ||
+                    (a.y < 0.0 && b.y < 0.0 && c.y < 0.0) ||
+                    (a.x > 1.0 && b.x > 1.0 && c.x > 1.0) ||
+                    (a.y > 1.0 && b.y > 1.0 && c.y > 1.0)) return;
+                //if (!Rectangle2.One.Overlaps(a) && !Rectangle2.One.Overlaps(b) && !Rectangle2.One.Overlaps(c)) return;
 
                 a *= new Vector2(_width, _height);
                 b *= new Vector2(_width, _height);
@@ -359,7 +360,7 @@ namespace NerdFramework
                 {
                     Vector2 textureCoords = Vector2.FromParameterization3(t, s, triangle.textureU, triangle.textureV, triangle.textureW);
 
-                    Color3 textureLight = material.textureMap.ColorAt(textureCoords.x, textureCoords.y);
+                    Color3 textureLight = material.texture.ColorAt(textureCoords.x, textureCoords.y);
                     Color3 diffuseLight = Color3.FromVector3(material.diffuseColor);
                     double lightValue = Color3.ValueFromParameterization3(t, s, colorA, colorB, colorC) / 255.0;
 
@@ -388,7 +389,7 @@ namespace NerdFramework
                                 depthBuffer[y, x] = dist;
                                 normalBuffer[y, x] = Vector3.FromParameterization3(pos.x, pos.y, normal1, normal2, normal3);
                             }
-                            else if (lightBuffer[y, x].alpha < 0.9999)
+                            else if (lightBuffer[y, x].alpha < 1.0)
                             {
                                 Color3 color = TotalColorAt(pos.x, pos.y);
                                 lightBuffer[y, x] = Color3.Flatten(color, lightBuffer[y, x]);
@@ -402,8 +403,8 @@ namespace NerdFramework
                 //FillLine(Color3.Blue, c, b);
             }
 
-            IEnumerable<MeshTriangle3> processed = scene.triangles.AsParallel()
-                .Where(t => Vector3.Dot(camera.d.v, t.Normal()) < 0.0)
+            OrderedParallelQuery<MeshTriangle3> processed = scene.triangles.AsParallel()
+                .Where(t => Vector3.Dot(camera.d.v, t.Normal()) < 0.2 && Vector3.Dot((t.a + t.b + t.c) / 3.0 - camera.d.p, camera.d.v) > 0.0)
                 .OrderBy(t => -((t.a + t.b + t.c) / 3.0 - camera.d.p).Magnitude());
 
             Parallel.ForEach(processed, RenderMeshTriangle3);
@@ -414,24 +415,24 @@ namespace NerdFramework
                     Vector3 projected = vector.NormalizedCubic();
 
                     if (projected.x == -1)
-                        return skyboxRight.ColorAt(projected.z + 0.5, projected.y + 0.5);
+                        return skyboxLeft.ColorAt(1.0 - (projected.z / 2.0 - 0.5), projected.y / 2.0 + 0.5);
                     else if (projected.x == 1)
-                        return skyboxLeft.ColorAt(projected.z + 0.5, projected.y + 0.5);
+                        return skyboxRight.ColorAt(projected.z / 2.0 - 0.5, projected.y / 2.0 + 0.5);
                     else if (projected.y == -1)
-                        return skyboxBottom.ColorAt(projected.z + 0.5, projected.x + 0.5);
+                        return skyboxBottom.ColorAt(projected.z / 2.0 + 0.5, projected.x / 2.0 + 0.5);
                     else if (projected.y == 1)
-                        return skyboxTop.ColorAt(projected.z + 0.5, projected.x + 0.5);
+                        return skyboxTop.ColorAt(projected.z / 2.0 + 0.5, 1.0 - (projected.x / 2.0 + 0.5));
                     else if (projected.z == -1)
-                        return skyboxBack.ColorAt(projected.x + 0.5, projected.y + 0.5);
+                        return skyboxBack.ColorAt(projected.x / 2.0 + 0.5, projected.y / 2.0 + 0.5);
                     else if (projected.z == 1)
-                        return skyboxFront.ColorAt(projected.x + 0.5, projected.y + 0.5);
+                        return skyboxFront.ColorAt(1.0 - (projected.x / 2.0 + 0.5), projected.y / 2.0 + 0.5);
                     return Color3.None;
                 }
 
                 if (depthBuffer[y, x] != double.MaxValue)
                 {
                     lightBuffer[y, x] = RenderFog(lightBuffer[y, x], depthBuffer[y, x]);
-                    if (lightBuffer[y, x].alpha < 0.9999)
+                    if (lightBuffer[y, x].alpha < 1.0)
                         lightBuffer[y, x] = Color3.Flatten(skyboxFromVector(camera.VectorAt((double)x / _width, (double)y / _height)), lightBuffer[y, x]);
                 } else
                     lightBuffer[y, x] = skyboxFromVector(camera.VectorAt((double)x / _width, (double)y / _height));

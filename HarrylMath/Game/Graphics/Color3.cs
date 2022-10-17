@@ -76,7 +76,7 @@ namespace NerdFramework
             double b = layers[layers.Length - 1].b;
             double alpha = layers[layers.Length - 1].alpha;
 
-            for (int i = layers.Length - 2; i >= 0 && alpha < 0.9999; i--)
+            for (int i = layers.Length - 2; i >= 0 && alpha < 1.0; i--)
             {
                 r += layers[i].r * (1.0 - alpha);
                 g += layers[i].g * (1.0 - alpha);
@@ -93,7 +93,7 @@ namespace NerdFramework
             double b = layers[layers.Length - 1].color.b;
             double alpha = layers[layers.Length - 1].color.alpha;
 
-            for (int i = layers.Length - 2; i >= 0 && alpha < 0.9999; i--)
+            for (int i = layers.Length - 2; i >= 0 && alpha < 1.0; i--)
             {
                 r += layers[i].color.r * (1.0 - alpha) * layers[i].color.alpha;
                 g += layers[i].color.g * (1.0 - alpha) * layers[i].color.alpha;

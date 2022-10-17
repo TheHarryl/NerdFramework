@@ -9,6 +9,9 @@ namespace NerdFramework
         public UDim x;
         public UDim y;
 
+        public static UDim2 Zero = new UDim2(new UDim(0.0, 0.0), new UDim(0.0, 0.0));
+        public static UDim2 One = new UDim2(new UDim(1.0, 0.0), new UDim(1.0, 0.0));
+
         public UDim2()
         {
             this.x = new UDim();

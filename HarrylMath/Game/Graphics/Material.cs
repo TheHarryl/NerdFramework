@@ -17,7 +17,7 @@
         public double shininess;
         public double alpha;
 
-        public Texture2 textureMap;
+        public Texture2 texture;
 
         public Material()
         {
@@ -30,7 +30,7 @@
             shininess = 0.0;
             alpha = 1.0;
 
-            textureMap = Texture2.None;
+            texture = Texture2.None;
         }
     }
 }

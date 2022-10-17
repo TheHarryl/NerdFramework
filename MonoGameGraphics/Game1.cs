@@ -19,7 +19,7 @@ namespace MonoGameGraphics
         private SpriteBatch _spriteBatch;
 
         private static double FOV = Math.PI;
-        private Renderer3 renderer = new Renderer3(new Ray3Sector(new Ray3(Vector3.Zero, Vector3.zAxis), 100, 75, FOV), 800, 600);
+        private Renderer3 renderer = new Renderer3(new Ray3Sector(new Ray3(new Vector3(0.0, 0.0, -20.0), Vector3.zAxis), 100, 75, FOV), 800, 600);
         //private MeshTriangle3Collection tris = MeshParser.FromCube(Vector3.Zero, 20).polygons;
         //private MeshTriangle3Collection tris = MeshParser.FromIcoSphere(new Vector3(-15, 0, 15), 15, 4).polygons;
         //private MeshTriangle3Collection tris = MeshParser.FromUVSphere(new Vector3(0, 0, 15), 15);
@@ -33,7 +33,7 @@ namespace MonoGameGraphics
         private bool downPos = false;
 
         private int iterations = 1;
-        private double cameraSpeed = 10.0;
+        private double cameraSpeed = 100.0;
 
         private MouseState lastMouseState;
         private MouseState mouseState;
@@ -54,6 +54,7 @@ namespace MonoGameGraphics
 
         protected override void Initialize()
         {
+            MeshTriangle3Collection baseplate = MeshParser.FromCube(Vector3.Zero, 1.0).polygons;
             renderer.scene = tris;
             screen = new Texture2D(_graphics.GraphicsDevice, renderer.width, renderer.height);
 
@@ -64,6 +65,10 @@ namespace MonoGameGraphics
             tris.RotateY(Math.PI, Vector3.Zero);
             tris.scale = Vector3.One * 3;//17;
             tris.Rotate(-0.001, 0.005, 0.0, new Vector3(0, 0, 0));
+
+            renderer.camera.Rotate(-0.001, 0.001, 0.001);
+
+            renderer.cameraLight.rayCaster.d.p = (renderer.cameraLight.rayCaster.d.p - new Vector3(0, 0, 15)).Rotate(0.0, -Math.HalfPI, 0.0) + new Vector3(0, 0, 15);
         }
 
         public Texture2 ConvertTexture(Texture2D texture)
@@ -87,7 +92,7 @@ namespace MonoGameGraphics
             _spriteBatch = new SpriteBatch(GraphicsDevice);
             Dictionary<string, Texture2> textures = new Dictionary<string, Texture2>();
 
-            List<string> tNames = new List<string>() { "belt.jpg", "chest.png", "leg.png", "luke face.png", "luke hair.png", "skybox\\up.jpg", "skybox\\down.jpg", "skybox\\front.jpg", "skybox\\back.jpg", "skybox\\left.jpg", "skybox\\right.jpg" };
+            List<string> tNames = new List<string>() { "belt.jpg", "chest.png", "leg.png", "luke face.png", "luke hair.png", "skybox\\up2.png", "skybox\\down2.png", "skybox\\front2.png", "skybox\\back2.png", "skybox\\left2.png", "skybox\\right2.png" };
 
             foreach (string name in tNames)
             {
@@ -99,12 +104,12 @@ namespace MonoGameGraphics
 
             renderer.AddMaterials(MaterialParser.FromFile("C:\\Users\\harry\\Desktop\\Mathi\\HarrylMath\\Test\\luke.mtl", textures));
 
-            renderer.skyboxFront = textures["skybox\\front.jpg"];
-            renderer.skyboxBack = textures["skybox\\back.jpg"];
-            renderer.skyboxLeft = textures["skybox\\left.jpg"];
-            renderer.skyboxRight = textures["skybox\\right.jpg"];
-            renderer.skyboxTop = textures["skybox\\up.jpg"];
-            renderer.skyboxBottom = textures["skybox\\down.jpg"];
+            renderer.skyboxFront = textures["skybox\\front2.png"];
+            renderer.skyboxBack = textures["skybox\\back2.png"];
+            renderer.skyboxLeft = textures["skybox\\left2.png"];
+            renderer.skyboxRight = textures["skybox\\right2.png"];
+            renderer.skyboxTop = textures["skybox\\up2.png"];
+            renderer.skyboxBottom = textures["skybox\\down2.png"];
         }
 
         protected override void Update(GameTime gameTime)
@@ -167,22 +172,28 @@ namespace MonoGameGraphics
             if (lastMouseState.RightButton == ButtonState.Pressed && mouseState.RightButton == ButtonState.Pressed)
             {
                 Vector2 angularDisplacement = new Vector2(
-                    (mouseState.X - lastMouseState.X) / (double)renderer.width * FOV / 10.0,
-                    (mouseState.Y - lastMouseState.Y) / (double)renderer.height * (FOV * ((double)renderer.height /  renderer.width)) / 10.0
+                    (mouseState.X - lastMouseState.X) / (double)renderer.width * FOV,
+                    (mouseState.Y - lastMouseState.Y) / (double)renderer.height * (FOV * ((double)renderer.height /  renderer.width))
                 );
-                //totalAngularDisplacementX += angularDisplacement.x;
-                //totalAngularDisplacementY += angularDisplacement.y;
+                Mouse.SetPosition(lastMouseState.X, lastMouseState.Y);
+                mouseState = lastMouseState;
+                totalAngularDisplacementX = (totalAngularDisplacementX + angularDisplacement.x) % Math.TwoPI;
+                totalAngularDisplacementY = (totalAngularDisplacementY + angularDisplacement.y) % Math.TwoPI;
                 //Vector3 target = new Vector3(0.0, 0.0, 1.0).RotateX(totalAngularDisplacementY).RotateY(totalAngularDisplacementX);
-                Vector3 target = Vector3.Lerp(renderer.camera.d.v, renderer.camera.h, angularDisplacement.y / Math.PI).RotateY(angularDisplacement.x);
-                renderer.camera.RotateTo(target);
+                //Vector3 target = Vector3.Lerp(Vector3.zAxis, Vector3.yAxis, angularDisplacement.y / Math.PI).RotateY(-totalAngularDisplacementX);
+                //renderer.camera.RotateTo(target);
+                //System.Diagnostics.Trace.WriteLine(renderer.camera.d.v);
+                renderer.camera.RotateY(-angularDisplacement.x);
+                //Vector3 target = Vector3.Lerp(renderer.camera.d.v, renderer.camera.h, angularDisplacement.y / Math.PI);
+                //renderer.camera.RotateTo(target);
 
                 //renderer.camera.RotateAbout(renderer.camera.w, angularDisplacement.y);
             }
             int scrollWheelDelta = mouseState.ScrollWheelValue - lastMouseState.ScrollWheelValue;
             if (scrollWheelDelta != 0)
-                renderer.camera.d.p += renderer.camera.d.v * cameraSpeed * scrollWheelDelta * 0.05;
+                renderer.camera.d.p += renderer.camera.d.v * cameraSpeed * scrollWheelDelta * 0.01;
 
-            //renderer.cameraLight.rayCaster.d.p = (renderer.cameraLight.rayCaster.d.p - new Vector3(0, 0, 15)).Rotate(-0.2 * gameTime.ElapsedGameTime.TotalSeconds, 0.2 * gameTime.ElapsedGameTime.TotalSeconds, 0.0) + new Vector3(0, 0, 15);
+            // renderer.cameraLight.rayCaster.d.p = (renderer.cameraLight.rayCaster.d.p - new Vector3(0, 0, 15)).Rotate(0.0 * gameTime.ElapsedGameTime.TotalSeconds, 2.0 * gameTime.ElapsedGameTime.TotalSeconds, 0.0) + new Vector3(0, 0, 15);
 
             UpdateScreen();
 

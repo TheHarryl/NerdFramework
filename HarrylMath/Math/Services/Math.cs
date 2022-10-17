@@ -7,6 +7,16 @@
             return a * (1.0 - t - s) + b * t + c * s;
         }
 
+        public static double Average(params double[] values)
+        {
+            double total = 0.0;
+            for (int i = 0; i < values.Length; i++)
+            {
+                total += values[i];
+            }
+            return total / values.Length;
+        }
+
         public static double Min(double a, double b)
         {
             if (a <= b) return a;

@@ -4,7 +4,11 @@ using System.Text;
 
 namespace NerdFramework
 {
-    public class FontParser
+    public static class FontParser
     {
+        public static Font FromFile()
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

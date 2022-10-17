@@ -7,7 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConsoleGraphics", "Mathi\Co
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NerdFramework", "HarrylMath\NerdFramework.csproj", "{3A9300B9-3827-4ADF-8B8A-FB0831E11ACF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MonoGameGraphics", "MonoGameGraphics\MonoGameGraphics.csproj", "{6CD20634-64CB-4443-AA9D-BC11EBC5B680}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MonoGameGraphics", "MonoGameGraphics\MonoGameGraphics.csproj", "{6CD20634-64CB-4443-AA9D-BC11EBC5B680}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

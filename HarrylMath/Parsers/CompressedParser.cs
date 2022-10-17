@@ -4,7 +4,7 @@ using System.Text;
 
 namespace NerdFramework
 {
-    public class CompressedParser
+    public static class CompressedParser
     {
     }
 }
