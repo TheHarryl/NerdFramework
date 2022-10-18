@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\harry\\Desktop\\Mathi\\HarrylMath\\NerdFramework.csproj": {}
+    "C:\\Users\\harry\\Desktop\\Mathi\\NerdPanel\\NerdPanel.csproj": {}
   },
   "projects": {
-    "C:\\Users\\harry\\Desktop\\Mathi\\HarrylMath\\NerdFramework.csproj": {
+    "C:\\Users\\harry\\Desktop\\Mathi\\NerdPanel\\NerdPanel.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\harry\\Desktop\\Mathi\\HarrylMath\\NerdFramework.csproj",
-        "projectName": "NerdFramework",
-        "projectPath": "C:\\Users\\harry\\Desktop\\Mathi\\HarrylMath\\NerdFramework.csproj",
+        "projectUniqueName": "C:\\Users\\harry\\Desktop\\Mathi\\NerdPanel\\NerdPanel.csproj",
+        "projectName": "NerdPanel",
+        "projectPath": "C:\\Users\\harry\\Desktop\\Mathi\\NerdPanel\\NerdPanel.csproj",
         "packagesPath": "C:\\Users\\harry\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\harry\\Desktop\\Mathi\\HarrylMath\\obj\\",
+        "outputPath": "C:\\Users\\harry\\Desktop\\Mathi\\NerdPanel\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages",
@@ -45,6 +45,16 @@
       "frameworks": {
         "netcoreapp3.1": {
           "targetAlias": "netcoreapp3.1",
+          "dependencies": {
+            "MonoGame.Content.Builder.Task": {
+              "target": "Package",
+              "version": "[3.8.0.1641, )"
+            },
+            "MonoGame.Framework.DesktopGL": {
+              "target": "Package",
+              "version": "[3.8.0.1641, )"
+            }
+          },
           "imports": [
             "net461",
             "net462",
