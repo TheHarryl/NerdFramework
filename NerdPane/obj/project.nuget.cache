@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "9Tq3wKj8jmjiTNiW12cBlA8W9EPHSupp4puTVtHj05ogpgyvkXkka+Xl+LkyuN6sWBxk6gsxkbbZ0Qskq2xVLg==",
+  "dgSpecHash": "p6UZxSKqGdvdagLW8nohpTvRJFnxeXyG09EU0fXFw6dxfnvMRc0hrHDf1XvzIy6tV8qepKe15OnpG9hTOEUYmA==",
   "success": true,
-  "projectFilePath": "C:\\Users\\harry\\Desktop\\Mathi\\NerdPane\\NerdPane.csproj",
+  "projectFilePath": "C:\\Users\\harry\\Desktop\\Mathi\\NerdPane\\NerdPanel.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\harry\\.nuget\\packages\\libuv\\1.9.1\\libuv.1.9.1.nupkg.sha512",
     "C:\\Users\\harry\\.nuget\\packages\\microsoft.codeanalysis.analyzers\\1.1.0\\microsoft.codeanalysis.analyzers.1.1.0.nupkg.sha512",

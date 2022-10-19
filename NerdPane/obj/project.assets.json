@@ -7380,9 +7380,9 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\harry\\Desktop\\Mathi\\NerdPane\\NerdPane.csproj",
-      "projectName": "NerdPane",
-      "projectPath": "C:\\Users\\harry\\Desktop\\Mathi\\NerdPane\\NerdPane.csproj",
+      "projectUniqueName": "C:\\Users\\harry\\Desktop\\Mathi\\NerdPane\\NerdPanel.csproj",
+      "projectName": "NerdPanel",
+      "projectPath": "C:\\Users\\harry\\Desktop\\Mathi\\NerdPane\\NerdPanel.csproj",
       "packagesPath": "C:\\Users\\harry\\.nuget\\packages\\",
       "outputPath": "C:\\Users\\harry\\Desktop\\Mathi\\NerdPane\\obj\\",
       "projectStyle": "PackageReference",
@@ -7446,7 +7446,7 @@
             "privateAssets": "none"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.412\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.400\\RuntimeIdentifierGraph.json"
       }
     }
   }
