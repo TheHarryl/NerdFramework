@@ -8,6 +8,7 @@ namespace NerdPanel
     {
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
+        private System.Windows.Forms.Form _winform;
 
         public Game1()
         {
@@ -19,8 +20,22 @@ namespace NerdPanel
         protected override void Initialize()
         {
             // TODO: Add your initialization logic here
+            _winform = System.Windows.Forms.Form.FromHandle(Window.Handle) as System.Windows.Forms.Form;
+            _winform.AllowDrop = true;
+            _winform.DragEnter += new System.Windows.Forms.DragEventHandler(DragEnter);
+            _winform.DragDrop += new System.Windows.Forms.DragEventHandler(DragDrop);
 
             base.Initialize();
+        }
+
+        private void DragEnter(object sender, System.Windows.Forms.DragEventArgs e)
+        {
+            System.Diagnostics.Trace.WriteLine("dd");
+        }
+
+        private void DragDrop(object sender, System.Windows.Forms.DragEventArgs e)
+        {
+            System.Diagnostics.Trace.WriteLine("ss");
         }
 
         protected override void LoadContent()
