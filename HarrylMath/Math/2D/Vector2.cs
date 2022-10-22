@@ -37,11 +37,6 @@ namespace NerdFramework
             return this / Magnitude();
         }
 
-        public Vector3 AsVector3()
-        {
-            return new Vector3(x, y, 0.0);
-        }
-
         public static Vector2 FromParameterization3(double t, double s, Vector2 a, Vector2 b, Vector2 c)
         {
             double u = 1.0 - t - s;
@@ -95,12 +90,17 @@ namespace NerdFramework
 
         public static bool operator ==(Vector2 a, Vector2 b)
         {
-            return a.x == b.x && a.y == b.y;
+            return (a - b).Magnitude() <= 0.00001;
         }
 
         public static bool operator !=(Vector2 a, Vector2 b)
         {
-            return a.x != b.x || a.y != b.y;
+            return (a - b).Magnitude() >= 0.00001;
+        }
+
+        public static explicit operator Vector3(Vector2 a)
+        {
+            return new Vector3(a.x, a.y, 0.0);
         }
 
         public override string ToString()

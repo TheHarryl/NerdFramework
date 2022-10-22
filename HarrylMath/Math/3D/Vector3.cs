@@ -316,12 +316,12 @@
 
         public static bool operator ==(Vector3 a, Vector3 b)
         {
-            return Math.Abs(a.x - b.x) < 0.00001 && Math.Abs(a.y - b.y) < 0.00001 && Math.Abs(a.z - b.z) < 0.00001;
+            return (a - b).Magnitude() <= 0.00001;
         }
 
         public static bool operator !=(Vector3 a, Vector3 b)
         {
-            return Math.Abs(a.x - b.x) >= 0.00001 || Math.Abs(a.y - b.y) >= -0.00001 || Math.Abs(a.z - b.z) >= 0.00001;
+            return (a - b).Magnitude() >= 0.00001;
         }
     }
 }

@@ -35,5 +35,10 @@ namespace NerdFramework
 
             throw new System.NotImplementedException();
         }
+
+        public static void FromFileDraw(string fileLocation, Color3[,] screen, string text, Vector2i position, int pixelHeight)
+        {
+
+        }
     }
 }

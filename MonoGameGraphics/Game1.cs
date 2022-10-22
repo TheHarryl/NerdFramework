@@ -61,7 +61,7 @@ namespace MonoGameGraphics
             base.Initialize();
 
             Trace.WriteLine(tris.triangles.Count);
-            tris.origin = new Vector3(0.0, 0.0, 100.0);
+            tris.origin = new Vector3(0.0, 0.0, 30.0);
             tris.RotateY(Math.PI, Vector3.Zero);
             tris.scale = Vector3.One * 3;//17;
             tris.Rotate(-0.001, 0.005, 0.0, new Vector3(0, 0, 0));
@@ -269,7 +269,7 @@ namespace MonoGameGraphics
             frameCount++;
             if (DateTime.Now - startFrameCount >= new TimeSpan(0, 0, 1))
             {
-                Trace.WriteLine(frameCount + " FPS");
+                Trace.WriteLine(frameCount + " FPS (" + (renderer.frameNum / gameTime.TotalGameTime.TotalSeconds) + " Avg.)");
                 frameCount = 0;
                 startFrameCount = DateTime.Now;
             }

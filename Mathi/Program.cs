@@ -18,7 +18,7 @@ namespace Mathi
 
 
             //Triangle3Group tris = Triangle3Group.FromCube(Vector3.Zero, 20);
-            Triangle3Collection tris = MeshParser.FromIcoSphere(new Vector3(0, 0, 15), 15, 2);
+            MeshTriangle3Collection tris = MeshParser.FromIcoSphere(new Vector3(0, 0, 15), 15, 2).polygons;
             renderer.scene = tris;
 
             DateTime _lastTime = DateTime.Now; // marks the beginning the measurement began

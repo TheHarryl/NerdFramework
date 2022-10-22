@@ -65,6 +65,20 @@
             return new double[2] { min, max };
         }
 
+        public static int[] BoundsIndex(params double[] values)
+        {
+            int min = 0;
+            int max = 0;
+            for (int i = 1; i < values.Length; i++)
+            {
+                if (values[i] > values[max])
+                    max = i;
+                else if (values[i] < values[min])
+                    min = i;
+            }
+            return new int[2] { min, max };
+        }
+
         public static int MinIndex(params double[] values)
         {
             double min = values[0];

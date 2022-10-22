@@ -25,7 +25,7 @@
              * Parallelogram is two triangles
              */
 
-            return Vector3.Cross((b - a).AsVector3(), (c - a).AsVector3()).Magnitude() / 2.0;
+            return Vector3.Cross(new Vector3(b.x - a.x, b.y - a.y, 0.0), new Vector3(c.x - a.x, c.y - a.y, 0.0)).Magnitude() / 2.0;
         }
 
         public static Vector2 Parameterization(Vector2 a, Vector2 b, Vector2 c, Vector2 point)
