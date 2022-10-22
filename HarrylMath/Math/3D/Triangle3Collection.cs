@@ -44,7 +44,7 @@ namespace NerdFramework
             this.triangles = triangles;
         }
 
-        public Triangle3Collection Clone()
+        /*public Triangle3Collection Clone()
         {
             Vector3 oldOrigin = this.origin;
             Vector3 oldScale = this.scale;
@@ -63,7 +63,7 @@ namespace NerdFramework
             clone.scale = oldScale;
 
             return clone;
-        }
+        }*/
 
         public static void Move(List<Triangle3> triangles, Vector3 offset)
         {

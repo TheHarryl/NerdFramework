@@ -45,7 +45,7 @@ namespace NerdFramework
             this.triangles = triangles;
         }
 
-        public GameTriangle3Collection Clone()
+        /*public GameTriangle3Collection Clone()
         {
             Vector3 oldOrigin = this.origin;
             Vector3 oldScale = this.scale;
@@ -64,9 +64,9 @@ namespace NerdFramework
             clone.scale = oldScale;
 
             return clone;
-        }
+        }*/
 
-        public GameTriangle3Collection Inverted()
+        /*public GameTriangle3Collection Inverted()
         {
             GameTriangle3Collection clone = Clone();
             Parallel.ForEach(triangles, triangle =>
@@ -77,7 +77,7 @@ namespace NerdFramework
             });
 
             return clone;
-        }
+        }*/
 
         /*public Box3 Bounds()
         {
