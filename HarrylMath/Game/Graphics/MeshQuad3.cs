@@ -1,6 +1,6 @@
 ﻿namespace NerdFramework
 {
-    public class MeshQuad3 : Quad3
+    public unsafe class MeshQuad3 : Quad3
     {
         public Vector2 textureU;
         public Vector2 textureV;
@@ -15,7 +15,7 @@
         public NormalType normalType;
         public string material;
 
-        public MeshQuad3(Vector3 a, Vector3 b, Vector3 c, Vector3 d, Vector2 textureU, Vector2 textureV, Vector2 textureW, Vector2 textureX, Vector3 normalA, Vector3 normalB, Vector3 normalC, Vector3 normalD) : base(a, b, c, d)
+        public MeshQuad3(Vector3* a, Vector3* b, Vector3* c, Vector3* d, Vector2 textureU, Vector2 textureV, Vector2 textureW, Vector2 textureX, Vector3 normalA, Vector3 normalB, Vector3 normalC, Vector3 normalD) : base(a, b, c, d)
         {
            /* A ----- D
             * |       |
@@ -40,7 +40,7 @@
             this.material = "None";
         }
 
-        public MeshQuad3(Vector3 a, Vector3 b, Vector3 c, Vector3 d) : base(a, b, c, d)
+        public MeshQuad3(Vector3* a, Vector3* b, Vector3* c, Vector3* d) : base(a, b, c, d)
         {
             this.textureU = new Vector2(0.0, 0.0);
             this.textureV = new Vector2(0.0, 1.0);

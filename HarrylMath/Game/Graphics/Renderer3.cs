@@ -12,7 +12,7 @@ namespace NerdFramework
         MultiThreaded
     }
 
-    public class Renderer3 : Renderer2
+    public unsafe class Renderer3 : Renderer2
     {
         public Dictionary<string, Material> materials = new Dictionary<string, Material>();
 
@@ -313,9 +313,9 @@ namespace NerdFramework
 
             void RenderMeshTriangle3(MeshTriangle3 triangle)
             {
-                Vector2 a = camera.Projection(triangle.a);
-                Vector2 b = camera.Projection(triangle.b);
-                Vector2 c = camera.Projection(triangle.c);
+                Vector2 a = camera.Projection(*triangle.a);
+                Vector2 b = camera.Projection(*triangle.b);
+                Vector2 c = camera.Projection(*triangle.c);
 
                 if ((a.x < 0.0 && b.x < 0.0 && c.x < 0.0) ||
                     (a.y < 0.0 && b.y < 0.0 && c.y < 0.0) ||
@@ -327,9 +327,9 @@ namespace NerdFramework
                 b *= new Vector2(_width, _height);
                 c *= new Vector2(_width, _height);
 
-                double distance1 = camera.Distance(triangle.a);
-                double distance2 = camera.Distance(triangle.b);
-                double distance3 = camera.Distance(triangle.c);
+                double distance1 = camera.Distance(*triangle.a);
+                double distance2 = camera.Distance(*triangle.b);
+                double distance3 = camera.Distance(*triangle.c);
 
                 double avgDist = Math.Average(distance1, distance2, distance3);
                 if (avgDist < minDist || avgDist > maxDist) return;
@@ -356,9 +356,9 @@ namespace NerdFramework
                     normal2 = normal;
                     normal3 = normal;
                 }
-                colorA = RenderFog(CalculateLighting(triangle.a, normal1), distance1);
-                colorB = RenderFog(CalculateLighting(triangle.b, normal2), distance2);
-                colorC = RenderFog(CalculateLighting(triangle.c, normal3), distance3);
+                colorA = RenderFog(CalculateLighting(*triangle.a, normal1), distance1);
+                colorB = RenderFog(CalculateLighting(*triangle.b, normal2), distance2);
+                colorC = RenderFog(CalculateLighting(*triangle.c, normal3), distance3);
 
                 /* Triangle:
                  * OP = OA + ABt + ACs
@@ -473,8 +473,8 @@ namespace NerdFramework
             }
 
             OrderedParallelQuery<MeshTriangle3> processed = scene.triangles.AsParallel()
-                .Where(t => Vector3.Dot(camera.d.v, t.Normal()) < 0.2 && Vector3.Dot((t.a + t.b + t.c) / 3.0 - camera.d.p, camera.d.v) > 0.0)
-                .OrderBy(t => -((t.a + t.b + t.c) / 3.0 - camera.d.p).Magnitude());
+                .Where(t => Vector3.Dot(camera.d.v, t.Normal()) < 0.2 && Vector3.Dot((*t.a + *t.b + *t.c) / 3.0 - camera.d.p, camera.d.v) > 0.0)
+                .OrderBy(t => -((*t.a + *t.b + *t.c) / 3.0 - camera.d.p).Magnitude());
 
             Parallel.ForEach(processed, parallelOptions, RenderMeshTriangle3);
 

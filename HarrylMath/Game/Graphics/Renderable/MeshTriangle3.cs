@@ -6,7 +6,7 @@
         Interpolated
     }
 
-    public class MeshTriangle3 : Triangle3
+    public unsafe class MeshTriangle3 : Triangle3
     {
         public Vector2 textureU;
         public Vector2 textureV;
@@ -19,7 +19,7 @@
         public NormalType normalType;
         public string material;
 
-        public MeshTriangle3(Vector3 a, Vector3 b, Vector3 c) : base(a, b, c)
+        public MeshTriangle3(Vector3* a, Vector3* b, Vector3* c) : base(a, b, c)
         {
             this.textureU = new Vector2(0.0, 0.0);
             this.textureV = new Vector2(0.0, 1.0);
@@ -33,7 +33,7 @@
             this.material = "None";
         }
 
-        public MeshTriangle3(Vector3 a, Vector3 b, Vector3 c, Vector2 textureU, Vector2 textureV, Vector2 textureW, Vector3 normalA, Vector3 normalB, Vector3 normalC, NormalType normalType = NormalType.Interpolated, string material = "None") : base(a, b, c)
+        public MeshTriangle3(Vector3* a, Vector3* b, Vector3* c, Vector2 textureU, Vector2 textureV, Vector2 textureW, Vector3 normalA, Vector3 normalB, Vector3 normalC, NormalType normalType = NormalType.Interpolated, string material = "None") : base(a, b, c)
         {
             this.textureU = textureU;
             this.textureV = textureV;

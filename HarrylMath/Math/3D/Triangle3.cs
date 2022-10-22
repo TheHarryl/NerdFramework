@@ -1,12 +1,12 @@
 ﻿namespace NerdFramework
 {
-    public class Triangle3
+    public unsafe class Triangle3
     {
-        public Vector3 a;
-        public Vector3 b;
-        public Vector3 c;
+        public Vector3* a;
+        public Vector3* b;
+        public Vector3* c;
 
-        public Triangle3(Vector3 a, Vector3 b, Vector3 c)
+        public Triangle3(Vector3* a, Vector3* b, Vector3* c)
         {
             /* Triangle:
              * a: point1
@@ -31,7 +31,7 @@
              * n = a×b
              */
 
-            return Vector3.Cross(new Vector3(a, b), new Vector3(a, c));
+            return Vector3.Cross(new Vector3(*a, *b), new Vector3(*a, *c));
         }
 
         public double Area()
@@ -40,65 +40,65 @@
              * Parallelogram is two triangles
              */
 
-            return Vector3.Cross(b - a, c - a).Magnitude() / 2.0;
+            return Vector3.Cross(*b - *a, *c - *a).Magnitude() / 2.0;
         }
 
         public void Move(Vector3 offset)
         {
-            a += offset;
-            b += offset;
-            c += offset;
+            *a += offset;
+            *b += offset;
+            *c += offset;
         }
 
         public void Scale(Vector3 scale, Vector3 origin)
         {
-            a = (a - origin) * scale + origin;
-            b = (b - origin) * scale + origin;
-            c = (c - origin) * scale + origin;
+            *a = (*a - origin) * scale + origin;
+            *b = (*b - origin) * scale + origin;
+            *c = (*c - origin) * scale + origin;
         }
 
         public virtual void RotateX(double radians, Vector3 origin)
         {
-            Vector3 OA = (a - origin).RotateX(radians);
-            Vector3 OB = (b - origin).RotateX(radians);
-            Vector3 OC = (c - origin).RotateX(radians);
+            Vector3 OA = (*a - origin).RotateX(radians);
+            Vector3 OB = (*b - origin).RotateX(radians);
+            Vector3 OC = (*c - origin).RotateX(radians);
 
-            a = origin + OA;
-            b = origin + OB;
-            c = origin + OC;
+            *a = origin + OA;
+            *b = origin + OB;
+            *c = origin + OC;
         }
 
         public virtual void RotateY(double radians, Vector3 origin)
         {
-            Vector3 OA = (a - origin).RotateY(radians);
-            Vector3 OB = (b - origin).RotateY(radians);
-            Vector3 OC = (c - origin).RotateY(radians);
+            Vector3 OA = (*a - origin).RotateY(radians);
+            Vector3 OB = (*b - origin).RotateY(radians);
+            Vector3 OC = (*c - origin).RotateY(radians);
 
-            a = origin + OA;
-            b = origin + OB;
-            c = origin + OC;
+            *a = origin + OA;
+            *b = origin + OB;
+            *c = origin + OC;
         }
 
         public virtual void RotateZ(double radians, Vector3 origin)
         {
-            Vector3 OA = (a - origin).RotateZ(radians);
-            Vector3 OB = (b - origin).RotateZ(radians);
-            Vector3 OC = (c - origin).RotateZ(radians);
+            Vector3 OA = (*a - origin).RotateZ(radians);
+            Vector3 OB = (*b - origin).RotateZ(radians);
+            Vector3 OC = (*c - origin).RotateZ(radians);
 
-            a = origin + OA;
-            b = origin + OB;
-            c = origin + OC;
+            *a = origin + OA;
+            *b = origin + OB;
+            *c = origin + OC;
         }
 
         public virtual void Rotate(double r1, double r2, double r3, Vector3 origin)
         {
-            Vector3 OA = (a - origin).Rotate(r1, r2, r3);
-            Vector3 OB = (b - origin).Rotate(r1, r2, r3);
-            Vector3 OC = (c - origin).Rotate(r1, r2, r3);
+            Vector3 OA = (*a - origin).Rotate(r1, r2, r3);
+            Vector3 OB = (*b - origin).Rotate(r1, r2, r3);
+            Vector3 OC = (*c - origin).Rotate(r1, r2, r3);
 
-            a = origin + OA;
-            b = origin + OB;
-            c = origin + OC;
+            *a = origin + OA;
+            *b = origin + OB;
+            *c = origin + OC;
         }
 
         public static Vector2 Parameterization(Vector3 a, Vector3 b, Vector3 c, Vector3 point)
@@ -170,9 +170,9 @@
              * s = [P.x - P.y*(B.x/B.y)] / [C.x - C.y*(B.x/B.y)]
              */
 
-            Vector3 AB = b - a;
-            Vector3 AC = c - a;
-            Vector3 AP = point - a;
+            Vector3 AB = *b - *a;
+            Vector3 AC = *c - *a;
+            Vector3 AP = point - *a;
             double ABdiff = AB.x / AB.y;
             double ACdiff = AC.x / AC.y;
             double t = (AP.x - AP.y * ACdiff) / (AB.x - AB.y * ACdiff);
@@ -236,9 +236,9 @@
              * t + s <= 1
              */
 
-            Vector3 AB = b - a;
-            Vector3 AC = c - a;
-            Vector3 AP = point - a;
+            Vector3 AB = *b - *a;
+            Vector3 AC = *c - *a;
+            Vector3 AP = point - *a;
             double ABdiff = AB.x / AB.y;
             double ACdiff = AC.x / AC.y;
             double t = (AP.x - AP.y * ACdiff) / (AB.x - AB.y * ACdiff);
@@ -368,7 +368,7 @@
             // This condition can be checked for by using the Meets(Ray) function.
 
             Line3 line = new Line3(ray.p, ray.v);
-            Plane3 plane = new Plane3(a, Normal());
+            Plane3 plane = new Plane3(*a, Normal());
 
             return plane.Intersection(line);
         }
