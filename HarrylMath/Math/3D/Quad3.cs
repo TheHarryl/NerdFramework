@@ -1,13 +1,13 @@
 ﻿namespace NerdFramework
 {
-    public unsafe class Quad3
+    public class Quad3
     {
-        public Vector3* a;
-        public Vector3* b;
-        public Vector3* c;
-        public Vector3* d;
+        public Vector3 a;
+        public Vector3 b;
+        public Vector3 c;
+        public Vector3 d;
 
-        public Quad3(Vector3* a, Vector3* b, Vector3* c, Vector3* d)
+        public Quad3(Vector3 a, Vector3 b, Vector3 c, Vector3 d)
         {
            /* A ----- D
             * |       |
