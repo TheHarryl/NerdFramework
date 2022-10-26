@@ -9,7 +9,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NerdFramework", "HarrylMath
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MonoGameGraphics", "MonoGameGraphics\MonoGameGraphics.csproj", "{6CD20634-64CB-4443-AA9D-BC11EBC5B680}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NerdPanel", "NerdPane\NerdPanel.csproj", "{A18361F7-6E27-4F27-B0A1-2B9DE2E33764}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NerdPanel", "NerdPane\NerdPanel.csproj", "{A18361F7-6E27-4F27-B0A1-2B9DE2E33764}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Test", "Test", "{2DBB7F86-F7FC-4AC3-B0F5-83A00FA86BF3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -108,6 +110,10 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{912D158A-76B4-4EBD-B334-FA185FC518BA} = {2DBB7F86-F7FC-4AC3-B0F5-83A00FA86BF3}
+		{6CD20634-64CB-4443-AA9D-BC11EBC5B680} = {2DBB7F86-F7FC-4AC3-B0F5-83A00FA86BF3}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {3637B7AB-B8A7-49E1-A9E2-3ADF76FD41B6}

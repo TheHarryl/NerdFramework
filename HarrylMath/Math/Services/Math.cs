@@ -109,7 +109,7 @@
             return index;
         }
 
-        public static double Constrain(double x, double max, double min)
+        public static double Constrain(double x, double min, double max)
         {
             if (x > max)
                 return max;
@@ -120,8 +120,7 @@
 
         public static double Abs(double x)
         {
-            if (x < 0.0) return x * -1.0;
-            return x;
+            return x < 0.0 ? -x : x;
         }
 
         public static int Floor(double x)
@@ -193,13 +192,31 @@
         public static double QuarterPI = PI / 4.0;
         public static double TwoPI = PI * 2.0;
 
-        public static double DegreesToRadians(double radians)
+        public static double DegreesToRadians(double degrees)
         {
-            return (radians / 360.0) * (2 * PI);
+            /* Radians => Complete Rotation: 2*PI
+             * Degrees => Complete Rotation: 360
+             * 
+             * Conversion:
+             * Degrees => Radians
+             * (x / 360) * (2 * PI)
+             * (x * PI) / 180
+             */
+
+            return (degrees * PI) / 180.0;
         }
         public static double RadiansToDegrees(double radians)
         {
-            return (radians / (2 * PI)) * 360.0;
+            /* Radians => Complete Rotation: 2*PI
+             * Degrees => Complete Rotation: 360
+             * 
+             * Conversion:
+             * Degrees => Radians
+             * (x / [2 * PI]) * 360.0
+             * (x * 180) / PI
+             */
+
+            return (radians * 180.0) / PI;
         }
 
         public static double Sin(double radians, int steps = 10)

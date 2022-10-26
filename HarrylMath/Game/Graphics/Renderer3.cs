@@ -480,36 +480,42 @@ namespace NerdFramework
 
             bool recache = _cachedCameraDirection != camera.d.v;
 
-            RenderDirectShader((x, y) => {
-                Color3 SkyboxFromVector(Vector3 vector)
+            Parallel.For(0, _height, y =>
+            {
+                for (int x = 0; x < _width; x++)
                 {
-                    Vector3 projected = vector.NormalizedCubic();
+                    Color3 SkyboxFromVector(Vector3 vector)
+                    {
+                        Vector3 projected = vector.NormalizedCubic();
 
-                    if (projected.x == -1)
-                        return skyboxLeft.ColorAt(1.0 - (projected.z / 2.0 - 0.5), projected.y / 2.0 + 0.5);
-                    else if (projected.x == 1)
-                        return skyboxRight.ColorAt(projected.z / 2.0 - 0.5, projected.y / 2.0 + 0.5);
-                    else if (projected.y == -1)
-                        return skyboxBottom.ColorAt(projected.z / 2.0 + 0.5, projected.x / 2.0 + 0.5);
-                    else if (projected.y == 1)
-                        return skyboxTop.ColorAt(projected.z / 2.0 + 0.5, 1.0 - (projected.x / 2.0 + 0.5));
-                    else if (projected.z == -1)
-                        return skyboxBack.ColorAt(projected.x / 2.0 + 0.5, projected.y / 2.0 + 0.5);
-                    else if (projected.z == 1)
-                        return skyboxFront.ColorAt(1.0 - (projected.x / 2.0 + 0.5), projected.y / 2.0 + 0.5);
-                    return Color3.None;
-                }
+                        if (projected.x == -1)
+                            return skyboxLeft.ColorAt(1.0 - (projected.z / 2.0 - 0.5), projected.y / 2.0 + 0.5);
+                        else if (projected.x == 1)
+                            return skyboxRight.ColorAt(projected.z / 2.0 - 0.5, projected.y / 2.0 + 0.5);
+                        else if (projected.y == -1)
+                            return skyboxBottom.ColorAt(projected.z / 2.0 + 0.5, projected.x / 2.0 + 0.5);
+                        else if (projected.y == 1)
+                            return skyboxTop.ColorAt(projected.z / 2.0 + 0.5, 1.0 - (projected.x / 2.0 + 0.5));
+                        else if (projected.z == -1)
+                            return skyboxBack.ColorAt(projected.x / 2.0 + 0.5, projected.y / 2.0 + 0.5);
+                        else if (projected.z == 1)
+                            return skyboxFront.ColorAt(1.0 - (projected.x / 2.0 + 0.5), projected.y / 2.0 + 0.5);
+                        return Color3.None;
+                    }
 
-                if (recache)
-                    _cachedSkybox[y, x] = SkyboxFromVector(camera.VectorAt((double)x / _width, (double)y / _height));
+                    if (recache)
+                        _cachedSkybox[y, x] = SkyboxFromVector(camera.VectorAt((double)x / _width, (double)y / _height));
 
-                if (depthBuffer[y, x] != double.MaxValue)
-                {
-                    lightBuffer[y, x] = RenderFog(lightBuffer[y, x], depthBuffer[y, x]);
-                    if (lightBuffer[y, x].alpha < 1.0)
-                        lightBuffer[y, x] = Color3.Flatten(_cachedSkybox[y, x], lightBuffer[y, x]);
-                } else {
-                    lightBuffer[y, x] = _cachedSkybox[y, x];
+                    if (depthBuffer[y, x] != double.MaxValue)
+                    {
+                        lightBuffer[y, x] = RenderFog(lightBuffer[y, x], depthBuffer[y, x]);
+                        if (lightBuffer[y, x].alpha < 1.0)
+                            lightBuffer[y, x] = Color3.Flatten(_cachedSkybox[y, x], lightBuffer[y, x]);
+                    }
+                    else
+                    {
+                        lightBuffer[y, x] = _cachedSkybox[y, x];
+                    }
                 }
             });
 
