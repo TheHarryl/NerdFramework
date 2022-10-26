@@ -17,9 +17,10 @@ namespace NerdFramework
             {
                 if (_origin == value) return;
 
+                Vector3 amount = value - _origin;
                 foreach (Triangle3 triangle in triangles)
                 {
-                    triangle.Move(value - _origin);
+                    triangle.Move(amount);
                 }
                 _origin = value;
             }
@@ -31,9 +32,10 @@ namespace NerdFramework
             {
                 if (_scale == value) return;
 
+                Vector3 amount = value / _scale;
                 foreach (Triangle3 triangle in triangles)
                 {
-                    triangle.Scale(value / _scale, _origin);
+                    triangle.Scale(amount, _origin);
                 }
                 _scale = value;
             }
@@ -93,36 +95,40 @@ namespace NerdFramework
 
         public void RotateX(double radians, Vector3 origin)
         {
+            Vector3 offset = origin + _origin;
             foreach (Triangle3 triangle in triangles)
             {
-                triangle.RotateX(radians, origin + _origin);
+                triangle.RotateX(radians, offset);
             }
             //_origin = (_origin - origin).RotateX(radians) + origin;
         }
 
         public void RotateY(double radians, Vector3 origin)
         {
+            Vector3 offset = origin + _origin;
             foreach (Triangle3 triangle in triangles)
             {
-                triangle.RotateY(radians, origin + _origin);
+                triangle.RotateY(radians, offset);
             }
             //_origin = (_origin - origin).RotateY(radians) + origin;
         }
 
         public void RotateZ(double radians, Vector3 origin)
         {
+            Vector3 offset = origin + _origin;
             foreach (Triangle3 triangle in triangles)
             {
-                triangle.RotateZ(radians, origin + _origin);
+                triangle.RotateZ(radians, offset);
             }
             //_origin = (_origin - origin).RotateZ(radians) + origin;
         }
 
         public void Rotate(double r1, double r2, double r3, Vector3 origin)
         {
+            Vector3 offset = origin + _origin;
             foreach (Triangle3 triangle in triangles)
             {
-                triangle.Rotate(r1, r2, r3, origin + _origin);
+                triangle.Rotate(r1, r2, r3, offset);
             }
             //_origin = (_origin - origin).Rotate(r1, r2, r3) + origin;
         }
