@@ -157,11 +157,11 @@ namespace MonoGameGraphics
             if (keyboardState.IsKeyDown(Keys.D))
                 renderer.camera.d.p += renderer.camera.d.v * cameraSpeed * gameTime.ElapsedGameTime.TotalSeconds;
             if (keyboardState.IsKeyDown(Keys.A))
-                renderer.camera.d.p += renderer.camera.w.Normalized() * cameraSpeed * gameTime.ElapsedGameTime.TotalSeconds;
+                renderer.camera.d.p -= renderer.camera.w.Normalized() * cameraSpeed * gameTime.ElapsedGameTime.TotalSeconds;
             if (keyboardState.IsKeyDown(Keys.S))
                 renderer.camera.d.p -= renderer.camera.d.v * cameraSpeed * gameTime.ElapsedGameTime.TotalSeconds;
             if (keyboardState.IsKeyDown(Keys.H))
-                renderer.camera.d.p -= renderer.camera.w.Normalized() * cameraSpeed * gameTime.ElapsedGameTime.TotalSeconds;
+                renderer.camera.d.p += renderer.camera.w.Normalized() * cameraSpeed * gameTime.ElapsedGameTime.TotalSeconds;
 
             lastMouseState = mouseState;
             mouseState = Mouse.GetState();
