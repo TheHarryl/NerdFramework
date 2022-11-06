@@ -6,12 +6,6 @@ using System.Threading.Tasks;
 
 namespace NerdFramework
 {
-    public enum CPUMode
-    {
-        SingleThreaded,
-        MultiThreaded
-    }
-
     public class Renderer3 : Renderer2
     {
         public Dictionary<string, Material> materials = new Dictionary<string, Material>();
@@ -51,8 +45,6 @@ namespace NerdFramework
         public double[,] depthBuffer;
         public Vector3[,] normalBuffer;
 
-        public CPUMode CPUMode;
-
         public Texture2 skyboxFront = Texture2.Black;
         public Texture2 skyboxLeft = Texture2.Black;
         public Texture2 skyboxBack = Texture2.Black;
@@ -60,27 +52,21 @@ namespace NerdFramework
         public Texture2 skyboxTop = Texture2.Black;
         public Texture2 skyboxBottom = Texture2.Black;
 
-        ParallelOptions parallelOptions = new ParallelOptions();
-
-        public ulong frameNum { get; private set; }
-
         private Vector3 _cachedCameraDirection = Vector3.Zero;
         private Color3[,] _cachedSkybox;
 
+        public Action<int, int> shader = (y, x) => { };
+
         public Renderer3(Ray3Caster camera, int width = 200, int height = 100) : base(width, height)
         {
-            this.camera = camera;
-            this.cameraLight = new Light3Caster(new Ray3Radial(new Ray3(camera.d.p - new Vector3(0.0, 0.0, 100), camera.d.v), Math.TwoPI), scene, new Color3Sequence(Color3.White), 10000);
-
             this.width = width;
             this.height = height;
 
+            this.camera = camera;
+            this.cameraLight = new Light3Caster(new Ray3Radial(new Ray3(camera.d.p - new Vector3(0.0, 0.0, 100), camera.d.v), Math.TwoPI), scene, new Color3Sequence(Color3.White), 10000);
+
             Material defaultMaterial = new Material();
             this.materials.Add("None", defaultMaterial);
-
-            this.CPUMode = CPUMode.MultiThreaded;
-
-            this.parallelOptions.MaxDegreeOfParallelism = 10;
         }
 
         public void AddMaterial(string name, Material material)
@@ -302,6 +288,8 @@ namespace NerdFramework
 
         public void RenderRasterized(double minDist = 0.0, double maxDist = double.MaxValue)
         {
+            base.Render();
+
             Parallel.For(0, _height, parallelOptions, y =>
             {
                 for (int x = 0; x < _width; x++)
@@ -411,65 +399,6 @@ namespace NerdFramework
                         }
                     }
                 }
-
-                /*Vector2[] vertices = new Vector2[3] { a, b, c };
-
-                int[] boundsY = Math.BoundsIndex(a.y, b.y, c.y);
-                int midVertice = 3 - boundsY[0] - boundsY[1];
-
-                int minY = (int)Math.Max(vertices[boundsY[0]].y, 0.0);
-                int maxY = (int)Math.Min(vertices[boundsY[1]].y, _height - 1);
-
-                for (int y = minY; y <= maxY; y++)
-                {
-                    bool uncertain = false;
-                
-                    double[] boundsX;
-                    if (y == minY || y == maxY) {
-                        boundsX = Math.Bounds(a.x, b.x, c.x);
-                        uncertain = true;
-                    } else
-                    {
-                        Vector2 majorDiff = vertices[boundsY[0]] - vertices[boundsY[1]];
-                        double majorSlope = majorDiff.y / majorDiff.x;
-                        double majorX = (y - vertices[boundsY[0]].y) / majorSlope + vertices[boundsY[0]].x;
-
-                        Vector2 diff0 = vertices[midVertice] - vertices[boundsY[0]];
-                        double diffSlope0 = diff0.y / diff0.x;
-                        double x0 = (y - vertices[midVertice].y) / diffSlope0 + vertices[midVertice].x;
-
-                        Vector2 diff1 = vertices[midVertice] - vertices[boundsY[1]];
-                        double diffSlope1 = diff1.y / diff1.x;
-                        double x1 = (y - vertices[midVertice].y) / diffSlope1 + vertices[midVertice].x;
-
-                        double minorX = Math.Abs(majorX - x0) < Math.Abs(majorX - x1) ? x0 : x1;
-                        boundsX = Math.Bounds(minorX, majorX);
-                    }
-
-                    for (int x = (int)Math.Max(boundsX[0], 0.0); x <= Math.Min(boundsX[1], _width - 1); x++)
-                    {
-                        Vector2 pos = Triangle2.Parameterization(a, b, c, new Vector2(x, y));
-                        double dist = Math.FromParameterization3(pos.x, pos.y, distance1, distance2, distance3);
-                        if (uncertain && (pos.x < 0 || pos.y < 0 || pos.x + pos.y > 1)) continue;
-                        if (dist < depthBuffer[y, x])
-                        {
-                            Color3 color = TotalColorAt(pos.x, pos.y);
-                            lightBuffer[y, x] = Color3.Flatten(lightBuffer[y, x], color);
-                            depthBuffer[y, x] = dist;
-                            normalBuffer[y, x] = Vector3.FromParameterization3(pos.x, pos.y, normal1, normal2, normal3);
-                        }
-                        else if (lightBuffer[y, x].alpha < 1.0)
-                        {
-                            Color3 color = TotalColorAt(pos.x, pos.y);
-                            lightBuffer[y, x] = Color3.Flatten(color, lightBuffer[y, x]);
-                        }
-                    }
-                }
-                 */
-
-                //FillLine(Color3.Red, a, b);
-                //FillLine(Color3.Green, a, c);
-                //FillLine(Color3.Blue, c, b);
             }
 
             OrderedParallelQuery<MeshTriangle3> processed = scene.triangles.AsParallel()
@@ -516,17 +445,19 @@ namespace NerdFramework
                     {
                         lightBuffer[y, x] = _cachedSkybox[y, x];
                     }
+
+                    shader(y, x);
                 }
             });
 
             if (recache)
                 _cachedCameraDirection = camera.d.v;
-
-            frameNum++;
         }
 
         public void RenderRaytraced(double minDist = 0.0, double maxDist = double.MaxValue)
         {
+            base.Render();
+
             for (int y = 0; y < _height; y++)
             {
                 for (int x = 0; x < _width; x++)
@@ -557,8 +488,6 @@ namespace NerdFramework
                     lightBuffer[y, x] = RenderFog(lightBuffer[y, x], depthBuffer[y, x]);
                 }
             }
-
-            frameNum++;
         }
 
         private Color3 RenderFog(Color3 original, double distance)

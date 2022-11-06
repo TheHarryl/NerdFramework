@@ -23,6 +23,12 @@ namespace NerdFramework
             v = vector;
         }
 
+        public Ray3(Vector3 position, Vector3s vector)
+        {
+            p = position;
+            v = new Vector3(vector);
+        }
+
         public Ray3 March(List<Triangle3> triangles)
         {
             double distance = (triangles[0].a - p).Magnitude();

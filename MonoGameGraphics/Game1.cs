@@ -183,7 +183,8 @@ namespace MonoGameGraphics
                 //Vector3 target = Vector3.Lerp(Vector3.zAxis, Vector3.yAxis, angularDisplacement.y / Math.PI).RotateY(-totalAngularDisplacementX);
                 //renderer.camera.RotateTo(target);
                 //System.Diagnostics.Trace.WriteLine(renderer.camera.d.v);
-                renderer.camera.RotateY(-angularDisplacement.x);
+                renderer.camera.RotatePolar(-angularDisplacement.x);
+                renderer.camera.RotateZenith(angularDisplacement.y);
                 //Vector3 target = Vector3.Lerp(renderer.camera.d.v, renderer.camera.h, angularDisplacement.y / Math.PI);
                 //renderer.camera.RotateTo(target);
 
@@ -206,7 +207,7 @@ namespace MonoGameGraphics
             Parallel.For(0, renderer.height, y => {
                 for (int x = 0; x < renderer.width; x++)
                 {
-                    data[(renderer.width - x - 1) + (renderer.height - y - 1) * renderer.width] = new Color(renderer.lightBuffer[y, x].r, renderer.lightBuffer[y, x].g, renderer.lightBuffer[y, x].b);
+                    data[x + (renderer.height - y - 1) * renderer.width] = new Color(renderer.lightBuffer[y, x].r, renderer.lightBuffer[y, x].g, renderer.lightBuffer[y, x].b);
                 }
             });
             screen.SetData(data);

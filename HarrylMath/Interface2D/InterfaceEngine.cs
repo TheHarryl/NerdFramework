@@ -5,57 +5,27 @@ using System.Text;
 
 namespace NerdFramework
 {
-    public class InterfaceEngine
+    public class InterfaceEngine : Renderer2
     {
-        public List<UIObject> scene;
+        public Frame scene;
 
-        private int _width;
-        private int _height;
-        public int width
+        public InterfaceEngine(int width, int height) : base(width, height)
         {
-            get => _width;
-            set
-            {
-                _width = value;
-                pixelBuffer = new Color3[_height, _width];
-            }
-        }
-        public int height
-        {
-            get => _height;
-            set
-            {
-                _height = value;
-                pixelBuffer = new Color3[_height, _width];
-            }
-        }
-
-        public Color3[,] pixelBuffer;
-
-        public InterfaceEngine(int width, int height)
-        {
-            this.width = width;
-            this.height = height;
+            this.scene = new Frame(UDim2.Zero, UDim2.One);
+            this.scene.borderWidth = 0;
+            this.scene.color = Color3.None;
         }
 
         public void Update(double delta)
         {
-            scene = scene.OrderByDescending(obj => obj.zindex).ToList();
-
-            foreach (UIObject obj in scene)
-            {
-                obj.Update(delta);
-            }
+            scene.Update(delta);
         }
 
-        public void Draw()
+        public void RenderUI()
         {
-            scene = scene.OrderByDescending(obj => obj.zindex).ToList();
+            base.Render();
 
-            foreach (UIObject obj in scene)
-            {
-                obj.Draw(pixelBuffer);
-            }
+            scene.Draw(this.lightBuffer);
         }
     }
 }

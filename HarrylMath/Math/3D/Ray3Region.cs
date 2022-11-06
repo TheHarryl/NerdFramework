@@ -134,5 +134,15 @@
             Vector3 rotation = Vector3.Angle3(d.v, vector);
             Rotate(rotation.x, rotation.y, rotation.z);
         }
+
+        public override void RotateZenith(double radians)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public override void RotatePolar(double radians)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

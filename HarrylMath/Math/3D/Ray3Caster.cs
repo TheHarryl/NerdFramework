@@ -9,6 +9,7 @@ namespace NerdFramework
         public Ray3 d;
         public Vector3 w;
         public Vector3 h;
+        protected Vector3s _spherical;
 
         public abstract Ray3 RayAt(double wAlpha, double hAlpha);
         public abstract Vector3 VectorAt(double wAlpha, double hAlpha);
@@ -21,6 +22,9 @@ namespace NerdFramework
         public abstract void RotateZ(double radians);
         public abstract void Rotate(double r1, double r2, double r3);
         public abstract void RotateTo(Vector3 vector);
+
+        public abstract void RotateZenith(double radians);
+        public abstract void RotatePolar(double radians);
 
         public abstract void RotateAbout(Vector3 rotand, double radians);
     }

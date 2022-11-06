@@ -19,6 +19,27 @@
             this.z = z;
         }
 
+        public Vector3(Vector3s spherical)
+        {
+            /* Spherical coordinates to Rectangular:
+             * x = ρsin(ϕ)cos(θ)
+             * y = ρsin(ϕ)sin(θ)
+             * z = ρcos(ϕ)
+             * 
+             * HOWEVER: This engine uses x and z as horizontal plane
+             * We will shift the values with cyclic permutation
+             * 
+             * z = ρsin(ϕ)cos(θ)
+             * x = ρsin(ϕ)sin(θ)
+             * y = ρcos(ϕ)
+             */
+
+            double s = Math.Sin(spherical.phi);
+            this.z = spherical.rho * s * Math.Cos(spherical.theta);
+            this.x = spherical.rho * s * Math.Sin(spherical.theta);
+            this.y = spherical.rho * Math.Cos(spherical.phi);
+        }
+
         public Vector3(Vector3 a, Vector3 b)
         {
             this.x = b.x - a.x;

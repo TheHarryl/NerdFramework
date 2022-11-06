@@ -46,6 +46,16 @@ namespace NerdFramework
             this.triangles = triangles;
         }
 
+        public Triangle3Collection(params Triangle3[] triangles)
+        {
+            List<Triangle3> triangleList = new List<Triangle3>();
+            for (int i = 0; i < triangles.Length; i++)
+            {
+                triangleList.Add(triangles[i]);
+            }
+            this.triangles = triangleList;
+        }
+
         public Triangle3Collection Clone()
         {
             Vector3 oldOrigin = this.origin;
@@ -131,16 +141,6 @@ namespace NerdFramework
                 triangle.Rotate(r1, r2, r3, offset);
             }
             //_origin = (_origin - origin).Rotate(r1, r2, r3) + origin;
-        }
-
-        public static Triangle3Collection operator +(Triangle3Collection a, Triangle3 b)
-        {
-            return new Triangle3Collection(a.triangles.Concat(new List<Triangle3>(){ b }).ToList());
-        }
-
-        public static Triangle3Collection operator +(Triangle3Collection a, Triangle3Collection b)
-        {
-            return new Triangle3Collection(a.triangles.Concat(b.triangles).ToList());
         }
     }
 }

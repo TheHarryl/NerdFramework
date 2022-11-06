@@ -14,9 +14,14 @@ namespace NerdFramework
         public static Color3 None = new Color3(0, 0, 0, 0.0);
         public static Color3 White = new Color3(255, 255, 255);
         public static Color3 Black = new Color3(0, 0, 0);
+
         public static Color3 Red = new Color3(255, 0, 0);
         public static Color3 Green = new Color3(0, 255, 0);
         public static Color3 Blue = new Color3(0, 0, 255);
+
+        public static Color3 LightRed = new Color3(255, 128, 128);
+        public static Color3 LightGreen = new Color3(128, 255, 128);
+        public static Color3 LightBlue = new Color3(128, 128, 255);
 
         public Color3(int r, int g, int b, double alpha = 1.0)
         {
@@ -85,23 +90,6 @@ namespace NerdFramework
             }
             return new Color3((int)r, (int)g, (int)b, alpha);
         }*/
-
-        public static Color3 Flatten(params Color4[] layers)
-        {
-            double r = layers[layers.Length - 1].color.r;
-            double g = layers[layers.Length - 1].color.g;
-            double b = layers[layers.Length - 1].color.b;
-            double alpha = layers[layers.Length - 1].color.alpha;
-
-            for (int i = layers.Length - 2; i >= 0 && alpha < 1.0; i--)
-            {
-                r += layers[i].color.r * (1.0 - alpha) * layers[i].color.alpha;
-                g += layers[i].color.g * (1.0 - alpha) * layers[i].color.alpha;
-                b += layers[i].color.b * (1.0 - alpha) * layers[i].color.alpha;
-                alpha += layers[i].color.alpha * (1.0 - alpha);
-            }
-            return new Color3((int)r, (int)g, (int)b, alpha);
-        }
 
         public static Color3 FromParameterization3(double t, double s, Color3 a, Color3 b, Color3 c)
         {

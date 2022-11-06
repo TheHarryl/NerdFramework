@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace NerdPanel
+namespace NerdPane
 {
     public static class Program
     {

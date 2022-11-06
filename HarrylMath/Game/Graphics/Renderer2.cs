@@ -1,9 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace NerdFramework
 {
+    public enum CPUMode
+    {
+        SingleThreaded,
+        MultiThreaded
+    }
+
     public class Renderer2
     {
         protected int _width = 1;
@@ -28,17 +35,36 @@ namespace NerdFramework
         }
         public Color3[,] lightBuffer;
 
+        public CPUMode CPUMode;
+        public ParallelOptions parallelOptions = new ParallelOptions();
+
+        public ulong frameNum { get; private set; }
+
         public Renderer2(int width, int height)
         {
-            _width = width;
-            _height = height;
+            this.width = width;
+            this.height = height;
 
-            lightBuffer = new Color3[height, width];
+            this.lightBuffer = new Color3[height, width];
+
+            this.CPUMode = CPUMode.MultiThreaded;
+            this.parallelOptions.MaxDegreeOfParallelism = 10;
+        }
+
+        public void Clear()
+        {
+            Parallel.For(0, _height, parallelOptions, y =>
+            {
+                for (int x = 0; x < _width; x++)
+                {
+                    lightBuffer[y, x] = Color3.None;
+                }
+            });
         }
 
         public void Render()
         {
-
+            frameNum++;
         }
     }
 }

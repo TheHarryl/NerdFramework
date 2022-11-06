@@ -272,6 +272,26 @@
             return PI / 2.0 - Asin(d, steps);*/
         }
 
+        public static double Tan(double radians, int steps = 10)
+        {
+            return System.Math.Tan(radians);
+        }
+
+        public static double Atan(double d, int steps = 10)
+        {
+            return System.Math.Atan(d);
+        }
+
+        public static double Cot(double radians)
+        {
+            return 1.0 / Tan(radians);
+        }
+
+        public static double Acot(double d)
+        {
+            return Atan(1.0 / d);
+        }
+
         public static double Log(double x, double y)
         {
             return 1.0;

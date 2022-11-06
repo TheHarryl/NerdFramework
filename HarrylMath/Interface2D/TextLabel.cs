@@ -9,6 +9,8 @@ namespace NerdFramework
         public Font font;
         public string text;
 
+        public bool richText;
+
         public TextLabel(UDim2 position, UDim2 size) : base(position, size)
         {
 
