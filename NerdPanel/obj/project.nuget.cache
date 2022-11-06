@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "3/HIBluIofz4BEgrMUEQ5ji3piFu697ZYw4gLJ9rSpNWA9P8/bhosFFT3ns4S+J5s5/KzHWog1ty66Nl4FXqmw==",
+  "dgSpecHash": "9SAmFtWmq8uVUHN56/G/s9jyl8AzmRd8FKTkjvlS8WuqXi8uhmoOa1MwkSUzZB35ENku3WX2emhhbmO7odt39Q==",
   "success": true,
   "projectFilePath": "C:\\Users\\harry\\Desktop\\Mathi\\NerdPanel\\NerdPanel.csproj",
   "expectedPackageFiles": [
@@ -23,7 +23,6 @@
     "C:\\Users\\harry\\.nuget\\packages\\microsoft.win32.primitives\\4.0.1\\microsoft.win32.primitives.4.0.1.nupkg.sha512",
     "C:\\Users\\harry\\.nuget\\packages\\microsoft.win32.registry\\4.0.0\\microsoft.win32.registry.4.0.0.nupkg.sha512",
     "C:\\Users\\harry\\.nuget\\packages\\monogame.content.builder.task\\3.8.0.1641\\monogame.content.builder.task.3.8.0.1641.nupkg.sha512",
-    "C:\\Users\\harry\\.nuget\\packages\\monogame.framework.desktopgl\\3.8.0.1641\\monogame.framework.desktopgl.3.8.0.1641.nupkg.sha512",
     "C:\\Users\\harry\\.nuget\\packages\\monogame.framework.windowsdx\\3.8.0.1641\\monogame.framework.windowsdx.3.8.0.1641.nupkg.sha512",
     "C:\\Users\\harry\\.nuget\\packages\\netstandard.library\\1.6.0\\netstandard.library.1.6.0.nupkg.sha512",
     "C:\\Users\\harry\\.nuget\\packages\\runtime.native.system\\4.0.0\\runtime.native.system.4.0.0.nupkg.sha512",

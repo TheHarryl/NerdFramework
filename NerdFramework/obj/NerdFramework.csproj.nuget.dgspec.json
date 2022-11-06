@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\harry\\Desktop\\Mathi\\NerdPanel\\NerdPanel.csproj": {}
+    "C:\\Users\\harry\\Desktop\\Mathi\\NerdFramework\\NerdFramework.csproj": {}
   },
   "projects": {
-    "C:\\Users\\harry\\Desktop\\Mathi\\NerdPanel\\NerdPanel.csproj": {
+    "C:\\Users\\harry\\Desktop\\Mathi\\NerdFramework\\NerdFramework.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\harry\\Desktop\\Mathi\\NerdPanel\\NerdPanel.csproj",
-        "projectName": "NerdPanel",
-        "projectPath": "C:\\Users\\harry\\Desktop\\Mathi\\NerdPanel\\NerdPanel.csproj",
+        "projectUniqueName": "C:\\Users\\harry\\Desktop\\Mathi\\NerdFramework\\NerdFramework.csproj",
+        "projectName": "NerdFramework",
+        "projectPath": "C:\\Users\\harry\\Desktop\\Mathi\\NerdFramework\\NerdFramework.csproj",
         "packagesPath": "C:\\Users\\harry\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\harry\\Desktop\\Mathi\\NerdPanel\\obj\\",
+        "outputPath": "C:\\Users\\harry\\Desktop\\Mathi\\NerdFramework\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages",
@@ -50,7 +50,7 @@
               "target": "Package",
               "version": "[3.8.0.1641, )"
             },
-            "MonoGame.Framework.WindowsDX": {
+            "MonoGame.Framework.DesktopGL": {
               "target": "Package",
               "version": "[3.8.0.1641, )"
             }
@@ -68,9 +68,6 @@
           "frameworkReferences": {
             "Microsoft.NETCore.App": {
               "privateAssets": "all"
-            },
-            "Microsoft.WindowsDesktop.App.WindowsForms": {
-              "privateAssets": "none"
             }
           },
           "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.412\\RuntimeIdentifierGraph.json"
