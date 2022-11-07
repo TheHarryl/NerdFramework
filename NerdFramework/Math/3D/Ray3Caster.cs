@@ -15,6 +15,7 @@ namespace NerdFramework
         public abstract Vector3 VectorAt(double wAlpha, double hAlpha);
         public abstract Vector2 Projection(Vector3 point);
         public abstract bool Meets(Vector3 point);
+        public abstract bool Meets(MeshTriangle3 triangle);
         public abstract double Distance(Vector3 point);
 
         public abstract void RotateX(double radians);

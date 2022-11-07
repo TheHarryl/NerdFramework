@@ -402,7 +402,7 @@ namespace NerdFramework
             }
 
             OrderedParallelQuery<MeshTriangle3> processed = scene.triangles.AsParallel()
-                .Where(t => Vector3.Dot(camera.d.v, t.Normal()) < 0.2 && Vector3.Dot((t.a + t.b + t.c) / 3.0 - camera.d.p, camera.d.v) > 0.0)
+                .Where(t => camera.Meets(t))
                 .OrderBy(t => -((t.a + t.b + t.c) / 3.0 - camera.d.p).Magnitude());
 
             Parallel.ForEach(processed, parallelOptions, RenderMeshTriangle3);

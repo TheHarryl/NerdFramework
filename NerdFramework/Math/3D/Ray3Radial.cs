@@ -34,6 +34,11 @@
             return Vector3.Angle(d.v, point - d.p) <= angle / 2.0;
         }
 
+        public override bool Meets(MeshTriangle3 triangle)
+        {
+            throw new System.NotImplementedException();
+        }
+
         public override double Distance(Vector3 point)
         {
             return (point - d.p).Magnitude();

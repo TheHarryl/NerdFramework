@@ -12,7 +12,7 @@ namespace Mathi
         {
             //Random random = new Random();
             //List<char> light = new List<char> { ',', '\"', '^', '`', '\'', '.', '-', '~', '_' };
-            Renderer3 renderer = new Renderer3(new Ray3Region(new Ray3(Vector3.Zero, Vector3.zAxis), 70, 35), 230, 60);
+            Renderer3 renderer = new Renderer3(new Ray3Rectangular(new Ray3(Vector3.Zero, Vector3.zAxis), 70, 35), 230, 60);
             Console.SetBufferSize(800, 800);
             Console.TreatControlCAsInput = true;
 

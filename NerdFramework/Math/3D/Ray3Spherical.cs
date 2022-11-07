@@ -1,32 +1,38 @@
 ﻿namespace NerdFramework
 {
-    public class Ray3Sector : Ray3Caster
+    public class Ray3Spherical : Ray3Caster
     {
         protected double FOV;
+        protected double vertFOV;
 
         protected double width;
         protected double height;
         protected double r;
-        protected double v;
 
-        public Ray3Sector(Ray3 direction, double width, double height, double FOV)
+        protected Vector3 bounds1;
+        protected Vector3 bounds2;
+        protected Vector3 bounds3;
+        protected Vector3 bounds4;
+
+        public Ray3Spherical(Ray3 direction, double width, double height, double FOVinRadians)
         {
             this.d = new Ray3(direction.p, Vector3.zAxis);
             this.width = width;
             this.height = height;
-            this.FOV = FOV;
+            this.FOV = FOVinRadians;
+            this.vertFOV = FOVinRadians / width * height;
 
-            /* arc length = 2*PI*r*(theta/180)
-             * width = 2PI*r*(FOV/180)
-             * r = (width*180) / (2*PI*FOV)
-             * 
-             * a^2 + b^2 = c^2
-             * d^2 + (w/2)^2 = r^2
-             * d = sqrt(r^2 - w^2/4)
+            /* c^2 = a^2 + b^2 - 2abcos(theta)
+             * width = 2r^2 - 2rcos(FOV)
+             * 0 = 2r^2 - 2rcos(FOV) - width
+             * x = [-b +/- sqrt(b^2 - 4ac)] / 2a
+             * r = [2cos(FOV) +/- sqrt([2cos(FOV)]^2 + 4(2)(width))] / 2(2)
+             * r = [2cos(FOV) +/- sqrt([2cos(FOV)]^2 + 8*width)] / 4
+             * r = 2cos(FOV) + sqrt(4cos^2(FOV) + 8*width)
              */
 
-            this.r = (width * 180) / (Math.TwoPI * FOV);
-            this.v = Math.Sqrt(r * r - width * width / 4) / 20;
+            double c = Math.Cos(FOV);
+            this.r = 2*c + Math.Sqrt(4*c*c + 8*width);
 
             RotateTo(direction.v);
         }
@@ -38,21 +44,21 @@
 
         public override Vector3 VectorAt(double wAlpha, double hAlpha)
         {
-            return (d.v * v) + w * (wAlpha - 0.5) + h * (hAlpha - 0.5);
+            return (d.v * r) + w * (wAlpha - 0.5) + h * (hAlpha - 0.5);
         }
 
         public override Vector2 Projection(Vector3 point)
         {
-            /* arc length = 2*PI*r*(theta/180)
-             * width = 2PI*r*(FOV/180)
-             * r = (width*180) / (2*PI*FOV)
-             * 
-             * a^2 + b^2 = c^2
-             * d^2 + (w/2)^2 = r^2
-             * d = sqrt(r^2 - w^2/4)
+            /* c^2 = a^2 + b^2 - 2abcos(theta)
+             * width = 2r^2 - 2rcos(FOV)
+             * 0 = 2r^2 - 2rcos(FOV) - width
+             * x = [-b +/- sqrt(b^2 - 4ac)] / 2a
+             * r = [2cos(FOV) +/- sqrt([2cos(FOV)]^2 + 4(2)(width))] / 2(2)
+             * r = [2cos(FOV) +/- sqrt([2cos(FOV)]^2 + 8*width)] / 4
+             * r = 2cos(FOV) + sqrt(4cos^2(FOV) + 8*width)
              */
 
-            Vector3 origin = d.p + d.v * v - w * 0.5 - h * 0.5;
+            Vector3 origin = d.p + d.v * r - w * 0.5 - h * 0.5;
             Vector3 intersection = new Plane3(origin, d.v).Intersection(new Line3(point, d.p - point));
 
             return Triangle3.Parameterization(origin, origin + w, origin + h, intersection);
@@ -60,7 +66,20 @@
 
         public override bool Meets(Vector3 point)
         {
-            throw new System.NotImplementedException();
+            Vector3s pointSpherical = new Vector3s(point - d.p);
+            Vector3s diff = Vector3s.Difference(pointSpherical, _spherical);
+            return diff.theta <= FOV && diff.phi <= vertFOV;
+        }
+
+        public override bool Meets(MeshTriangle3 triangle)
+        {
+            Vector3 normal = triangle.Normal();
+            return (
+                Vector3.Dot(bounds1, normal) < 0.0 ||
+                Vector3.Dot(bounds2, normal) < 0.0 ||
+                Vector3.Dot(bounds3, normal) < 0.0 ||
+                Vector3.Dot(bounds4, normal) < 0.0) &&
+                (Meets(triangle.a) || Meets(triangle.b) || Meets(triangle.c));
         }
 
         public override double Distance(Vector3 point)
@@ -73,6 +92,11 @@
         {
             w = new Vector3(_spherical.RotatePolar(-Math.HalfPI)) * width;
             h = new Vector3(_spherical.RotateZenith(-Math.HalfPI)) * height;
+            double vertFOV = FOV / width * height;
+            bounds1 = new Vector3(_spherical.RotatePolar( FOV / 2));
+            bounds2 = new Vector3(_spherical.RotatePolar(-FOV / 2));
+            bounds3 = new Vector3(_spherical.RotateZenith( vertFOV / 2));
+            bounds4 = new Vector3(_spherical.RotateZenith(-vertFOV / 2));
         }
 
         public override void RotateX(double radians)

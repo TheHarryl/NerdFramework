@@ -1,8 +1,8 @@
 ﻿namespace NerdFramework
 {
-    public class Ray3Region : Ray3Caster
+    public class Ray3Rectangular : Ray3Caster
     {
-        public Ray3Region(Ray3 direction, double width, double height)
+        public Ray3Rectangular(Ray3 direction, double width, double height)
         {
             this.d = new Ray3(direction.p, Vector3.zAxis);
             this.w = Vector3.xAxis * width;
@@ -84,6 +84,11 @@
         }
 
         public override bool Meets(Vector3 point)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public override bool Meets(MeshTriangle3 triangle)
         {
             throw new System.NotImplementedException();
         }

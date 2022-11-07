@@ -43,8 +43,8 @@ namespace NerdFramework
              */
 
             this.rho = rho;
-            this.phi = phi;
-            this.theta = theta;
+            this.phi = phi % Math.PI;
+            this.theta = theta % Math.TwoPI;
         }
 
         public Vector3s(Vector3 rectangular)
@@ -73,6 +73,17 @@ namespace NerdFramework
         public Vector3s RotatePolar(double radians)
         {
             return new Vector3s(rho, phi, theta + radians);
+        }
+
+        public static Vector3s Difference(Vector3s a, Vector3s b)
+        {
+            double phiDiff = Math.Abs(a.phi - b.phi);
+            double thetaDiff = Math.Abs(a.theta - b.theta);
+            if (phiDiff >= Math.HalfPI)
+                phiDiff = Math.PI - phiDiff;
+            if (thetaDiff >= Math.PI)
+                thetaDiff = Math.TwoPI - thetaDiff;
+            return new Vector3s(1.0, phiDiff, thetaDiff);
         }
     }
 }

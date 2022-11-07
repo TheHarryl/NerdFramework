@@ -8,7 +8,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading.Tasks;
 
-namespace NerdPane
+namespace NerdPanel
 {
     public class Game1 : Game
     {

@@ -18,8 +18,8 @@ namespace MonoGameGraphics
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
 
-        private static double FOV = Math.PI;
-        private Renderer3 renderer = new Renderer3(new Ray3Sector(new Ray3(new Vector3(0.0, 0.0, -20.0), Vector3.zAxis), 100, 75, FOV), 800, 600);
+        private static double FOV = Math.DegreesToRadians(80.0);
+        private Renderer3 renderer = new Renderer3(new Ray3Spherical(new Ray3(new Vector3(0.0, 0.0, -20.0), Vector3.zAxis), 100, 75, FOV), 800, 600);
         //private MeshTriangle3Collection tris = MeshParser.FromCube(Vector3.Zero, 20).polygons;
         //private MeshTriangle3Collection tris = MeshParser.FromIcoSphere(new Vector3(-15, 0, 15), 15, 4).polygons;
         //private MeshTriangle3Collection tris = MeshParser.FromUVSphere(new Vector3(0, 0, 15), 15);
